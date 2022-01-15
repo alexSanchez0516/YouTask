@@ -1,0 +1,22 @@
+// Fuentes
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+$fuente_principal: 'Poppins', sans-serif;
+
+$font-family-sans-serif: $fuente_principal;
+
+// Tamaño de Media Queries
+$phone: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+// Colores
+$lightBlue: #26C6DA;
+$lightGreen: #00c99a;
+$midWhite: #F7F8F8;
+$lightPurple: #8F6DCA;
+$lightAzulSpa: #568cc8;
+$gradientFooter: linear-gradient(to right,#8F6DCA,#568cc8);
+
+
+@import "../../node_modules/bootstrap/scss/bootstrap";

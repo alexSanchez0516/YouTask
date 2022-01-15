@@ -1,0 +1,35 @@
+@import 'variables';
+
+.d-none {
+    display: none !important;
+}
+
+.fixed {
+    position: fixed;
+    width: 100%;
+}
+
+.text-darkness {
+    color: black !important;
+    font-weight: bolder;
+}
+
+.bg-darkness {
+    background-color: black !important;
+}
+
+.text-orange {
+    color: #ff454e;
+
+}
+.threm {
+    font-size: 2rem;
+}
+.m-right-1 {
+    margin-right: 1rem;
+}
+
+
+ol, ul {
+    padding-left: 0rem !important;
+}
