@@ -4,6 +4,7 @@ namespace Controllers;
 
 use MVC\Router;
 use PHPMailer\PHPMailer\PHPMailer;
+use Model\Users;
 
 
 class PageController

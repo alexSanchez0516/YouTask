@@ -3,10 +3,53 @@
 .d-none {
     display: none !important;
 }
+.bg-white { 
+    background: $white;
+}
+
+.w-65 {
+    width: 65%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+
+
+.w-40 {
+    width: 40%;
+}
+
+.darkGreen {
+    background-color: $darkGreen !important;
+}
+
+.bg-light-green {
+    background-color: $lightGreen;
+}
+
+
+.w-15 {
+    width: 15%;
+}
+.w-10 {
+    width: 10%;
+}
+.w-30 { 
+    width: 30%;
+}
+
+.calc-30 {
+    flex: 0 1 calc(20% - 1rem);
+}
 
 .fixed {
     position: fixed;
     width: 100%;
+}
+.text-align-left {
+    text-align: left;
 }
 
 .text-darkness {

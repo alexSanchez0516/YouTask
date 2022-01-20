@@ -1,19 +1,21 @@
 <?php
+
 namespace Model;
+
 use Intervention\Image\ImageManagerStatic as Image;
 
 class ActiveRecord
 {
     protected static $db;
     protected static $colDB = [];
-    protected static $tabla = ''; 
+    protected static $tabla = '';
 
 
 
     protected static array $errors = [];
 
 
-   
+
 
     public static function setDB($database)
     {
@@ -23,10 +25,8 @@ class ActiveRecord
     public function create()
     {
 
+        $atributes = $this->sanitizeData();
 
-        $atributes = $this->sanitizeData(0);
-        $services = $atributes['services'];
-        unset($atributes['services']);
 
 
         $query = "INSERT INTO " . static::$tabla . " (";
@@ -34,23 +34,7 @@ class ActiveRecord
         $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributes));
         $query .= "')";
-
-
-        static::$db->query($query) ?: header('Location: /');
-
-
-        $query = "SELECT MAX(id) FROM services";
-        $results = static::$db->query($query);
-
-        $record = $results->fetch_assoc();
-        $id = filter_var(intval($record['MAX(id)']), FILTER_VALIDATE_INT) ?: header('Location: /');
-
-
-        $query = "INSERT INTO service (serviceID, nameService) VALUES ($id, '${services}')";
-        static::$db->query($query) ?: header('Location: /');
-
-
-        header('Location: /admin?state=1');
+        static::$db->query($query) ?: header('Location: /inicio');
     }
 
     public function save()
@@ -100,14 +84,11 @@ class ActiveRecord
     public function mapAtributes(): array
     {
         $atributes = [];
-        //debug(static::$colDB);
         foreach (static::$colDB as $col) {
-            //debug($col);
             if ($col === 'id') continue;
             //Atributes en la posicion de col se va a llenar con los valores de la instancia 
             $atributes[$col] = $this->$col;
         }
-
         return $atributes;
     }
 
@@ -122,23 +103,19 @@ class ActiveRecord
     }
 
 
-    public function sanitizeData(int $opt): array
+    public function sanitizeData(): array
     {
         $atributes = $this->mapAtributes();
-        if ($opt == 1) {
-            unset($atributes['email']);
-        }
- 
+
         $sanitize = [];
-        
 
         foreach ($atributes as $key => $value) {
-            if (static::$tabla == 'users') {
-                $value = trim($value);
+            if (!is_bool($value)) {
+                $sanitize[$key] = static::$db->escape_string($value);
+            } else {
+                $sanitize[$key] = $value;
             }
-
-            $sanitize[$key] = static::$db->escape_string($value);
-        
+           
         }
         return $sanitize;
     }
@@ -152,17 +129,17 @@ class ActiveRecord
 
     public function uploadImg($image, $imgDelete)
     {
-        $nameImage =  md5(uniqid(rand(), true)); 
+        $nameImage =  md5(uniqid(rand(), true));
         $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $completeImg = $nameImage . "." . $extension;
         if (isset($imgDelete)) {
             file_exists(FOLDER_IMG . $imgDelete) ? unlink(FOLDER_IMG . $imgDelete) : false;
         }
-        
+
         $image = Image::make($image['tmp_name'])->fit(800, 600); //name and 
         $this->setImage($completeImg);
 
-    
+
         $image->save(FOLDER_IMG . $completeImg);
     }
 
@@ -172,7 +149,8 @@ class ActiveRecord
         return static::$errors;
     }
 
-    public static function setError($error) {
+    public static function setError($error)
+    {
         static::$errors[] = $error;
     }
 
@@ -219,15 +197,15 @@ class ActiveRecord
     }
 
     public static function find($id, $username)
-    {   
+    {
         if (isset($username)) {
-            $query = "SELECT * FROM " . static::$tabla  ." WHERE username = '${username}'";
+            $query = "SELECT * FROM " . static::$tabla  . " WHERE username = '${username}'";
 
             $data = static::consulSQL($query);
             return array_shift($data); //Devuelve primer elemento de arreglo
         }
 
-        $query = "SELECT * FROM " . static::$tabla  ." WHERE id = ${id}";
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE id = ${id}";
         $data = static::consulSQL($query);
 
         return array_shift($data); //Devuelve primer elemento de arreglo
@@ -238,7 +216,7 @@ class ActiveRecord
     public static function consulSQL($query): array
     {
         $data = static::$db->query($query);
-      
+
         $services = [];
 
         while ($record = $data->fetch_array(MYSQLI_ASSOC)) {
@@ -249,7 +227,7 @@ class ActiveRecord
         return $services; //return mapp array to getect
     }
 
-  
+
 
     protected static function createObject($record)
     { //objeto en memoria espejo de la db
@@ -266,11 +244,12 @@ class ActiveRecord
 
     }
 
-    public static function getAny(String $col, String $table) {
+    public static function getAny(String $col, String $table)
+    {
         $query = "SELECT ${col} FROM ${table}";
 
         $data = static::$db->query($query)->fetch_all();
-        
+
         return $data;
     }
 }

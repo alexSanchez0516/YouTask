@@ -1,0 +1,1 @@
+function checkPassword(){const e=document.querySelector("#password"),t=document.querySelector("#repeatPassword"),c=document.querySelector("#btn-register"),n=document.querySelector("#privacity");n.addEventListener("change",(function(){n.checked&&e.value==t.value&&c.classList.toggle("d-flex")}))}document.addEventListener("DOMContentLoaded",(function(){checkPassword()}));
