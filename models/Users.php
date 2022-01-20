@@ -9,6 +9,8 @@ class Users extends ActiveRecord
     protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar'];
     protected static $tabla = 'users';
 
+
+
     public int $id;
     public String $username;
     public String $password;
@@ -45,22 +47,21 @@ class Users extends ActiveRecord
     {            
 
         $data = $this->sanitizeData();
-
-        if (!$data['username'] || !$data['password']) {
+    
+        if (!$data['email'] || !$data['password']) {
             static::$errors[] = 'Completa correctamente el formulario';
         }
         if (empty(static::$errors)) {
-            $user_data =  static::find(null, $data['username']);
+            $user_data =  static::find(null, $data['email']);
             if (isset($user_data)) {
                 $auth = password_verify($this->password, $user_data->password);
-                
                 if ($auth) {
                     session_start();
 
                     $_SESSION['username'] = $user_data->username;
                     $_SESSION['login'] = true;
 
-                    header('Location: /admin');
+                    header('Location: /panel');
                 } else {
                     static::$errors[] = 'Credenciales erróneas';
                 }
@@ -83,8 +84,9 @@ class Users extends ActiveRecord
         $query .= ") VALUES (";
         $query .= "'{$this->username}', '{$this->password}' , '{$this->email}', false";
         $query .= ", '{$this->token}', false, '{$this->avatar}' )";
-        return (static::$db->query($query));
-
+        
+        
+        return static::$db->query($query);
        
     }
 

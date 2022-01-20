@@ -196,10 +196,10 @@ class ActiveRecord
 
     }
 
-    public static function find($id, $username)
+    public static function find($id, $mail)
     {
-        if (isset($username)) {
-            $query = "SELECT * FROM " . static::$tabla  . " WHERE username = '${username}'";
+        if (isset($mail)) {
+            $query = "SELECT * FROM " . static::$tabla  . " WHERE email = '${mail}'";
 
             $data = static::consulSQL($query);
             return array_shift($data); //Devuelve primer elemento de arreglo

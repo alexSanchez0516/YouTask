@@ -21,17 +21,11 @@
                                 <div class="w-100">
                                     <h3 class="mb-4">Iniciar</h3>
                                 </div>
-                                <div class="w-100">
-                                    <p class="social-media d-flex justify-content-end">
-                                        <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
-                                        <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
-                                    </p>
-                                </div>
                             </div>
                             <form action="/login" class="signin-form" method="post">
                                 <div class="form-group mb-3">
-                                    <label class="label" for="name">Usuario</label>
-                                    <input type="text" class="form-control" value="<?php echo $user->username?> "name="username" placeholder="Username" required>
+                                    <label class="label" for="name">Email</label>
+                                    <input type="email" class="form-control" value="<?php echo s($user->email)?> "name="email" placeholder="email" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password">Contraseña</label>

@@ -1,13 +1,16 @@
 <?php
 
 namespace Controllers;
+
 use MVC\Router;
 use Model\Users;
 
-class LoginController {
+class LoginController
+{
 
 
-    public static function auth(Router $router) {
+    public static function auth(Router $router)
+    {
         $errors = ['s'];
         $userLogin = new Users();
 
@@ -23,25 +26,53 @@ class LoginController {
         ]);
     }
 
-    public static function logout(Router $router) {
-        Users::logout();   
+    public static function logout(Router $router)
+    {
+        Users::logout();
     }
 
-    public static function register(Router $router) {
+    public static function register(Router $router)
+    {
         $errors = [];
-
+        $valid = true;
         $userRegister = new Users();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $userRegister = new Users($_POST);
-            
-            if ($userRegister->register()) {
-                header('Location: /panel');
-            } else {
-                $errors[] = 'Solo puedes tener una cuenta por correo';
+
+            foreach ($_POST as $key => $value) {
+                $_POST[$key] = trim($value);
+
+
+                if (strlen($_POST[$key]) < 5) {
+                    $valid = false;
+
+                    if ($key == 'password') {
+                        $errors[] = 'La contraseña debe tener minimo 5 carácteres';
+                    }
+                    if ($key == 'email') {
+                        $errors[] = 'Correo inválido';
+                    }
+                    if ($key == 'username') {
+                        $errors[] = 'Tu usuario debe tener minimo 5 carácteres';
+                    }
+                }
             }
+            $userRegister->synchronize($_POST);
 
 
+            if ($valid) {
+                if ($_POST['repeatPassword'] == $_POST['password']) {
+                    $userRegister = new Users($_POST);
+
+                    if ($userRegister->register()) {
+                        header('Location: /login?state=1');
+                    } else {
+                        $errors[] = 'Solo puedes tener una cuenta por correo';
+                    }
+                } else {
+                    $errors[] = "No coinciden las contraseñas";
+                }
+            } 
         }
 
         $router->render('auth/register', [
@@ -50,7 +81,8 @@ class LoginController {
         ]);
     }
 
-    public static function forgetPassword(Router $router) {
+    public static function forgetPassword(Router $router)
+    {
         $errors = [];
 
         $router->render('auth/forgetPassword', [
@@ -58,12 +90,12 @@ class LoginController {
         ]);
     }
 
-    public static function recoveryPassword(Router $router) {
+    public static function recoveryPassword(Router $router)
+    {
         $errors = [];
 
         $router->render('auth/recoveryPassword', [
             'errors' => $errors,
         ]);
     }
-
 }
