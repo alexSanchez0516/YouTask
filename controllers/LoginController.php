@@ -33,50 +33,32 @@ class LoginController
 
     public static function register(Router $router)
     {
-        $errors = [];
-        $valid = true;
         $userRegister = new Users();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            foreach ($_POST as $key => $value) {
-                $_POST[$key] = trim($value);
-
-
-                if (strlen($_POST[$key]) < 5) {
-                    $valid = false;
-
-                    if ($key == 'password') {
-                        $errors[] = 'La contraseña debe tener minimo 5 carácteres';
-                    }
-                    if ($key == 'email') {
-                        $errors[] = 'Correo inválido';
-                    }
-                    if ($key == 'username') {
-                        $errors[] = 'Tu usuario debe tener minimo 5 carácteres';
-                    }
-                }
-            }
+            
             $userRegister->synchronize($_POST);
 
-
-            if ($valid) {
-                if ($_POST['repeatPassword'] == $_POST['password']) {
+            $validate = $userRegister->validateAttributes($_POST);
+            
+            if ($validate) {
+                if (trim($_POST['repeatPassword']) == $userRegister->password) {
                     $userRegister = new Users($_POST);
 
                     if ($userRegister->register()) {
                         header('Location: /login?state=1');
                     } else {
-                        $errors[] = 'Solo puedes tener una cuenta por correo';
+                        $userRegister->setError('Solo puedes tener una cuenta por correo');
                     }
                 } else {
-                    $errors[] = "No coinciden las contraseñas";
+                    $userRegister->setError("No coinciden las contraseñas");
                 }
             } 
         }
+    
 
         $router->render('auth/register', [
-            'errors' => $errors,
+            'errors' => $userRegister->getErrors(),
             'user' => $userRegister
         ]);
     }

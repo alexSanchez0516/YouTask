@@ -9,6 +9,7 @@ class Users extends ActiveRecord
     protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar'];
     protected static $tabla = 'users';
 
+    protected static array $errors = [];
 
 
     public int $id;
@@ -88,6 +89,34 @@ class Users extends ActiveRecord
         
         return static::$db->query($query);
        
+    }
+
+
+    public function validateAttributes($attributes) : bool {
+        $valid = true;
+
+        foreach ($attributes as $key => $value) {
+            $this->$key = trim($value);
+            
+            if ($key == 'email') {
+                if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                    self::$errors[] = 'Correo inválido';
+                } 
+            }
+          
+            if (strlen($this->$key) < 5) {
+                $valid = false;
+
+                if ($key == 'password') {
+                    self::$errors[] = 'La contraseña debe tener minimo 5 carácteres';
+                }
+                
+                if ($key == 'username') {
+                    self::$errors[] = 'Tu usuario debe tener minimo 5 carácteres';
+                }
+            }
+        }
+        return $valid;
     }
 
 
