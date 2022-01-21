@@ -11,17 +11,15 @@ class LoginController
 
     public static function auth(Router $router)
     {
-        $errors = ['s'];
         $userLogin = new Users();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userLogin = new Users($_POST);
             $userLogin->login();
-            //$errors = $userLogin->getErrors();
         }
 
         $router->render('auth/login', [
-            'errors' => $errors,
+            'errors' => $userLogin->getErrors(),
             'user' => $userLogin
         ]);
     }

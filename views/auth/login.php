@@ -6,6 +6,11 @@
                     <h2 class="heading-section">Auteticación</h2>
                 </div>
             </div>
+            <div class="row justify-content-center m-2 p-2 ">
+                <?php foreach($errors as $error): ?>
+                    <span class="fs-5 text-center text-danger alerts errors"><?php echo $error ?></span>
+                <?php endforeach; ?>
+            </div>
             <div class="row justify-content-center ">
                 <div class="col-md-12 col-lg-10">
                     <div class="wrap d-md-flex">

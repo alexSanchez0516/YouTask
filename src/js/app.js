@@ -1,5 +1,7 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     checkPassword();
+    checkAlerts();
 });
 
 function checkPassword() {
@@ -8,14 +10,28 @@ function checkPassword() {
     const btn_register = document.querySelector('#btn-register');
     const privacity = document.querySelector('#privacity');
 
-
-    privacity.addEventListener('change', function () {
-        if (privacity.checked) {
-            if (password.value == repeatPassword.value) {
-                btn_register.classList.toggle('d-flex');
+    if (privacity != null) {
+        privacity.addEventListener('change', function () {
+            if (privacity.checked) {
+                if (password.value == repeatPassword.value) {
+                    btn_register.classList.toggle('d-flex');
+                }
             }
-        } 
 
-    });
+        });
+    }
+
+
+}
+
+function checkAlerts() {
+    if (document.querySelector('.alerts')) {
+        const alert = document.querySelector('.alerts');
+        
+        setTimeout(() => {
+            alert.remove();
+        }, 5000);
+    }
+
 
 }

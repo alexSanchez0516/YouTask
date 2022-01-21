@@ -100,6 +100,7 @@ class Users extends ActiveRecord
             
             if ($key == 'email') {
                 if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                    $valid = false;
                     self::$errors[] = 'Correo inválido';
                 } 
             }

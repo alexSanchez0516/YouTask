@@ -2,7 +2,7 @@
     <!-- Sign up form -->
 
     <?php foreach ($errors as $e) : ?>
-        <div class="errors d-flex flex-column flex-wrap m-2 p-2 bg-danger w-75 align-self-center">
+        <div class="errors d-flex flex-column flex-wrap m-2 p-2 bg-danger w-75 align-self-center alerts errors">
             <p class="text-center text-white w-100 m-0"><?php echo $e ?></p>
         </div>
     <?php endforeach; ?>
