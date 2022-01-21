@@ -19,7 +19,7 @@ class Users extends ActiveRecord
     public String $token;
     public bool $validate;
     public bool $admin;
-//    public bool $online;
+    //    public bool $online;
     public String $avatar;
 
     function __construct($args = [])
@@ -35,8 +35,6 @@ class Users extends ActiveRecord
         $this->admin = $args['admin'] ?? false;
         //$this->online = $args['online'] ?? false;
         $this->avatar = $args['avatar'] ?? '';
-
-
     }
 
     public static function setDB($database)
@@ -45,10 +43,10 @@ class Users extends ActiveRecord
     }
 
     public function login()
-    {            
+    {
 
         $data = $this->sanitizeData();
-    
+
         if (!$data['email'] || !$data['password']) {
             static::$errors[] = 'Completa correctamente el formulario';
         }
@@ -85,39 +83,43 @@ class Users extends ActiveRecord
         $query .= ") VALUES (";
         $query .= "'{$this->username}', '{$this->password}' , '{$this->email}', false";
         $query .= ", '{$this->token}', false, '{$this->avatar}' )";
-        
-        
+
+
         return static::$db->query($query);
-       
     }
 
 
-    public function validateAttributes($attributes) : bool {
-        $valid = true;
+    public function validateAttributes($attributes): bool
+    {
 
         foreach ($attributes as $key => $value) {
             $this->$key = trim($value);
-            
-            if ($key == 'email') {
-                if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                    $valid = false;
-                    self::$errors[] = 'Correo inválido';
-                } 
-            }
-          
-            if (strlen($this->$key) < 5) {
-                $valid = false;
 
-                if ($key == 'password') {
-                    self::$errors[] = 'La contraseña debe tener minimo 5 carácteres';
+            if ($key == 'email') {
+                if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                    self::$errors[] = 'Correo inválido';
                 }
-                
-                if ($key == 'username') {
+            }
+
+
+            if ($key == 'password') {
+                if (strlen($this->$key) < 8) {
+                    self::$errors[] = 'La contraseña debe tener minimo 8 carácteres';
+                }
+                if (trim($attributes['repeatPassword'] != $this->password)) {
+                    self::$errors[] = 'No coinciden las contraseñas';
+                }
+            }
+
+            if ($key == 'username') {
+                if (strlen($this->$key) < 5) {
                     self::$errors[] = 'Tu usuario debe tener minimo 5 carácteres';
                 }
             }
+
+            
         }
-        return $valid;
+        return empty(self::$errors);
     }
 
 
@@ -141,6 +143,4 @@ class Users extends ActiveRecord
     {
         return true;
     }
-
-    
 }

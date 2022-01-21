@@ -25,12 +25,15 @@ function checkPassword() {
 }
 
 function checkAlerts() {
-    if (document.querySelector('.alerts')) {
-        const alert = document.querySelector('.alerts');
-        
-        setTimeout(() => {
-            alert.remove();
-        }, 5000);
+    if (document.querySelectorAll('.alerts')) {
+        const alerts = document.querySelectorAll('.alerts');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        });
+
+
     }
 
 

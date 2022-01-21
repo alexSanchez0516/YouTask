@@ -34,26 +34,22 @@ class LoginController
         $userRegister = new Users();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            
+
             $userRegister->synchronize($_POST);
 
             $validate = $userRegister->validateAttributes($_POST);
-            
-            if ($validate) {
-                if (trim($_POST['repeatPassword']) == $userRegister->password) {
-                    $userRegister = new Users($_POST);
 
-                    if ($userRegister->register()) {
-                        header('Location: /login?state=1');
-                    } else {
-                        $userRegister->setError('Solo puedes tener una cuenta por correo');
-                    }
+            if ($validate) {
+                $userRegister = new Users($_POST);
+
+                if ($userRegister->register()) {
+                    header('Location: /login?state=1');
                 } else {
-                    $userRegister->setError("No coinciden las contraseñas");
+                    $userRegister->setError('Solo puedes tener una cuenta por correo');
                 }
-            } 
+            }
         }
-    
+
 
         $router->render('auth/register', [
             'errors' => $userRegister->getErrors(),
