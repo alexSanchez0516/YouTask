@@ -1,14 +1,16 @@
+
+
 <main class="wrap d-flex flex-column">
     <section class="ftco-section m-4">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-5">
+            <div class="row justify-content-center d-flex">
+                <div class="col-md-6 text-center mb-3">
                     <h2 class="heading-section">Auteticación</h2>
                 </div>
             </div>
-            <div class="row justify-content-center m-2 p-2 ">
-                <?php foreach($errors as $error): ?>
-                    <span class="fs-5 text-center text-danger alerts errors"><?php echo $error ?></span>
+            <div class="row justify-content-center alerts m-2 p-2 ">
+                <?php foreach($alerts as $alert): ?>
+                    <span class="fs-5 text-center text-danger errors"><?php echo $alert ?></span>
                 <?php endforeach; ?>
             </div>
             <div class="row justify-content-center ">
@@ -47,7 +49,7 @@
                                         </label>
                                     </div>
                                     <div class="w-50 text-md-right">
-                                        <a href="#">¿Has olvidado tu contraseña?</a>
+                                        <a href="/forget-password">¿Has olvidado tu contraseña?</a>
                                     </div>
                                 </div>
                             </form>

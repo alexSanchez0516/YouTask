@@ -12,7 +12,7 @@ class ActiveRecord
 
 
 
-    protected static array $errors = [];
+    protected static array $alerts = [];
 
 
 
@@ -34,15 +34,16 @@ class ActiveRecord
         $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributes));
         $query .= "')";
-        static::$db->query($query) ?: header('Location: /inicio');
+        return static::$db->query($query);
     }
 
     public function save()
     {
+        
         if (($this->id) > 0) {
-            $this->update();
+            return $this->update();
         } else {
-            $this->create();
+            return $this->create();
         }
     }
 
@@ -50,9 +51,7 @@ class ActiveRecord
     {
 
         $atributes = $this->sanitizeData(0);
-        $services = $atributes['services'];
 
-        unset($atributes['services']);
         if (empty($atributes['imageProduct'])) {
             unset($atributes['imageProduct']);
         }
@@ -62,21 +61,11 @@ class ActiveRecord
             $values[] = "{$key}='{$value}'";
         }
 
-        $query = " UPDATE services SET ";
+        $query = " UPDATE " . static::$tabla . " SET ";
         $query .= join(', ', $values);
         $query .= " WHERE id = " . static::$db->escape_string($this->id);
         $query .= " LIMIT 1";
-        static::$db->query($query) ?: header('Location: /error.html');
-
-
-
-        $query = "UPDATE service SET nameService = '${services}' WHERE serviceID = ";
-
-        $query .= static::$db->escape_string($this->id);
-        $query .= " LIMIT 1";
-        static::$db->query($query) ?: header('Location: /error.html');
-
-        header('Location: /admin?state=1');
+        return static::$db->query($query);
     }
 
 
@@ -144,36 +133,19 @@ class ActiveRecord
     }
 
 
-    public static function getErrors(): array
+    public static function getAlerts(): array
     {
-        return static::$errors;
+        return static::$alerts;
     }
 
-    public static function setError($error)
+    public static function setAlert($alert)
     {
-        static::$errors[] = $error;
+        static::$alerts[] = $alert;
     }
 
-    public function validateData(): array
+    public function validateData()
     {
-        if (!$this->name) {
-            static::$errors[] = "Title is required";
-        }
-        if (strlen($this->description) < 10) {
-            static::$errors[] = "Description is required minimum 10 chars";
-        }
-        if (!$this->price > 5) {
-            static::$errors[] = "Price is required";
-        }
-        if (!$this->services) {
-            static::$errors[] = "services list is required";
-        }
-        if (!$this->imageProduct && $this->id == 0) {
-            //debug($this->id);
-            static::$errors[] = "Photo is required";
-        }
-
-        return static::$errors;
+       
     }
 
 
@@ -196,16 +168,10 @@ class ActiveRecord
 
     }
 
-    public static function find($id, $mail)
+    public static function find($col, $item)
     {
-        if (isset($mail)) {
-            $query = "SELECT * FROM " . static::$tabla  . " WHERE email = '${mail}'";
 
-            $data = static::consulSQL($query);
-            return array_shift($data); //Devuelve primer elemento de arreglo
-        }
-
-        $query = "SELECT * FROM " . static::$tabla  . " WHERE id = ${id}";
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
         $data = static::consulSQL($query);
 
         return array_shift($data); //Devuelve primer elemento de arreglo

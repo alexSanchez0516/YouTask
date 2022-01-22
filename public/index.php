@@ -31,7 +31,9 @@ $router->post('/forget-password', [LoginController::class, 'forgetPassword']); /
 $router->get('/recovery-password', [LoginController::class, 'recoveryPassword']); //
 $router->post('/recovery-password', [LoginController::class, 'recoveryPassword']); //add new password
 
+
 $router->get('/panel', [PanelController::class, 'index']); 
+
 
 
 

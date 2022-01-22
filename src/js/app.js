@@ -30,7 +30,7 @@ function checkAlerts() {
         alerts.forEach(alert => {
             setTimeout(() => {
                 alert.remove();
-            }, 5000);
+            }, 9000);
         });
 
 

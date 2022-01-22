@@ -17,23 +17,19 @@ class Users extends ActiveRecord
     public String $password;
     public String $email;
     public String $token;
-    public bool $validate;
-    public bool $admin;
-    //    public bool $online;
+    public  $validate;
+    public  $admin;
     public String $avatar;
 
     function __construct($args = [])
     {
-        $this->username = $args['id'] ?? '';
+        $this->id = $args['id'] ?? 0;
         $this->username = $args['username'] ?? '';
-        $this->lastname = $args['lastname'] ?? '';
-        $this->password = $args['password'] ?? '';
         $this->password = $args['password'] ?? '';
         $this->email = $args['email'] ?? '';
+        $this->validate = $args['validate'] ?? '0';
         $this->token = $args['token'] ?? '';
-        $this->validate = $args['validate'] ?? false;
-        $this->admin = $args['admin'] ?? false;
-        //$this->online = $args['online'] ?? false;
+        $this->admin = $args['admin'] ?? '0';
         $this->avatar = $args['avatar'] ?? '';
     }
 
@@ -48,44 +44,34 @@ class Users extends ActiveRecord
         $data = $this->sanitizeData();
 
         if (!$data['email'] || !$data['password']) {
-            static::$errors[] = 'Completa correctamente el formulario';
+            static::$alerts[] = 'Completa correctamente el formulario';
         }
         if (empty(static::$errors)) {
-            $user_data =  static::find(null, $data['email']);
-            if (isset($user_data)) {
+            $user_data =  static::find('email', $data['email']);
+            
+            if (isset($user_data) && $user_data->validate === "1") {
                 $auth = password_verify($this->password, $user_data->password);
                 if ($auth) {
                     session_start();
-
                     $_SESSION['username'] = $user_data->username;
-                    $_SESSION['login'] = true;
+                    $_SESSION['email'] = $user_data->email;
+                    $_SESSION['id'] = $user_data->id;
+                    $_SESSION['auth'] = true;
+
+                    if ($user_data->admin === "1") {
+                        debug("es admin");
+                    } else {
+                        debug("This is client");
+                    }
 
                     header('Location: /panel');
                 } else {
-                    static::$errors[] = 'Credenciales erróneas';
+                    static::$alerts[] = 'Credenciales erróneas';
                 }
             } else {
-                static::$errors[] = 'El usuario no existe';
+                static::$alerts[] = 'El usuario no existe o no está verificado';
             }
         }
-    }
-
-    public function register(): bool
-    {
-        $this->admin = 0;
-        $this->validate = 0;
-        $data = $this->sanitizeData(); //Scape String
-        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-
-
-        $query = "INSERT INTO users(";
-        $query .= join(",", array_keys($data));
-        $query .= ") VALUES (";
-        $query .= "'{$this->username}', '{$this->password}' , '{$this->email}', false";
-        $query .= ", '{$this->token}', false, '{$this->avatar}' )";
-
-
-        return static::$db->query($query);
     }
 
 
@@ -97,29 +83,34 @@ class Users extends ActiveRecord
 
             if ($key == 'email') {
                 if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                    self::$errors[] = 'Correo inválido';
+                    self::$alerts[] = 'Correo inválido';
                 }
             }
 
 
             if ($key == 'password') {
+                $repeatPassword = trim($attributes['repeatPassword']);
                 if (strlen($this->$key) < 8) {
-                    self::$errors[] = 'La contraseña debe tener minimo 8 carácteres';
+                    self::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
                 }
-                if (trim($attributes['repeatPassword'] != $this->password)) {
-                    self::$errors[] = 'No coinciden las contraseñas';
+                if ($repeatPassword != $this->password) {
+                    self::$alerts[] = 'No coinciden las contraseñas';
                 }
             }
 
             if ($key == 'username') {
                 if (strlen($this->$key) < 5) {
-                    self::$errors[] = 'Tu usuario debe tener minimo 5 carácteres';
+                    self::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
                 }
             }
 
             
         }
-        return empty(self::$errors);
+        return empty(self::$alerts);
+    }
+
+    public function createToken() {
+        $this->token = uniqid();
     }
 
 

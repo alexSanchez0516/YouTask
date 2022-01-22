@@ -4,6 +4,7 @@ namespace Controllers;
 
 use MVC\Router;
 use Model\Users;
+use Classes\Email;
 
 class LoginController
 {
@@ -11,7 +12,27 @@ class LoginController
 
     public static function auth(Router $router)
     {
+        //BEGGINING VERIFICATION TOKEN
+        if (!empty($_GET['token'])) {
+            $token = filter_var($_GET['token'], FILTER_SANITIZE_STRING);
+            $userToken = Users::find("token", $token);
+            if ($userToken != null) {
+                $userToken->validate = "1";
+                $userToken->token = "";
+
+                if ($userToken->save()) {
+                    $userToken->setAlert("Tu Cuenta ha sido verificada con exito");
+                } else {
+                    $userToken->setAlert("Hay un error con la verificación, intentalo más tarde");
+                }
+            } else {
+                Users::setAlert("Token inválido");
+            }
+        } 
+        //END VERIFICATION TOKEN
+
         $userLogin = new Users();
+
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userLogin = new Users($_POST);
@@ -19,7 +40,7 @@ class LoginController
         }
 
         $router->render('auth/login', [
-            'errors' => $userLogin->getErrors(),
+            'alerts' => $userLogin->getAlerts(),
             'user' => $userLogin
         ]);
     }
@@ -32,6 +53,7 @@ class LoginController
     public static function register(Router $router)
     {
         $userRegister = new Users();
+        $msg = NULL;
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -41,21 +63,30 @@ class LoginController
 
             if ($validate) {
                 $userRegister = new Users($_POST);
+                $userRegister->createToken();
 
-                if ($userRegister->register()) {
-                    header('Location: /login?state=1');
-                } else {
-                    $userRegister->setError('Solo puedes tener una cuenta por correo');
+                $email = new Email($userRegister->token, $userRegister->username, $userRegister->email);
+
+                if ($email->sendConfirmation()) {
+                    $userRegister->password = password_hash($userRegister->password, PASSWORD_BCRYPT);
+                    if ($userRegister->save()) {
+                        $msg = "Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail";
+                    } else {
+                        $userRegister->setAlert('Solo puedes tener una cuenta por correo');
+                    }
                 }
             }
         }
 
 
         $router->render('auth/register', [
-            'errors' => $userRegister->getErrors(),
-            'user' => $userRegister
+            'alerts' => $userRegister->getAlerts(),
+            'user' => $userRegister,
+            'msg' => $msg
         ]);
     }
+
+
 
     public static function forgetPassword(Router $router)
     {

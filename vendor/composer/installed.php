@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => 'e38c131642cbe9a0a6575e82f14cebd94597776c',
         'name' => 'alexandersanchez/you-task',
         'dev' => true,
     ),
     'versions' => array(
         'alexandersanchez/you-task' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => 'e38c131642cbe9a0a6575e82f14cebd94597776c',
             'dev_requirement' => false,
         ),
         'guzzlehttp/psr7' => array(
