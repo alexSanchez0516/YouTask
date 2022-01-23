@@ -3,3 +3,5 @@ node_modules
 .vscode/
 .DS_Store/
 .DS_Store
+public/build/js/bootstrap.bundle.js
+public/build/js/jquery.min.js
