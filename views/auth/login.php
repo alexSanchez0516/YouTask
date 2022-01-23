@@ -1,5 +1,3 @@
-
-
 <main class="wrap d-flex flex-column">
     <section class="ftco-section m-4">
         <div class="container">
@@ -9,7 +7,7 @@
                 </div>
             </div>
             <div class="row justify-content-center alerts m-2 p-2 ">
-                <?php foreach($alerts as $alert): ?>
+                <?php foreach ($alerts as $alert) : ?>
                     <span class="fs-5 text-center text-danger errors"><?php echo $alert ?></span>
                 <?php endforeach; ?>
             </div>
@@ -32,7 +30,7 @@
                             <form action="/login" class="signin-form" method="post">
                                 <div class="form-group mb-3">
                                     <label class="label" for="name">Email</label>
-                                    <input type="email" class="form-control" value="<?php echo s($user->email)?> "name="email" placeholder="email" required>
+                                    <input type="email" class="form-control" value="<?php echo s($user->email) ?> " name="email" placeholder="email" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password">Contraseña</label>
@@ -59,4 +57,4 @@
             </div>
         </div>
     </section>
-<main>
+    <main>

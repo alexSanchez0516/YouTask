@@ -28,7 +28,7 @@ class LoginController
             } else {
                 Users::setAlert("Token inválido");
             }
-        } 
+        }
         //END VERIFICATION TOKEN
 
         $userLogin = new Users();
@@ -90,10 +90,34 @@ class LoginController
 
     public static function forgetPassword(Router $router)
     {
-        $errors = [];
+        $typeAlert = false;
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $user = new Users($_POST);
+            if ($validate = $user->validateAttributes($_POST)) {
+                $user->sanitizeData();
+                $user = $user->find("email", $user->email);
+                if (!empty($user)) {
+                    if ($user->validate === '1') {
+                        $user->createToken();
+                        $email = new Email($user->token, $user->username, $user->email);
+                        if ($email->sendTokenRecovery()) {
+                            $typeAlert = true;
+                            $user->setAlert("Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail");
+                        }
+                    } else {
+                        $user->setAlert("Esta cuenta aun no ha sido verificada");
+                    }
+                    
+                } else {
+                    $user->setAlert("Este email no está registrado");
+                }
+            }
+        }
 
         $router->render('auth/forgetPassword', [
-            'errors' => $errors,
+            'alerts' => Users::getAlerts(),
+            'typeAlert' => $typeAlert,
         ]);
     }
 

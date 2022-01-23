@@ -21,12 +21,12 @@ $router->post('/inicio', [PageController::class, 'index']);
 $router->get('/login', [LoginController::class, 'auth']);
 $router->post('/login', [LoginController::class, 'auth']);
 
-$router->get('/register', [LoginController::class, 'register']);
-$router->post('/register', [LoginController::class, 'register']);
+$router->get('/registro', [LoginController::class, 'register']);
+$router->post('/registro', [LoginController::class, 'register']);
 
 //Send EMAIL request
-$router->get('/forget-password', [LoginController::class, 'forgetPassword']); //OlvidePaswword
-$router->post('/forget-password', [LoginController::class, 'forgetPassword']); //OlvidePaswword
+$router->get('/recuperar-password', [LoginController::class, 'forgetPassword']); //OlvidePaswword
+$router->post('/recuperar-password', [LoginController::class, 'forgetPassword']); //OlvidePaswword
 
 $router->get('/recovery-password', [LoginController::class, 'recoveryPassword']); //
 $router->post('/recovery-password', [LoginController::class, 'recoveryPassword']); //add new password
