@@ -10,7 +10,7 @@ $auth = $_SESSION['login'] ?? false; //si no existe es igual a null
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -51,7 +51,9 @@ $auth = $_SESSION['login'] ?? false; //si no existe es igual a null
 
     </header>
     <script src="/build/js/app.js"></script>
-    <script src="/build/js/bootstrap.bundle.js"></script>
+    <script src="/build/js/bootstrap.min.js"></script>
+    <script src="/build/js/jquery.min.js"></script>
+
 
     <?php echo $content; ?>
 

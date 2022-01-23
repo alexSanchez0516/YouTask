@@ -58,11 +58,7 @@ class Users extends ActiveRecord
                     $_SESSION['id'] = $user_data->id;
                     $_SESSION['auth'] = true;
 
-                    if ($user_data->admin === "1") {
-                        debug("es admin");
-                    } else {
-                        debug("This is client");
-                    }
+                    
 
                     header('Location: /panel');
                 } else {
