@@ -1,1 +1,1 @@
-newToken(90dias) => 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
+newToken(90dias) => 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
