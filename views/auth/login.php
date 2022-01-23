@@ -6,11 +6,8 @@
                     <h2 class="heading-section">Auteticación</h2>
                 </div>
             </div>
-            <div class="row justify-content-center alerts m-2 p-2 ">
-                <?php foreach ($alerts as $alert) : ?>
-                    <span class="fs-5 text-center text-danger errors"><?php echo $alert ?></span>
-                <?php endforeach; ?>
-            </div>
+            <?php  include_once __DIR__ . "/../templates/alerts.php" ?>
+            
             <div class="row justify-content-center ">
                 <div class="col-md-12 col-lg-10">
                     <div class="wrap d-md-flex">
@@ -47,7 +44,7 @@
                                         </label>
                                     </div>
                                     <div class="w-50 text-md-right">
-                                        <a href="/forget-password">¿Has olvidado tu contraseña?</a>
+                                        <a href="/recuperar-password">¿Has olvidado tu contraseña?</a>
                                     </div>
                                 </div>
                             </form>

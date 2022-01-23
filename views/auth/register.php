@@ -2,17 +2,13 @@
     <!-- Sign up form -->
 
     <?php foreach ($alerts as $alert) : ?>
-        <div class="errors d-flex flex-column flex-wrap m-2 p-2 bg-danger w-75 align-self-center alerts errors">
-            <p class="text-center text-white w-100 m-0"><?php echo $alert ?></p>
-        </div>
+        <?php if ($typeAlert) : ?>
+            <span class="fs-5 text-center text-primary errors"><?php echo $alert ?></span>
+        <?php elseif (!$typeAlert) : ?>
+            <span class="fs-5 text-center text-danger errors"><?php echo $alert ?></span>
+        <?php endif; ?>
     <?php endforeach; ?>
 
-    <?php if($msg != null):?>
-        <div class="errors d-flex flex-column flex-wrap m-2 p-2 bg-success w-75 align-self-center alerts errors">
-            <p class="text-center text-white w-100 m-0"><?php echo $msg ?></p>
-        </div>
-    <?php endif; ?>
-    
     <section class=" shadow">
         <div class="container">
             <div class="row d-flex justify-content-center align-items-center h-100">

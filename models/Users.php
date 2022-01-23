@@ -48,7 +48,7 @@ class Users extends ActiveRecord
         }
         if (empty(static::$errors)) {
             $user_data =  static::find('email', $data['email']);
-            
+
             if (isset($user_data) && $user_data->validate === "1") {
                 $auth = password_verify($this->password, $user_data->password);
                 if ($auth) {
@@ -58,7 +58,7 @@ class Users extends ActiveRecord
                     $_SESSION['id'] = $user_data->id;
                     $_SESSION['auth'] = true;
 
-                    
+
 
                     header('Location: /panel');
                 } else {
@@ -75,37 +75,38 @@ class Users extends ActiveRecord
     {
 
         foreach ($attributes as $key => $value) {
-            $this->$key = trim($value);
+            if ($key != 'repeatPassword') {
+                $this->$key = trim($value);
 
-            if ($key == 'email') {
-                if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                    self::$alerts[] = 'Correo inválido';
+                if ($key == 'email') {
+                    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                        self::$alerts[] = 'Correo inválido';
+                    }
+                }
+
+
+                if ($key == 'password') {
+                    $repeatPassword = trim($attributes['repeatPassword']);
+                    if (strlen($this->$key) < 8) {
+                        self::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
+                    }
+                    if ($repeatPassword != $this->password) {
+                        self::$alerts[] = 'No coinciden las contraseñas';
+                    }
+                }
+
+                if ($key == 'username') {
+                    if (strlen($this->$key) < 5) {
+                        self::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
+                    }
                 }
             }
-
-
-            if ($key == 'password') {
-                $repeatPassword = trim($attributes['repeatPassword']);
-                if (strlen($this->$key) < 8) {
-                    self::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
-                }
-                if ($repeatPassword != $this->password) {
-                    self::$alerts[] = 'No coinciden las contraseñas';
-                }
-            }
-
-            if ($key == 'username') {
-                if (strlen($this->$key) < 5) {
-                    self::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
-                }
-            }
-
-            
         }
         return empty(self::$alerts);
     }
 
-    public function createToken() {
+    public function createToken()
+    {
         $this->token = uniqid();
     }
 

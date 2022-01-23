@@ -173,7 +173,7 @@ class ActiveRecord
 
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
         $data = static::consulSQL($query);
-
+     
         return array_shift($data); //Devuelve primer elemento de arreglo
     }
 

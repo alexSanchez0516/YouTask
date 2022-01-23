@@ -12,15 +12,18 @@ class LoginController
 
     public static function auth(Router $router)
     {
+        $typeAlert = false;
+
         //BEGGINING VERIFICATION TOKEN
         if (!empty($_GET['token'])) {
-            $token = filter_var($_GET['token'], FILTER_SANITIZE_STRING);
+            $token = filter_var(s($_GET['token']), FILTER_SANITIZE_STRING);
             $userToken = Users::find("token", $token);
             if ($userToken != null) {
                 $userToken->validate = "1";
                 $userToken->token = "";
 
                 if ($userToken->save()) {
+                    $typeAlert = true;
                     $userToken->setAlert("Tu Cuenta ha sido verificada con exito");
                 } else {
                     $userToken->setAlert("Hay un error con la verificación, intentalo más tarde");
@@ -41,7 +44,8 @@ class LoginController
 
         $router->render('auth/login', [
             'alerts' => $userLogin->getAlerts(),
-            'user' => $userLogin
+            'user' => $userLogin,
+            'typeAlert' => $typeAlert
         ]);
     }
 
@@ -53,7 +57,8 @@ class LoginController
     public static function register(Router $router)
     {
         $userRegister = new Users();
-        $msg = NULL;
+        $typeAlert = false;
+
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -67,13 +72,18 @@ class LoginController
 
                 $email = new Email($userRegister->token, $userRegister->username, $userRegister->email);
 
-                if ($email->sendConfirmation()) {
-                    $userRegister->password = password_hash($userRegister->password, PASSWORD_BCRYPT);
-                    if ($userRegister->save()) {
-                        $msg = "Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail";
+                $userRegister->password = password_hash($userRegister->password, PASSWORD_BCRYPT);
+                if ($userRegister->save()) {
+                    if ($email->sendConfirmation()) {
+                        $typeAlert = true;
                     } else {
-                        $userRegister->setAlert('Solo puedes tener una cuenta por correo');
+                        $userRegister->setAlert("Lo sentimos estamos teniendo un problema técnico, inténtalo más tarde");
+                        $typeAlert = false;;
                     }
+
+                    $userRegister->setAlert("Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail");
+                } else {
+                    $userRegister->setAlert('Solo puedes tener una cuenta por correo');
                 }
             }
         }
@@ -82,7 +92,7 @@ class LoginController
         $router->render('auth/register', [
             'alerts' => $userRegister->getAlerts(),
             'user' => $userRegister,
-            'msg' => $msg
+            'typeAlert' => $typeAlert,
         ]);
     }
 
@@ -101,14 +111,15 @@ class LoginController
                     if ($user->validate === '1') {
                         $user->createToken();
                         $email = new Email($user->token, $user->username, $user->email);
-                        if ($email->sendTokenRecovery()) {
+                        if ($user->save() && $email->sendTokenRecovery()) {
                             $typeAlert = true;
                             $user->setAlert("Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail");
+                        } else {
+                            $user->setAlert("Lo sentimos estamos teniendo un problema técnico, inténtalo más tarde");
                         }
                     } else {
                         $user->setAlert("Esta cuenta aun no ha sido verificada");
                     }
-                    
                 } else {
                     $user->setAlert("Este email no está registrado");
                 }
@@ -123,10 +134,39 @@ class LoginController
 
     public static function recoveryPassword(Router $router)
     {
-        $errors = [];
+        $user = NULL;
+        $typeAlert = false;
+        $userToken = NULL;
+
+        $token = filter_var(s($_GET['token'] ?? null), FILTER_SANITIZE_STRING);
+        $userToken = Users::find('token', $token);
+
+        if (!empty($token)) {
+            $typeAlert = true;
+            //$userToken->token = '';
+            $userToken->save();
+
+        } 
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            if ($userToken->validateAttributes($_POST)) {
+                $userToken->sanitizeData();
+                $userToken->save();
+                
+                debug($userToken);
+
+
+            }
+        }
+
+
+
 
         $router->render('auth/recoveryPassword', [
-            'errors' => $errors,
+            'alerts' => Users::getAlerts(),
+            'typeAlert' => $typeAlert,
         ]);
     }
 }

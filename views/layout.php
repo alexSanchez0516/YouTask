@@ -38,7 +38,7 @@ $auth = $_SESSION['login'] ?? false; //si no existe es igual a null
                     <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none">Inicio</a></li>
                     <li class="nav__item"><a href="" class="nav__link text-decoration-none">Blog</a></li>
                     <li class="nav__item"><a href="" class="nav__link text-decoration-none">Contacto</a></li>
-                    <li class="nav__item"><a href="/register" class="nav__link text-decoration-none">Crear cuenta</a></li>
+                    <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none">Crear cuenta</a></li>
                     <li class="nav__item"><a href="/login" class="nav__link text-decoration-none">Ingresar</a></li>
                 </ul>
             </div>
