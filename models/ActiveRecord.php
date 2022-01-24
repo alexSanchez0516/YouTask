@@ -39,6 +39,7 @@ class ActiveRecord
 
     public function save()
     {
+        debug($this);
         
         if (($this->id) > 0) {
             return $this->update();
@@ -50,7 +51,8 @@ class ActiveRecord
     public function update()
     {
 
-        $atributes = $this->sanitizeData(0);
+        $atributes = $this->sanitizeData();
+        debug($atributes);
 
         if (empty($atributes['imageProduct'])) {
             unset($atributes['imageProduct']);
@@ -65,6 +67,7 @@ class ActiveRecord
         $query .= join(', ', $values);
         $query .= " WHERE id = " . static::$db->escape_string($this->id);
         $query .= " LIMIT 1";
+        debug($query);
         return static::$db->query($query);
     }
 

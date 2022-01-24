@@ -134,28 +134,33 @@ class LoginController
 
     public static function recoveryPassword(Router $router)
     {
-        $user = NULL;
         $typeAlert = false;
-        $userToken = NULL;
 
         $token = filter_var(s($_GET['token'] ?? null), FILTER_SANITIZE_STRING);
-        $userToken = Users::find('token', $token);
+        $user = Users::find('token', $token);
 
         if (!empty($token)) {
             $typeAlert = true;
-            //$userToken->token = '';
-            $userToken->save();
-
+            $user->token = '';
         } 
 
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $password = new Users($_POST);
+            debug($user);
 
-            if ($userToken->validateAttributes($_POST)) {
-                $userToken->sanitizeData();
-                $userToken->save();
+            if ($password->validateAttributes($_POST)) {
+                $password->sanitizeData();
+                $user->password = '';
+                $user->token = '';
+
+
+                $password->password = password_hash($password->password, PASSWORD_BCRYPT);
+                $user->password = $password->password;
+                if ($password->save()) {
+                    header('Location: /');
+                }
                 
-                debug($userToken);
 
 
             }
