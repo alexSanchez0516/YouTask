@@ -25,7 +25,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 </head>
 
 <body class="container-fluid">
-    <header class="flex-column" data-cy=''>
+    <header class="flex-column bg-success" data-cy=''>
         <div class="container-fluid m-0">
             <!-- Beginning NAVBAR -->
             <div class="row">
@@ -39,21 +39,18 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                             <i class="fas fa-bars h2 "></i>
                         </div>
                     </div>
-                    <?php if (!$auth) : ?>
-                        <div class="nav__menu w-50 align-self-center" id="nav-menu">
+                    <div class="nav__menu w-50 align-self-center" id="nav-menu">
 
-                            <ul class="nav__list d-flex justify-content-around w-100">
-                                <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none">Inicio</a></li>
-                                <li class="nav__item"><a href="" class="nav__link text-decoration-none">Blog</a></li>
-                                <li class="nav__item"><a href="" class="nav__link text-decoration-none">Contacto</a></li>
-                                <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none">Crear cuenta</a></li>
-                                <li class="nav__item"><a href="/login" class="nav__link text-decoration-none">Ingresar</a></li>
-                            </ul>
-                        </div>
-                    <?php elseif ($auth) : ?>
-                        
+                        <ul class="nav__list d-flex justify-content-around w-100 mt-3">
+                            <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none text-white">Inicio</a></li>
+                            <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white">Blog</a></li>
+                            <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white">Contacto</a></li>
+                            <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none text-white">Crear cuenta</a></li>
+                            <li class="nav__item"><a href="/login" class="nav__link text-decoration-none text-white">Ingresar</a></li>
+                        </ul>
+                    </div>
 
-                    <?php endif; ?>
+
                 </nav>
             </div>
 

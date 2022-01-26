@@ -7,6 +7,8 @@ class Router
     public array $getRoutes = [];
     public array $postRoutes = [];
 
+    public static $currentUrl;
+    public static $urlsProtected;
     public function get($url, $fn)
     {
         $this->getRoutes[$url] = $fn;
@@ -22,30 +24,31 @@ class Router
 
         session_start();
 
-        $auth = $_SESSION['login'] ?? null;
+        $auth = $_SESSION['auth'] ?? null;
 
-        $urlsProtected = ['/admin', '/admin/update', '/admin/create', '/admin/delete'];
+        self::$urlsProtected = ['/panel', '/perfil'];
 
-        $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
-        for ($i = 0; $i < strlen($currentUrl); $i++) {
+        self::$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
             # code...
-            if ($currentUrl[$i] === '?') {
-                $currentUrl = substr($currentUrl, 0, $i);
+            if (self::$currentUrl === '?') {
+                self::$currentUrl = substr(self::$currentUrl, 0, $i);
                 break;
             }
         }
+
 
 
         $method = $_SERVER['REQUEST_METHOD'];
 
 
         if ($method === 'GET') {
-            $fn = $this->getRoutes[$currentUrl] ?? null;
+            $fn = $this->getRoutes[self::$currentUrl] ?? null;
         } else {
-            $fn = $this->postRoutes[$currentUrl] ?? null;
+            $fn = $this->postRoutes[self::$currentUrl] ?? null;
         }
 
-        if (in_array($currentUrl, $urlsProtected) && !$auth) {
+        if (in_array(self::$currentUrl, self::$urlsProtected) && !$auth) {
             header('Location: /');
         }
         if ($fn) {
@@ -66,14 +69,20 @@ class Router
         ob_start(); // Almacenamiento en memoria durante un momento...
 
         // entonces incluimos la vista en el layout
-        
+
         include_once __DIR__ . "/views/$view.php";
         $content = ob_get_clean(); // Limpia el Buffer
+
+
         if ($_SESSION['auth']) {
-            include_once __DIR__ . '/views/app/layoutPanel.php';
+            if (in_array(self::$currentUrl, self::$urlsProtected)) {
+
+                include_once __DIR__ . '/views/app/layoutPanel.php';
+            } else {
+                include_once __DIR__ . '/views/layout.php';
+            }
         } else {
             include_once __DIR__ . '/views/layout.php';
-
         }
     }
 }

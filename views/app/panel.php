@@ -13,7 +13,7 @@
                 </ul>
             </div>
             <div class="col-11 bg-primary d-flex flex-column align-items-center justify-content-center">
-                <p class="text-white">Parece que aún no tienes ningun proyecto ni tarea</p>
+                <h1><span class="badge bg-secondary ">Parece que aún no tienes ningun proyecto ni tarea</span></h1>
                 <button type="button" class="btn btn-dark w-25 mb-2"><a href="/" class="text-decoration-none text-white">Pincha aquí para crear un proyecto</a></button>
                 <button type="button" class="btn btn-dark w-25 mt-2"><a href="/" class="text-decoration-none text-white">Pincha aquí para crear una tarea</a></button>
 
@@ -21,4 +21,3 @@
         </div>
     </div>
 </main>
-onclick="window.location.href='/admin'
