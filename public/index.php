@@ -17,7 +17,7 @@ $router->get('/inicio', [PageController::class, 'index']);
 $router->post('/inicio', [PageController::class, 'index']);
 
 
-//Login
+//AUTH
 $router->get('/login', [LoginController::class, 'auth']);
 $router->post('/login', [LoginController::class, 'auth']);
 
@@ -32,8 +32,8 @@ $router->get('/recovery-password', [LoginController::class, 'recoveryPassword'])
 $router->post('/recovery-password', [LoginController::class, 'recoveryPassword']); //add new password
 
 
+//PANEL
 $router->get('/panel', [PanelController::class, 'index']); 
-
 
 
 

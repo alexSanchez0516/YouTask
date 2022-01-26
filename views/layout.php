@@ -5,7 +5,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-$auth = $_SESSION['login'] ?? false; //si no existe es igual a null
+$auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
 ?>
 
@@ -24,30 +24,55 @@ $auth = $_SESSION['login'] ?? false; //si no existe es igual a null
     <title>YouTask</title>
 </head>
 
-<body>
+<body class="container-fluid">
     <header class="flex-column" data-cy=''>
+        <div class="container m-0">
+            <!-- Beginning NAVBAR -->
+            <div class="row">
+                <nav class="nav d-flex ">
+                    <div class="nav_wrapper d-flex">
+                        <div class="w-75 d-flex">
+                            <a class="nav__logo" href="#"><img src="/build/img/logo.png" id="logo" class="" alt="logo"></img></a>
+                            <p class="align-self-center  fs-4 fw-bold text-primary text-uppercase">YouTask.</p>
+                        </div>
+                        <div class="nav__response">
+                            <i class="fas fa-bars h2 "></i>
+                        </div>
+                    </div>
+                    <?php if (!$auth) : ?>
+                        <div class="nav__menu w-50 align-self-center" id="nav-menu">
 
-        <!-- Beginning NAVBAR -->
-        <nav class="nav d-flex ">
-            <div class="w-50 d-flex">
-                <a class="nav__logo" href="#"><img src="/build/img/logo.png" id="logo" class="" alt="logo"></img></a>
-                <p class="align-self-center  fs-3 fw-bold text-primary text-uppercase">YouTask.</p>
+                            <ul class="nav__list d-flex justify-content-around w-100">
+                                <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none">Inicio</a></li>
+                                <li class="nav__item"><a href="" class="nav__link text-decoration-none">Blog</a></li>
+                                <li class="nav__item"><a href="" class="nav__link text-decoration-none">Contacto</a></li>
+                                <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none">Crear cuenta</a></li>
+                                <li class="nav__item"><a href="/login" class="nav__link text-decoration-none">Ingresar</a></li>
+                            </ul>
+                        </div>
+                    <?php elseif ($auth) : ?>
+                        <div class="row nav_wrap_panel">
+                            <div class="nav__panel col-12 align-self-center" id="nav-menu">
+
+                                <ul class="nav__list  d-flex justify-content-around w-100">
+                                    <li class="nav__item"><i class="fas fa-bell"></i></li>
+                                    <li class="nav__item"><i class="fas fa-cog"></i></li>
+                                    <li class="nav__item"><i class="far fa-user"></i></li>
+
+                                </ul>
+
+                            </div>
+                            
+                        </div>
+
+                    <?php endif; ?>
+                </nav>
             </div>
-            <div class="nav__menu w-50 align-self-center" id="nav-menu">
-                <ul class="nav__list d-flex justify-content-around ">
-                    <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none">Inicio</a></li>
-                    <li class="nav__item"><a href="" class="nav__link text-decoration-none">Blog</a></li>
-                    <li class="nav__item"><a href="" class="nav__link text-decoration-none">Contacto</a></li>
-                    <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none">Crear cuenta</a></li>
-                    <li class="nav__item"><a href="/login" class="nav__link text-decoration-none">Ingresar</a></li>
-                </ul>
-            </div>
+
+            <!-- END NAVBAR -->
+        </div>
 
 
-            
-        </nav>
-
-        <!-- END NAVBAR -->
 
     </header>
     <script src="/build/js/app.js"></script>

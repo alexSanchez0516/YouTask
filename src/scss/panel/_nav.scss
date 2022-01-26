@@ -1,0 +1,6 @@
+.nav_wrap_panel {
+    width: 100%;
+    @include tablet {
+        width: 50%;
+    }
+}

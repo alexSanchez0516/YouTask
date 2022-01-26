@@ -137,17 +137,29 @@ class LoginController
         $typeAlert = false;
 
         $token = filter_var(s($_GET['token'] ?? null), FILTER_SANITIZE_STRING);
-        $user = Users::find('token', $token);
+        $user = NULL;
 
         if (!empty($token)) {
             $typeAlert = true;
-            $user->token = '';
-        } 
+            $user = Users::find('token', $token);
+
+            if (!empty($user)) {
+                if (!isset($_SESSION)) {
+                    session_start();
+                }
+                $_SESSION['user'] = $user;
+            } else {
+                $typeAlert = false;
+                Users::setAlert("Token is invalid");
+            }
+        }
 
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $password = new Users($_POST);
-            debug($user);
+            $user = $_SESSION['user'];
+            session_destroy();
+
 
             if ($password->validateAttributes($_POST)) {
                 $password->sanitizeData();
@@ -157,12 +169,10 @@ class LoginController
 
                 $password->password = password_hash($password->password, PASSWORD_BCRYPT);
                 $user->password = $password->password;
-                if ($password->save()) {
-                    header('Location: /');
+                if ($user->save()) {
+                    $user->setAlert("Tu contraseña ha sido cambiada con éxito");
+                    header('Location: /login');
                 }
-                
-
-
             }
         }
 

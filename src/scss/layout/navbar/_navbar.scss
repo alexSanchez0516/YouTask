@@ -1,0 +1,33 @@
+.nav__response {
+    display: flex;
+    width: 25%;
+    align-items: center;
+    justify-content: center;
+    i {
+        margin-left: 2rem;
+    }
+
+   @include tablet {
+    display: none;
+   } 
+}
+.nav__menu {
+    display: none;
+    @include tablet {
+        display: flex;
+    }
+}
+.nav_wrapper {
+    width: 100%;
+    @include tablet {
+        width: 50%;
+    }
+}
+
+.nav__list {
+    margin-left: 1rem;;
+}
+   
+
+
+

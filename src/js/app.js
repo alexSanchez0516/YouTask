@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     checkPassword();
     checkAlerts();
+    showMenuResponse();
 });
 
 function checkPassword() {
@@ -33,9 +34,17 @@ function checkAlerts() {
                 alert.remove();
             }, 9000);
         });
-
-
     }
+}
 
-
+function showMenuResponse() {
+    const burger = document.querySelector('.fa-bars');
+    const nav__menu = document.querySelector('.nav__menu');
+    const nav__list = document.querySelector('.nav__list');
+    
+    
+    burger.addEventListener('click', () => {
+        nav__menu.classList.toggle('d-flex');
+        nav__list.classList.toggle('flex-column');
+    });
 }
