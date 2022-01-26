@@ -66,8 +66,14 @@ class Router
         ob_start(); // Almacenamiento en memoria durante un momento...
 
         // entonces incluimos la vista en el layout
+        
         include_once __DIR__ . "/views/$view.php";
         $content = ob_get_clean(); // Limpia el Buffer
-        include_once __DIR__ . '/views/layout.php';
+        if ($_SESSION['auth']) {
+            include_once __DIR__ . '/views/app/layoutPanel.php';
+        } else {
+            include_once __DIR__ . '/views/layout.php';
+
+        }
     }
 }

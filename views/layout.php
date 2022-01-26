@@ -26,13 +26,13 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
 <body class="container-fluid">
     <header class="flex-column" data-cy=''>
-        <div class="container m-0">
+        <div class="container-fluid m-0">
             <!-- Beginning NAVBAR -->
             <div class="row">
                 <nav class="nav d-flex ">
                     <div class="nav_wrapper d-flex">
                         <div class="w-75 d-flex">
-                            <a class="nav__logo" href="#"><img src="/build/img/logo.png" id="logo" class="" alt="logo"></img></a>
+                            <a class="nav__logo" href="#"><img src="" id="logo" class="" alt="logo"></img></a>
                             <p class="align-self-center  fs-4 fw-bold text-primary text-uppercase">YouTask.</p>
                         </div>
                         <div class="nav__response">
@@ -51,19 +51,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                             </ul>
                         </div>
                     <?php elseif ($auth) : ?>
-                        <div class="row nav_wrap_panel">
-                            <div class="nav__panel col-12 align-self-center" id="nav-menu">
-
-                                <ul class="nav__list  d-flex justify-content-around w-100">
-                                    <li class="nav__item"><i class="fas fa-bell"></i></li>
-                                    <li class="nav__item"><i class="fas fa-cog"></i></li>
-                                    <li class="nav__item"><i class="far fa-user"></i></li>
-
-                                </ul>
-
-                            </div>
-                            
-                        </div>
+                        
 
                     <?php endif; ?>
                 </nav>

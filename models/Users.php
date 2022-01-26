@@ -53,11 +53,9 @@ class Users extends ActiveRecord
                 $auth = password_verify($this->password, $user_data->password);
                 if ($auth) {
                     session_start();
-                    $_SESSION['username'] = $user_data->username;
-                    $_SESSION['email'] = $user_data->email;
-                    $_SESSION['id'] = $user_data->id;
+                    $_SESSION['user'] = $user_data;
+                   
                     $_SESSION['auth'] = true;
-
 
 
                     header('Location: /panel');
