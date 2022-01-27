@@ -59,7 +59,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <?php echo $content; ?>
     <footer class="bg-dark d-flex flex-column">
         <div class=" footer__Copyright">
-            <p class="text-dark text-center mt-3 text-white ">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-dark ">Alexander Sánchez</a></p>
+            <p class="text-dark text-center mt-3 text-white ">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-white ">Alexander Sánchez</a></p>
         </div>
     </footer>
 

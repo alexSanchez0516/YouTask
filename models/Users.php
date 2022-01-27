@@ -6,7 +6,7 @@ class Users extends ActiveRecord
 {
 
     protected static $db;
-    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar'];
+    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description'];
     protected static $tabla = 'users';
 
     protected static array $errors = [];
@@ -20,6 +20,7 @@ class Users extends ActiveRecord
     public  $validate;
     public  $admin;
     public String $avatar;
+    public String $description;
 
     function __construct($args = [])
     {
@@ -31,6 +32,7 @@ class Users extends ActiveRecord
         $this->token = $args['token'] ?? '';
         $this->admin = $args['admin'] ?? '0';
         $this->avatar = $args['avatar'] ?? '';
+        $this->description = $args['description'] ?? '';
     }
 
     public static function setDB($database)

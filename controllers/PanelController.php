@@ -13,14 +13,18 @@ class PanelController {
         $user = $_SESSION['user'];
 
        
-       
         $router->render('app/panel', [
             'errors' => $errors,
         ]);
     }
 
     public static function showPerfil(Router $router) {
+
+        $user = $_SESSION['user'];
+
+       
         $router->render('app/perfil', [
+            'user' => $user
         ]);
     }
 }

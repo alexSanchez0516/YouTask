@@ -25,15 +25,15 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 </head>
 
 <body class="container-fluid">
-    <header class="flex-column bg-success" data-cy=''>
+    <header class="flex-column bg-light-green" data-cy=''>
         <div class="container-fluid m-0">
             <!-- Beginning NAVBAR -->
             <div class="row">
                 <nav class="nav d-flex ">
                     <div class="nav_wrapper d-flex">
                         <div class="w-75 d-flex">
-                            <a class="nav__logo" href="#"><img src="" id="logo" class="" alt="logo"></img></a>
-                            <p class="align-self-center  fs-4 fw-bold text-primary text-uppercase">YouTask.</p>
+                            <a class="nav__logo m-2" href=""><i class="fas text-white fa-crop fs-1 "></i></a>
+                            <p class="align-self-center  fs-4 fw-bold text-white text-uppercase ">YouTask.</p>
                         </div>
                         <div class="nav__response">
                             <i class="fas fa-bars h2 "></i>

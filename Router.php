@@ -73,14 +73,16 @@ class Router
         include_once __DIR__ . "/views/$view.php";
         $content = ob_get_clean(); // Limpia el Buffer
 
-
-        if ($_SESSION['auth']) {
-            if (in_array(self::$currentUrl, self::$urlsProtected)) {
-
-                include_once __DIR__ . '/views/app/layoutPanel.php';
-            } else {
-                include_once __DIR__ . '/views/layout.php';
-            }
+        if (array_key_exists('auth', $_SESSION)) {
+            if ($_SESSION['auth']) {
+                if (in_array(self::$currentUrl, self::$urlsProtected)) {
+    
+                    include_once __DIR__ . '/views/app/layoutPanel.php';
+                } else {
+                    include_once __DIR__ . '/views/layout.php';
+                }
+        }
+        
         } else {
             include_once __DIR__ . '/views/layout.php';
         }
