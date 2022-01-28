@@ -1,21 +1,23 @@
-
 <main class="wrap d-flex flex-column">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-1 bg-primary" id="menu-left-panel">
+            <div class="col-1 " id="menu-left-panel">
                 <ul class="d-flex flex-column align-items-center">
-                    <li class="nav__item my-5"><i class="fas fa-chart-line text-white fs-1"></i></li>
-                    <li class="nav__item my-5"><i class="far fa-calendar-check text-white fs-1"></i></li>
-                    <li class="nav__item my-5"><i class="fas fa-project-diagram text-white fs-1"></i></li>
-                    <li class="nav__item my-5"><i class="fas fa-tasks text-white fs-1"></i></li>
+                    <li class="nav__item my-5"><i class="fas fa-chart-line text-dark fs-1"></i></li>
+                    <li class="nav__item my-5"><i class="far fa-calendar-check text-dark fs-1"></i></li>
+                    <li class="nav__item my-5"><i class="fas fa-project-diagram text-dark fs-1"></i></li>
+                    <li class="nav__item my-5"><i class="fas fa-tasks text-dark fs-1"></i></li>
                     <li class="nav__item my-5"><i class="fas fa-sign-out-alt text-dark fs-1"></i></li>
 
                 </ul>
             </div>
-            <div class="col-11 bg-primary d-flex flex-column align-items-center justify-content-center">
-                <h1><span class="badge bg-secondary ">Parece que aún no tienes ningun proyecto ni tarea</span></h1>
-                <button type="button" class="btn btn-dark w-25 mb-2"><a href="/" class="text-decoration-none text-white">Pincha aquí para crear un proyecto</a></button>
-                <button type="button" class="btn btn-dark w-25 mt-2"><a href="/" class="text-decoration-none text-white">Pincha aquí para crear una tarea</a></button>
+            <div class="col-10 mx-2 d-flex border shadow flex-column align-items-center justify-content-center">
+                <h1><span class="badge bg-success">Gracias por usar YouTask ❤️</span></h1>
+                <div class="d-flex w-50  mt-4 justify-content-center">
+                    <button type="button" class="btn btn-success mx-2">Crear proyecto</button>
+                    <button type="button" class="btn btn-success ">Crear tarea</button>
+                </div>
+
 
             </div>
         </div>

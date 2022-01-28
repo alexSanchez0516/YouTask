@@ -1,14 +1,26 @@
-<main class="wrap d-flex flex-column vh-100">
-    <div class="container">
+<main class="wrap d-flex flex-column ">
+    <div class="container-fluid p-0">
         <div class="row d-flex justify-content-center">
-            <div class="col-12">
-                <h1 class="text-center my-2">Configuración de la cuenta</h1>
-            </div>
-            <div class="col-12 col-md-6 d-flex justify-content-center">
-                <form action="/perfil" class="d-flex flex-column w-100" method="post">
-                    <div class="row d-flex justify-content-center my-5">
-                        <div class="col-12 col-md-8 m-2 d-flex flex-column">
-                            <label for="username">Nombre</label>
+
+            <div class="col-12 m-0  d-flex justify-content-center">
+                <div class="col-1" id="menu-left-panel">
+                    <ul class="d-flex flex-column align-items-center">
+                        <li class="nav__item my-4"><i class="fas fa-chart-line text-dark fs-1"></i></li>
+                        <li class="nav__item my-4"><i class="far fa-calendar-check text-dark fs-1"></i></li>
+                        <li class="nav__item my-4"><i class="fas fa-project-diagram text-dark fs-1"></i></li>
+                        <li class="nav__item my-4"><i class="fas fa-tasks text-dark fs-1"></i></li>
+                        <li class="nav__item my-5"><i class="fas fa-sign-out-alt text-dark fs-1"></i></li>
+
+                    </ul>
+                </div>
+                <form action="/perfil" class="d-flex flex-column w-100 m-2" method="post" enctype="multipart/form-data">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-6 col-12 p-4 shadow  mx-2 border d-flex flex-column">
+                            <?php include_once __DIR__ . "/../templates/alerts.php" ?>
+
+                            <h1 class="text-center">Configuración de la cuenta</h1>
+
+                            <label for="username" class="mt-2">Nombre</label>
                             <input type="text" name="username" class="w-100" value="<?php echo $user->username; ?>" id="username" placeholder="">
 
                             <label for="username" class="mt-2">Descripción</label>
@@ -20,7 +32,7 @@
 
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Grupo: XyMinDTeam   
+                                Grupo: XyMinDTeam
                             </button>
 
                             <!-- Modal -->
@@ -44,9 +56,6 @@
                             </div>
 
 
-                            <label for="avatar" class="mt-2">Foto</label>
-                            <input type="file" name="avatar" class="w-100" id="avatar">
-
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                 Guardar cambios
@@ -57,11 +66,11 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                            <h5 class="modal-title" id="staticBackdropLabel">Información</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            ...
+                                            ¿Quieres guardar los cambios?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -71,6 +80,19 @@
                                 </div>
                             </div>
 
+
+                        </div>
+                        <div class="col-md-4 col-12 ">
+                            <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid" alt=""></img>
+                            
+                            <div class="custom-input-file col-md-6 col-sm-6 col-xs-6">
+                                <input type="file" name="avatar" id="fichero-tarifas" class="input-file" value="">
+                                <?php if (strlen($user->avatar) > 0): ?>
+                                    Cambiar imagen...
+                                <?php elseif(strlen($user->avatar) == 0): ?>
+                                    Añadir imagen...
+                                <?php endif; ?>
+                            </div>
 
                         </div>
                     </div>

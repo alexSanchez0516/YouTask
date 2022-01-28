@@ -26,20 +26,19 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
 
 <body class="container-fluid">
-    <header class="flex-column bg-dark" data-cy=''>
+    <header class="flex-column" data-cy=''>
         <div class="container-fluid ">
             <div class="row">
                 <picture class="col-6">
-                    <i class="fas text-white fa-crop fs-1"></i>
+                    <a href="/panel"><i class="fas text-dark fa-crop fs-1"></i></a> 
                 </picture>
                 <nav class="col-6 my-4 d-flex justify-content-end">
                     <div class="row nav_wrap_panel">
                         <div class="nav__panel col-12 align-self-center" id="nav-menu">
 
-                            <ul class="nav__list  d-flex justify-content-around w-100">
-                                <li class="nav__item"><i class="fas fa-bell text-white fs-2"></i></li>
-                                <li class="nav__item"><i class="fas fa-cog text-white fs-2"></i></li>
-                                <li class="nav__item"><a href="/perfil" class="text-decoration-none text-white"><i class="far fa-user text-white fs-2"></i></a></li>
+                            <ul class="nav__list  d-flex justify-content-center w-100">
+                                <li class="nav__item"><i class="fas fa-bell text-dark fs-2 mx-4"></i></li>
+                                <li class="nav__item"><a href="/perfil" class="text-decoration-none text-dark"><i class="far fa-user text-dark fs-2"></i></a></li>
 
                             </ul>
 
@@ -57,9 +56,9 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
 
     <?php echo $content; ?>
-    <footer class="bg-dark d-flex flex-column">
+    <footer class=" d-flex flex-column">
         <div class=" footer__Copyright">
-            <p class="text-dark text-center mt-3 text-white ">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-white ">Alexander Sánchez</a></p>
+            <p class="text-dark text-center mt-3 text-dark ">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-dark ">Alexander Sánchez</a></p>
         </div>
     </footer>
 

@@ -28,10 +28,12 @@ class Router
 
         self::$urlsProtected = ['/panel', '/perfil'];
 
-        self::$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        self::$currentUrl = $_SERVER['PATH_INFO'] ?? '/';
+        
         for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
             # code...
             if (self::$currentUrl === '?') {
+               
                 self::$currentUrl = substr(self::$currentUrl, 0, $i);
                 break;
             }
@@ -43,6 +45,7 @@ class Router
 
 
         if ($method === 'GET') {
+            //debug(self::$currentUrl);
             $fn = $this->getRoutes[self::$currentUrl] ?? null;
         } else {
             $fn = $this->postRoutes[self::$currentUrl] ?? null;

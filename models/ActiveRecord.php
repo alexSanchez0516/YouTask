@@ -52,9 +52,7 @@ class ActiveRecord
 
         $atributes = $this->sanitizeData();
 
-        if (empty($atributes['imageProduct'])) {
-            unset($atributes['imageProduct']);
-        }
+
 
 
         foreach ($atributes as $key => $value) {
@@ -112,7 +110,7 @@ class ActiveRecord
     public function setImage($image): void
     {
         if ($image) {
-            $this->imageProduct = $image;
+            $this->avatar = $image;
         }
     }
 
@@ -125,9 +123,8 @@ class ActiveRecord
             file_exists(FOLDER_IMG . $imgDelete) ? unlink(FOLDER_IMG . $imgDelete) : false;
         }
 
-        $image = Image::make($image['tmp_name'])->fit(800, 600); //name and 
+        $image = Image::make($image['tmp_name'])->fit(300, 300); //name and 
         $this->setImage($completeImg);
-
 
         $image->save(FOLDER_IMG . $completeImg);
     }
@@ -155,7 +152,7 @@ class ActiveRecord
         //Delete on cascade
         $query = "DELETE FROM services WHERE id = " . static::$db->escape_string($this->id) . " LIMIT 1";
 
-        file_exists(FOLDER_IMG . $this->imageProduct) ? unlink(FOLDER_IMG . $this->imageProduct) : false;
+        file_exists(FOLDER_IMG . $this->avatar) ? unlink(FOLDER_IMG . $this->avatar) : false;
         static::$db->query($query) ? header('Location: /admin?state=3') : header('Location: /404.html');
     }
 

@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 define('TEMPLATES_URL', __DIR__ .  '/templates');
 define('FUNCIONES_URL', '/includes/funciones.php');
-define('FOLDER_IMG', $_SERVER['DOCUMENT_ROOT'] . '/img/');
+define('FOLDER_IMG', $_SERVER['DOCUMENT_ROOT'] . '/build/img/');
 
 
 function includeTemplate($name)
