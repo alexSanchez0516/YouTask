@@ -39,7 +39,7 @@ class ActiveRecord
 
     public function save()
     {
-        
+
         if (($this->id) > 0) {
             return $this->update();
         } else {
@@ -102,7 +102,6 @@ class ActiveRecord
             } else {
                 $sanitize[$key] = $value;
             }
-           
         }
         return $sanitize;
     }
@@ -142,7 +141,6 @@ class ActiveRecord
 
     public function validateData()
     {
-       
     }
 
 
@@ -159,6 +157,7 @@ class ActiveRecord
     public static function all(): array
     {
         $query = $query = "SELECT * FROM " . static::$tabla;
+        debug($query);
         $data = static::consulSQL($query);
 
         return $data; //Return all data
@@ -167,10 +166,15 @@ class ActiveRecord
 
     public static function find($col, $item)
     {
-
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
+
+        //if ($item > 0) {
+          //  $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = ${item}";
+
+        //} 
+
         $data = static::consulSQL($query);
-     
+
         return array_shift($data); //Devuelve primer elemento de arreglo
     }
 
@@ -178,14 +182,16 @@ class ActiveRecord
 
     public static function consulSQL($query): array
     {
-        $data = static::$db->query($query);
-
+        $data = static::$db->query($query); //puede dar false 
         $services = [];
 
-        while ($record = $data->fetch_array(MYSQLI_ASSOC)) {
-            $services[] = static::createObject($record);
+        if ($data) {
+            while ($record = $data->fetch_array(MYSQLI_ASSOC)) {
+                $services[] = static::createObject($record);
+            }
+            $data->free(); //Liberar memoria
         }
-        $data->free(); //Liberar memoria
+
 
         return $services; //return mapp array to getect
     }
@@ -207,12 +213,36 @@ class ActiveRecord
 
     }
 
-    public static function getAny(String $col, String $table)
+    public  function validateAttributes($attributes): bool
     {
-        $query = "SELECT ${col} FROM ${table}";
+        foreach ($attributes as $key => $value) {
+            if ($key != 'repeatPassword') {
+                $this->$key = trim($value);
 
-        $data = static::$db->query($query)->fetch_all();
+                if ($key == 'email') {
+                    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                        self::$alerts[] = 'Correo inválido';
+                    }
+                }
 
-        return $data;
+
+                if ($key == 'password') {
+                    $repeatPassword = trim($attributes['repeatPassword']);
+                    if (strlen($this->$key) < 8) {
+                        self::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
+                    }
+                    if ($repeatPassword != $this->password) {
+                        self::$alerts[] = 'No coinciden las contraseñas';
+                    }
+                }
+
+                if ($key == 'username') {
+                    if (strlen($this->$key) < 5) {
+                        self::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
+                    }
+                }
+            }
+        }
+        return empty(self::$alerts);
     }
 }

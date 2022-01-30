@@ -9,7 +9,6 @@ class Users extends ActiveRecord
     protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description'];
     protected static $tabla = 'users';
 
-    protected static array $errors = [];
 
 
     public int $id;
@@ -48,7 +47,7 @@ class Users extends ActiveRecord
         if (!$data['email'] || !$data['password']) {
             static::$alerts[] = 'Completa correctamente el formulario';
         }
-        if (empty(static::$errors)) {
+        if (empty(static::$alerts)) {
             $user_data =  static::find('email', $data['email']);
 
             if (isset($user_data) && $user_data->validate === "1") {
@@ -71,39 +70,7 @@ class Users extends ActiveRecord
     }
 
 
-    public function validateAttributes($attributes): bool
-    {
 
-        foreach ($attributes as $key => $value) {
-            if ($key != 'repeatPassword') {
-                $this->$key = trim($value);
-
-                if ($key == 'email') {
-                    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                        self::$alerts[] = 'Correo inválido';
-                    }
-                }
-
-
-                if ($key == 'password') {
-                    $repeatPassword = trim($attributes['repeatPassword']);
-                    if (strlen($this->$key) < 8) {
-                        self::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
-                    }
-                    if ($repeatPassword != $this->password) {
-                        self::$alerts[] = 'No coinciden las contraseñas';
-                    }
-                }
-
-                if ($key == 'username') {
-                    if (strlen($this->$key) < 5) {
-                        self::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
-                    }
-                }
-            }
-        }
-        return empty(self::$alerts);
-    }
 
     public function createToken()
     {

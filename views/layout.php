@@ -32,7 +32,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                 <nav class="nav d-flex ">
                     <div class="nav_wrapper d-flex">
                         <div class="w-75 d-flex">
-                            <a class="nav__logo m-2" href=""><i class="fas text-white fa-crop fs-1 "></i></a>
+                            <a class="nav__logo mx-2" href=""><i class="fas text-white fa-crop fs-1 "></i></a>
                             <p class="align-self-center  fs-4 fw-bold text-white text-uppercase ">YouTask.</p>
                         </div>
                         <div class="nav__response">
@@ -45,8 +45,14 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                             <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none text-white">Inicio</a></li>
                             <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white">Blog</a></li>
                             <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white">Contacto</a></li>
-                            <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none text-white">Crear cuenta</a></li>
-                            <li class="nav__item"><a href="/login" class="nav__link text-decoration-none text-white">Ingresar</a></li>
+                            <?php if (!array_key_exists('auth', $_SESSION)): ?>
+                                <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none text-white">Crear cuenta</a></li>
+                                <li class="nav__item"><a href="/login" class="nav__link text-decoration-none text-white">Ingresar</a></li>
+                            
+                            <?php else: ?>
+                                <li class="nav__item"><a href="/panel" class="nav__link text-decoration-none text-white">Panel</a></li>
+                                <li class="nav__item"><a href="/logout" class="nav__link text-decoration-none text-white">Cerrar sesión</a></li>
+                            <?php endif; ?>
                         </ul>
                     </div>
 

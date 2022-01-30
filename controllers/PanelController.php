@@ -14,12 +14,18 @@ class PanelController
         $errors = [];
 
         $user = $_SESSION['user'];
-
+        $data = Users::consulSQL("SELECT * FROM Projects WHERE ");
+        
+        
 
         $router->render('app/panel', [
             'errors' => $errors,
+            'user' => $user,
+            'data' => $data
         ]);
     }
+
+
 
     public static function showPerfil(Router $router)
     {

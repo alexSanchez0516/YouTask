@@ -30,7 +30,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
         <div class="container-fluid ">
             <div class="row">
                 <picture class="col-6">
-                    <a href="/panel"><i class="fas text-dark fa-crop fs-1"></i></a> 
+                    <a href="/"><i class="fas text-dark fa-crop fs-1"></i></a>
                 </picture>
                 <nav class="col-6 my-4 d-flex justify-content-end">
                     <div class="row nav_wrap_panel">
@@ -55,7 +55,28 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <script src="/build/js/jquery.min.js"></script>
 
 
-    <?php echo $content; ?>
+
+    <main class="wrap d-flex flex-column">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-1 " id="menu-left-panel">
+                    <ul class="d-flex flex-column align-items-center">
+                        <li class="nav__item my-5"><a href="/panel"><i class="fas fa-chart-line text-dark fs-1"></i></a></li>
+                        <li class="nav__item my-5"><i class="far fa-calendar-check text-dark fs-1"></i></li>
+                        <li class="nav__item my-5"><i class="fas fa-project-diagram text-dark fs-1"></i></li>
+                        <li class="nav__item my-5"><i class="fas fa-tasks text-dark fs-1"></i></li>
+                        <li class="nav__item my-5"><i class="fas fa-sign-out-alt text-dark fs-1"></i></li>
+
+                    </ul>
+                </div>
+                <div class="col-10 mx-2 d-flex border shadow flex-column align-items-center justify-content-center">
+                    <?php echo $content; ?>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
     <footer class=" d-flex flex-column">
         <div class=" footer__Copyright">
             <p class="text-dark text-center mt-3 text-dark ">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-dark ">Alexander Sánchez</a></p>

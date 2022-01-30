@@ -26,7 +26,7 @@ class Router
 
         $auth = $_SESSION['auth'] ?? null;
 
-        self::$urlsProtected = ['/panel', '/perfil'];
+        self::$urlsProtected = ['/panel', '/perfil', '/crear-proyecto'];
 
         self::$currentUrl = $_SERVER['PATH_INFO'] ?? '/';
         

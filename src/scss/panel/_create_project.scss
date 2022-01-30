@@ -1,0 +1,12 @@
+#wrap_create_project {
+    display: none;
+}
+
+.show_wrap_create_project {
+    display: flex !important;
+    width: 100%;
+    flex-flow: column wrap;
+    justify-content:center;
+    align-items:center;
+}
+

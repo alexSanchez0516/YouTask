@@ -1,19 +1,13 @@
 <main class="wrap d-flex flex-column">
     <!-- Sign up form -->
 
-    <?php foreach ($alerts as $alert) : ?>
-        <?php if ($typeAlert) : ?>
-            <span class="fs-5 text-center text-primary errors"><?php echo $alert ?></span>
-        <?php elseif (!$typeAlert) : ?>
-            <span class="fs-5 text-center text-danger errors"><?php echo $alert ?></span>
-        <?php endif; ?>
-    <?php endforeach; ?>
+    <?php include_once __DIR__ . "/../templates/alerts.php"?>
 
     <section class=" shadow">
         <div class="container">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-lg-12 col-xl-11">
-                    <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card text-black mt-2" style="border-radius: 25px;">
                         <div class="card-body p-md-5">
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">

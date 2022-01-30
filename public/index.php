@@ -7,6 +7,7 @@ use MVC\Router;
 use Controllers\LoginController;
 use Controllers\PageController;
 use Controllers\PanelController;
+use Controllers\APIController;
 $router = new Router();
 
 
@@ -41,6 +42,12 @@ $router->get('/perfil', [PanelController::class, 'showPerfil']);
 $router->post('/perfil', [PanelController::class, 'showPerfil']);
 
 
+
+//debug("LEER DOCUMENTO WORD");
+
+//API
+$router->get('/api/proyects', [APIController::class, 'listProjects']);
+$router->get('/api/tasks', [APIController::class, 'listTasks']);
 
 
 $router->checkRutes();
