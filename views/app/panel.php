@@ -6,17 +6,8 @@
             <button type="button" id="create_task" class="btn btn-success ">Crear tarea</button>
         </div>
     </div>
+    <!-- COMPONENT CREATE PROJECTS ADD TASK-->
     <div class="" id="wrap_create_project">
-        <!--<form action="" method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="First name" aria-label="First name">
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
-                </div>
-            </div>
-        </form> -->
         <h2 class="mb-4 mt-2">Crear proyecto</h2>
         <form class="row g-3" action="" method="POST" enctype="multipart/form-data">
             <div class="col-md-6">
@@ -31,7 +22,7 @@
                 </select>
             </div>
 
-            <div class="col-12">
+            <div class="col-10">
                 <label for="inputAddress" class="form-label">Descripcion</label>
                 <textarea name="description" class="form-control" rows="10" id="inputDescription" placeholder="Describe tu proyecto con matices"></textarea>
             </div>
@@ -60,26 +51,20 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label for="inputZip" class="form-label">Fecha Fin(opcional)</label>
+                <label for="inputZip" class="form-label">Fecha Fin</label>
                 
-                <input type="date" class="form-control" id="inputDate" name="dateEnd">
-                <?php debug("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local");?>
+                <input type="datetime-local" class="form-control" id="inputDate" name="dateEnd" value="<?php echo date("Y-m-d H:i:s") ?>" min="" max="">
             </div>
-            <div class="col-12">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-                        Check me out
-                    </label>
-                </div>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+            
+            <div class="col-12 mb-2">
+                <button type="submit" class="btn btn-primary">Crear</button>
             </div>
         </form>
-    </div>
+    </div> 
+    
 
 <?php else : ?>
+    para usuarios ya con proyectos y tareas
 
 
 <?php endif; ?>

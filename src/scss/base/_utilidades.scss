@@ -1,7 +1,11 @@
 @import 'variables';
+@import 'mixins';
 
 .custom-input-file {
-    width: 100%;
+    width: 100% !important;
+    @include tablet {
+        width: 70% !important;
+    }
     background-color: $lightBlue;
     color: #fff;
     cursor: pointer;
