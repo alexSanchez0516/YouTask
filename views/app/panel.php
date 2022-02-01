@@ -36,20 +36,34 @@
                 <textarea name="description" class="form-control" rows="10" id="inputDescription" placeholder="Describe tu proyecto con matices"></textarea>
             </div>
 
-            <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity">
+            <div class="col-md-4">
+                <label for="inputState" class="form-label">Miembros</label>
+                <select id="inputState" class="form-select" multiple="" required>
+                    <option selected>Tú</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+                    <option>JUAN</option>
+
+                </select>
             </div>
             <div class="col-md-4">
-                <label for="inputState" class="form-label">State</label>
+                <label for="inputState" class="form-label">Prioridad</label>
                 <select id="inputState" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>...</option>
+                    <option selected>Baja</option>
+                    <option>Media</option>
+                    <option>Alta</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label for="inputZip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
+                <label for="inputZip" class="form-label">Fecha Fin(opcional)</label>
+                
+                <input type="date" class="form-control" id="inputDate" name="dateEnd">
+                <?php debug("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local");?>
             </div>
             <div class="col-12">
                 <div class="form-check">
