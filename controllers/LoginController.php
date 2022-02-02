@@ -64,9 +64,8 @@ class LoginController
 
             $userRegister->synchronize($_POST);
 
-            $validate = $userRegister->validateAttributes($_POST);
 
-            if ($validate) {
+            if ($userRegister->validateAttributes($_POST)) {
                 $userRegister = new Users($_POST);
                 $userRegister->createToken();
 
@@ -104,7 +103,7 @@ class LoginController
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user = new Users($_POST);
-            if ($validate = $user->validateAttributes($_POST)) {
+            if ($user->validateAttributes($_POST)) {
                 $user->sanitizeData();
                 $user = $user->find("email", $user->email);
                 if (!empty($user)) {

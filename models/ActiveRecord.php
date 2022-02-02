@@ -34,6 +34,7 @@ class ActiveRecord
         $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributes));
         $query .= "')";
+      
         return static::$db->query($query);
     }
 
@@ -169,7 +170,7 @@ class ActiveRecord
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
 
         //if ($item > 0) {
-          //  $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = ${item}";
+        //  $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = ${item}";
 
         //} 
 
@@ -216,12 +217,12 @@ class ActiveRecord
     public  function validateAttributes($attributes): bool
     {
         foreach ($attributes as $key => $value) {
-            if ($key != 'repeatPassword') {
+            if ($key != 'repeatPassword' && $key != 'members') {
                 $this->$key = trim($value);
 
                 if ($key == 'email') {
                     if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                        self::$alerts[] = 'Correo inválido';
+                        static::$alerts[] = 'Correo inválido';
                     }
                 }
 
@@ -229,20 +230,32 @@ class ActiveRecord
                 if ($key == 'password') {
                     $repeatPassword = trim($attributes['repeatPassword']);
                     if (strlen($this->$key) < 8) {
-                        self::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
-                    }
+                        static::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
+                    } 
                     if ($repeatPassword != $this->password) {
-                        self::$alerts[] = 'No coinciden las contraseñas';
+                        static::$alerts[] = 'No coinciden las contraseñas';
                     }
                 }
 
                 if ($key == 'username') {
                     if (strlen($this->$key) < 5) {
-                        self::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
+                        static::$alerts[] = 'Tu usuario debe tener minimo 5 carácteres';
                     }
                 }
             }
+            if ($key == 'name') {
+                if (strlen($this->$key) < 1) {
+                    static::$alerts[] = 'El nombre no puede ir vacio';
+                }
+            }
+            if ($key == 'description') {
+                if (strlen($this->$key) < 1) {
+                    static::$alerts[] = 'La descripcion no puede ir vacia';
+                }
+            }
+         
+        
         }
-        return empty(self::$alerts);
+        return empty(static::$alerts);
     }
 }

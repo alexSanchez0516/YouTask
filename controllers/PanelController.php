@@ -4,6 +4,7 @@ namespace Controllers;
 
 use MVC\Router;
 use Model\Users;
+use Model\Project;
 
 class PanelController
 {
@@ -12,16 +13,36 @@ class PanelController
     public static function index(Router $router)
     {
         $errors = [];
+        $project = new Project();
 
         $user = $_SESSION['user'];
-        $data = Users::consulSQL("SELECT * FROM Projects WHERE ");
-        
-        
+        //$data = Users::consulSQL("SELECT * FROM Projects WHERE ");
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
+            $project->synchronize($_POST);
+            if ($project->validateAttributes($project->sanitizeData())) {
+                $project->state = "EN PROCESO";
+                if ($project->save()) {
+                    debug("Se guardó");
+                }
+            }
+        }
+
 
         $router->render('app/panel', [
             'errors' => $errors,
             'user' => $user,
-            'data' => $data
+            'alerts' => Project::getAlerts(),
+            'typeAlert' => false
+
+        ]);
+    }
+
+    public static function createProject(Router $router) {
+        $router->render('app/createProject', [
+            'alerts' => Project::getAlerts(),
+            'typeAlert' => false
         ]);
     }
 

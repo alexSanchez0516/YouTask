@@ -4,7 +4,7 @@ namespace Model;
 
 class Project extends ActiveRecord {
     protected static $db;
-    protected static $colDB = ['id', 'name', 'description', 'adminID', 'state', 'priority', 'create_at', 'date_end' ];
+    protected static $colDB = ['id', 'name', 'description', 'adminID', 'state', 'priority', 'date_end' ];
     protected static $tabla = 'Projects';
 
     protected static array $alerts = [];
@@ -15,7 +15,6 @@ class Project extends ActiveRecord {
     public int $adminID;
     public String $state;
     public String $priority;
-    public String $create_at;
     public $date_end;
 
 
@@ -26,7 +25,6 @@ class Project extends ActiveRecord {
         $this->adminID = $args['adminID'] ?? 0;
         $this->state = $args['state'] ?? '';
         $this->priority = $args['priority'] ?? '';
-        $this->create_at = $args['create_at'] ?? '';
         $this->date_end = $args['date_end'] ?? '';
     }
 

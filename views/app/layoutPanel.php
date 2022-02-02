@@ -70,6 +70,8 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                     </ul>
                 </div>
                 <div class="col-10 mx-2 d-flex border shadow flex-column align-items-center justify-content-center">
+                    <?php include_once __DIR__ . "/../templates/alerts.php"; ?>
+
                     <?php echo $content; ?>
                 </div>
             </div>

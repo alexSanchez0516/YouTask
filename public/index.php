@@ -35,11 +35,15 @@ $router->post('/recovery-password', [LoginController::class, 'recoveryPassword']
 
 //PANEL
 $router->get('/panel', [PanelController::class, 'index']); 
-$router->get('/panel', [PanelController::class, 'index']); 
+$router->post('/panel', [PanelController::class, 'index']); 
 
 
 $router->get('/perfil', [PanelController::class, 'showPerfil']);
 $router->post('/perfil', [PanelController::class, 'showPerfil']);
+
+
+$router->get('/crear-proyecto', [PanelController::class, 'createProject']); 
+$router->post('/crear-proyecto', [PanelController::class, 'createProject']); 
 
 
 
