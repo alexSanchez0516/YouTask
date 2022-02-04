@@ -28,8 +28,16 @@ class Project extends ActiveRecord {
         $this->date_end = $args['date_end'] ?? '';
     }
 
-    public function createProject() {
+    public function createProject(Users $user) : bool {
+        if ($this->validateAttributes($this->sanitizeData())) {
+            $this->state = "EN PROCESO";
+            $this->id = $user->id; 
+            
+            return $this->create();
 
+        }
+            
+                
     }
 
     public function deleteProject() {

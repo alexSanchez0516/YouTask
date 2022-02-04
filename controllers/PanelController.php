@@ -12,26 +12,22 @@ class PanelController
 
     public static function index(Router $router)
     {
-        $errors = [];
         $project = new Project();
-
         $user = $_SESSION['user'];
-        //$data = Users::consulSQL("SELECT * FROM Projects WHERE ");
+
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-
             $project->synchronize($_POST);
-            if ($project->validateAttributes($project->sanitizeData())) {
-                $project->state = "EN PROCESO";
-                if ($project->save()) {
-                    debug("Se guardó");
-                }
+            if ($project->createProject($user)) {
+
+            } else {
+                $project->setAlert("Web fuera de servicio temporalmente");
             }
+            
         }
 
 
         $router->render('app/panel', [
-            'errors' => $errors,
             'user' => $user,
             'alerts' => Project::getAlerts(),
             'typeAlert' => false

@@ -2,6 +2,9 @@
 
 namespace Model;
 
+use Classes\Email;
+
+
 class Users extends ActiveRecord
 {
 
@@ -55,7 +58,7 @@ class Users extends ActiveRecord
                 if ($auth) {
                     session_start();
                     $_SESSION['user'] = $user_data;
-                   
+
                     $_SESSION['auth'] = true;
 
 
@@ -69,7 +72,31 @@ class Users extends ActiveRecord
         }
     }
 
+    public function createUser(): bool
+    {
+        $typeAlert = false;
+        if ($this->validateAttributes($_POST)) {
+            $this->sanitizeData();
+            $this->createToken();
 
+            $email = new Email($this->token, $this->username, $this->email);
+
+            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+            if ($this->save()) {
+                if ($email->sendConfirmation()) {
+                    $typeAlert = true;
+                } else {
+                    $this->setAlert("Lo sentimos estamos teniendo un problema técnico, inténtalo más tarde");
+                }
+
+                $this->setAlert("Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail");
+            } else {
+                $this->setAlert('Solo puedes tener una cuenta por correo');
+            }
+        }
+
+        return $typeAlert;
+    }
 
 
     public function createToken()
@@ -84,12 +111,7 @@ class Users extends ActiveRecord
 
         $_SESSION = [];
 
-        header('Location: /login');
-    }
-
-    public function changePassword(String $password): bool
-    {
-        return true;
+        header('Location: /');
     }
 
 
@@ -97,5 +119,93 @@ class Users extends ActiveRecord
     public function deleteUser(): bool
     {
         return true;
+    }
+
+    public function recoveryPassword($password, $typeAlert): bool
+    {
+
+        if ($password->validateAttributes($_POST)) {
+            $password->sanitizeData();
+            $this->password = '';
+            $this->token = '';
+
+
+            $password->password = password_hash($password->password, PASSWORD_BCRYPT);
+            $this->password = $password->password;
+            if ($this->save()) {
+                $typeAlert = true;
+                $this->setAlert("Tu contraseña ha sido cambiada con éxito");
+            }
+        }
+
+        return $typeAlert;
+    }
+
+
+
+    public function validateUser($typeAlert) : bool
+    {
+
+        $this->validate = "1";
+        $this->token = "";
+
+        if ($this->save()) {
+            $typeAlert = true;
+            $this->setAlert("Tu Cuenta ha sido verificada con exito");
+        } else {
+            $this->setAlert("Hay un error con la verificación, intentalo más tarde");
+        } 
+        return $typeAlert;
+    }
+
+
+    public static function checkToken(): bool
+    {
+        $typeAlert = true;
+
+        $token = filter_var(s($_GET['token'] ?? null), FILTER_SANITIZE_STRING);
+        $user = NULL;
+
+
+        if (!empty($token)) {
+            $user = Users::find('token', $token);
+            if (!empty($user)) {
+                if (!isset($_SESSION)) {
+                    session_start();
+                }
+                $_SESSION['user'] = $user;
+            } else {
+                $typeAlert = false;
+                Users::setAlert("Token is invalid");
+            }
+        }
+
+
+        return $typeAlert;
+    }
+
+    public function forgetPassword($typeAlert): bool
+    {
+        if ($this->validateAttributes($_POST)) {
+            $this->sanitizeData();
+            $user = $this->find("email", $this->email);
+            if (!empty($user)) {
+                if ($user->validate === '1') {
+                    $user->createToken();
+                    $email = new Email($user->token, $user->username, $user->email);
+                    if ($user->save() && $email->sendTokenRecovery()) {
+                        $typeAlert = true;
+                        $user->setAlert("Hemos enviado las intrucciones para confimar tu cuenta a tu e-mail");
+                    } else {
+                        $user->setAlert("Lo sentimos estamos teniendo un problema técnico, inténtalo más tarde");
+                    }
+                } else {
+                    $user->setAlert("Esta cuenta aun no ha sido verificada");
+                }
+            } else {
+                static::$alerts[] = "Este email no está registrado";
+            }
+            return $typeAlert;
+        }
     }
 }

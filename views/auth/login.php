@@ -6,8 +6,9 @@
                     <h2 class="heading-section">Auteticación</h2>
                 </div>
             </div>
-            <?php  include_once __DIR__ . "/../templates/alerts.php" ?>
-            
+
+            <?php include_once __DIR__ . "/../templates/alerts.php" ?>
+
             <div class="row justify-content-center ">
                 <div class="col-md-12 col-lg-10">
                     <div class="wrap d-md-flex">
