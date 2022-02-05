@@ -48,8 +48,8 @@ class Project extends ActiveRecord {
 
     }
 
-    public static function getProjects() {
-
+    public  function getProjects(Users $user) {
+       return $this->find("adminID", $user->id, true);
     }
 
     public function getID() {

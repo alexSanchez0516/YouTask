@@ -39,5 +39,6 @@
 </div>
 
 <div class="col-12 mb-2 d-flex justify-content-center">
-    <button type="submit" class="btn btn-primary">Crear</button>
+    <button type="button" onclick="window.location.href='/panel'" class="btn btn-danger mx-2" data-bs-dismiss="modal">Cancelar</button>
+    <button type="submit"  class="btn btn-primary">Crear</button>
 </div>

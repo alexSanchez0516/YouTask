@@ -158,24 +158,20 @@ class ActiveRecord
     public static function all(): array
     {
         $query = $query = "SELECT * FROM " . static::$tabla;
-        debug($query);
         $data = static::consulSQL($query);
 
         return $data; //Return all data
 
     }
 
-    public static function find($col, $item)
+    public static function find($col, $item, bool $isAll)
     {
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
-
-        //if ($item > 0) {
-        //  $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = ${item}";
-
-        //} 
-
         $data = static::consulSQL($query);
 
+        if ($isAll) {
+            return $data;
+        }
         return array_shift($data); //Devuelve primer elemento de arreglo
     }
 

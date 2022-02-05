@@ -14,12 +14,15 @@ class PanelController
     {
         $project = new Project();
         $user = $_SESSION['user'];
+        $typeAlert = false;
 
+      
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $project->synchronize($_POST);
             if ($project->createProject($user)) {
-
+                $typeAlert = true;
+                $project->setAlert("Proyecto creado correctamente");
             } else {
                 $project->setAlert("Web fuera de servicio temporalmente");
             }
@@ -30,7 +33,8 @@ class PanelController
         $router->render('app/panel', [
             'user' => $user,
             'alerts' => Project::getAlerts(),
-            'typeAlert' => false
+            'typeAlert' => $typeAlert,
+            'projects' => $project->getProjects($user)
 
         ]);
     }
@@ -51,19 +55,7 @@ class PanelController
         $imgDelete = NULL;
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if ($user->validateAttributes($_POST)) {
-                $typeAlert = true;
-                $user->username = $_POST['username'];
-                $user->description = $_POST['description'];
-                if (strlen($_FILES['avatar']['name']) > 0) {
-                    if (strlen($user->avatar) > 0) { //Comprobamos si hay imagen
-                        $imgDelete = $user->avatar;
-                    }
-                    $user->uploadImg($_FILES['avatar'], $imgDelete);
-                }
-
-                $user->save() ? $user->setAlert("Cambios guardados correctamente") : false;
-            }
+            $typeAlert = $user->alterUser($typeAlert);
         }
 
         $router->render('app/perfil', [

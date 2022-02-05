@@ -67,10 +67,10 @@
 
 
         </div>
-        <div class="col-md-4 col-12 ">
+        <div class="col-md-4 col-12 d-flex flex-column align-items-center">
             <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid" alt=""></img>
 
-            <div class="custom-input-file col-md-6 col-sm-6 col-xs-6">
+            <div class="custom-input-file col-md-6 mt-2 col-sm-6 col-xs-6">
                 <input type="file" name="avatar" id="fichero-tarifas" class="input-file" value="">
                 <?php if (strlen($user->avatar) > 0) : ?>
                     Cambiar imagen...

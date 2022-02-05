@@ -16,7 +16,7 @@ class LoginController
         //BEGGINING VERIFICATION TOKEN
         if (!empty($_GET['token'])) {
             $token = filter_var(s($_GET['token']), FILTER_SANITIZE_STRING);
-            $userToken = Users::find("token", $token);
+            $userToken = Users::find("token", $token, false);
             
             if (!empty($userToken)) {
                 $typeAlert = $userToken->validateUser($typeAlert);

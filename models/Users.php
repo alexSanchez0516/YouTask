@@ -51,7 +51,7 @@ class Users extends ActiveRecord
             static::$alerts[] = 'Completa correctamente el formulario';
         }
         if (empty(static::$alerts)) {
-            $user_data =  static::find('email', $data['email']);
+            $user_data =  static::find('email', $data['email'], false);
 
             if (isset($user_data) && $user_data->validate === "1") {
                 $auth = password_verify($this->password, $user_data->password);
@@ -143,7 +143,7 @@ class Users extends ActiveRecord
 
 
 
-    public function validateUser($typeAlert) : bool
+    public function validateUser($typeAlert): bool
     {
 
         $this->validate = "1";
@@ -154,7 +154,7 @@ class Users extends ActiveRecord
             $this->setAlert("Tu Cuenta ha sido verificada con exito");
         } else {
             $this->setAlert("Hay un error con la verificación, intentalo más tarde");
-        } 
+        }
         return $typeAlert;
     }
 
@@ -168,7 +168,7 @@ class Users extends ActiveRecord
 
 
         if (!empty($token)) {
-            $user = Users::find('token', $token);
+            $user = Users::find('token', $token, false);
             if (!empty($user)) {
                 if (!isset($_SESSION)) {
                     session_start();
@@ -188,7 +188,7 @@ class Users extends ActiveRecord
     {
         if ($this->validateAttributes($_POST)) {
             $this->sanitizeData();
-            $user = $this->find("email", $this->email);
+            $user = $this->find("email", $this->email, false);
             if (!empty($user)) {
                 if ($user->validate === '1') {
                     $user->createToken();
@@ -207,5 +207,24 @@ class Users extends ActiveRecord
             }
             return $typeAlert;
         }
+    }
+
+    public function alterUser(bool $typeAlert)
+    {
+        if ($this->validateAttributes($_POST)) {
+            $typeAlert = true;
+            $this->username = $_POST['username'];
+            $this->description = $_POST['description'];
+            if (strlen($_FILES['avatar']['name']) > 0) {
+                if (strlen($this->avatar) > 0) { //Comprobamos si hay imagen
+                    $imgDelete = $this->avatar;
+                }
+                $this->uploadImg($_FILES['avatar'], $imgDelete);
+            }
+
+            $this->save() ? $this->setAlert("Cambios guardados correctamente") : false;
+        }
+
+        return $typeAlert;
     }
 }
