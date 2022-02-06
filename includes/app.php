@@ -9,7 +9,9 @@ $db = connectDB();
 use Model\ActiveRecord;
 use Model\Users;
 use Model\Project;
+use Model\Task;
 
 ActiveRecord::setDB($db);
 Users::setDB($db);
 Project::setDB($db);
+Task::setDB($db);

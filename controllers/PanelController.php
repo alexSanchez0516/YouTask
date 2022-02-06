@@ -5,6 +5,7 @@ namespace Controllers;
 use MVC\Router;
 use Model\Users;
 use Model\Project;
+use Model\Task;
 
 class PanelController
 {
@@ -16,7 +17,7 @@ class PanelController
         $user = $_SESSION['user'];
         $typeAlert = false;
 
-      
+
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $project->synchronize($_POST);
@@ -26,7 +27,6 @@ class PanelController
             } else {
                 $project->setAlert("Web fuera de servicio temporalmente");
             }
-            
         }
 
 
@@ -39,10 +39,52 @@ class PanelController
         ]);
     }
 
-    public static function createProject(Router $router) {
+    public static function createProject(Router $router)
+    {
+
+        $project = new Project();
+        $user = $_SESSION['user'];
+        $typeAlert = false;
+
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $project->synchronize($_POST);
+            if ($project->createProject($user)) {
+                $typeAlert = true;
+                $project->setAlert("Proyecto creado correctamente");
+            } else {
+                $project->setAlert("Web fuera de servicio temporalmente");
+            }
+        }
+
         $router->render('app/createProject', [
             'alerts' => Project::getAlerts(),
-            'typeAlert' => false
+            'typeAlert' => $typeAlert,
+        ]);
+    }
+
+    public static function createTask(Router $router)
+    {
+        $Project = new Project();
+        $Task = new Task();
+        $User = $_SESSION['user'];
+        $typeAlert = false;
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $Task->synchronize($_POST);
+            if ($Task->createTask($User, $Project->getProjects($User))) {
+                $typeAlert = true;
+                $Task->setAlert("Proyecto creado correctamente");
+            } else {
+                $Task->setAlert("Ups tenemos un problema con tu solicitud");
+            }
+        }
+        $router->render('app/createTask', [
+            'alerts' => Project::getAlerts(),
+            'typeAlert' => $typeAlert,
+            'projects' => $Project->getProjects($User)
         ]);
     }
 

@@ -45,6 +45,8 @@ $router->post('/perfil', [PanelController::class, 'showPerfil']);
 $router->get('/crear-proyecto', [PanelController::class, 'createProject']); 
 $router->post('/crear-proyecto', [PanelController::class, 'createProject']); 
 
+$router->get('/crear-tarea', [PanelController::class, 'createTask']); 
+$router->post('/crear-tarea', [PanelController::class, 'createTask']); 
 
 
 //debug("LEER DOCUMENTO WORD");

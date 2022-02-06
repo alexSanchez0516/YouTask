@@ -5,22 +5,34 @@ document.addEventListener('DOMContentLoaded', function () {
     showCreateProject();
 });
 
+
+
+
 function showCreateProject() {
 
-    ///Hay que crear el contenedor para mejorar el desacomplamiento
     const create_project = document.querySelector('#create_project');
-    const create_task = document.querySelector('#create_task');
     const wrap_initials = document.querySelector('#wrap_initials');
     const wrap_create_project = document.querySelector('#wrap_create_project');
 
-    if (create_project != null) {
-        create_project.addEventListener('click', () => {
-            wrap_initials.remove();
+    
+    if (document.querySelector('#create_project') != null) {
+            
+        if (create_project != null) {
+            create_project.addEventListener('click', () => {
+                wrap_initials.remove();
+                wrap_create_project.classList.add('show_wrap_create_project');
+            });
+        } else {
             wrap_create_project.classList.add('show_wrap_create_project');
-        });
+        }
     } else {
-        wrap_create_project.classList.add('show_wrap_create_project');
+        if (document.querySelector('#wrap_create_project') != null) {
+            wrap_create_project.classList.add('show_wrap_create_project');
+
+        }
     }
+
+   
 }
 
 function checkPassword() {

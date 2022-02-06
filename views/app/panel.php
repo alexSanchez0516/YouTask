@@ -28,8 +28,8 @@
             <span class="fs-4">Calendario</span>
         </div>
         <div class="col-md-3  border col-12 d-flex justify-content-evenly bg-light-green p-3" style="border-radius:1em;">
-            <i class="fas fa-tasks fs-1"></i>
-            <span class="fs-5">Crear Tarea</span>
+            <a href="/crear-tarea" class="text-decoration-none text-white"><i class="fas fa-plus-circle fs-1 text-white fs-1 create_task"></i></a>
+            <a href="/crear-tarea" class="text-decoration-none text-white"><span class="fs-5" class="create_task text-white">Crear Tarea</span></a>
         </div>
         <div class="col-md-3 border col-12 d-flex justify-content-evenly   bg-primary p-3" style="border-radius:1em" ;>
             <a href="/crear-proyecto" class="text-decoration-none"><i class="fas fa-plus-circle fs-1 text-white"></i></a>
@@ -41,7 +41,7 @@
             <h2 class="text-uppercase text-success">Últimos avances</h2>
             <div class="row w-100">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-success">
+                    <table class="table table-bordered table-info">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -73,7 +73,7 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-center">
+                <div class="row justify-content-center mt-3">
                     <div class="col-12 col-sm-4 darkWhiteSpecial mx-2 shadow col-md-3 mt-3 d-flex flex-column">
                         <h3 class="text-center fs-6">Tareas Acabadas</h3>
                         <div class="d-flex w-100 align-items-center">
@@ -94,7 +94,7 @@
 
 
                     <div class="col-12 col-sm-3 darkWhiteSpecial mx-2 shadow col-md-5 mt-3 d-flex flex-column">
-                        <h3 class="text-center fs-6">Tareas Acabadas</h3>
+                        <h3 class="text-center fs-6">Avance del mes</h3>
                         <div class="d-flex w-100 align-items-center">
                             <div class="progress w-100">
                                 <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
@@ -103,8 +103,140 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center my-3">
+        <span class="col-12 text-center my-2 fs-3">Tareas diarias</span>
+        <div class="col-12 d-flex flex-column align-items-center">
+            <div class="d-flex flex-column w-30 align-items-center">
+                <span class="w-100 text-center my-2">10:00</span>
+                <div class="d-flex w-100 justify-content-center align-items-center">
+                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-danger">
+                        <span class="w-100 text-center">Design meeting</span>
+                        <span class="w-100 text-center">11:00 - 11:30</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column w-50 align-items-center mt-3">
+                <span class="w-100 text-center my-3">11:00</span>
+                <div class="d-flex w-100">
+                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-info">
+                        <span class="w-100 text-center">Design meeting</span>
+                        <span class="w-100 text-center">11:00 - 11:30</span>
+                    </div>
+                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-success">
+                        <span class="w-100 text-center">Design meeting</span>
+                        <span class="w-100 text-center">11:00 - 11:30</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column w-50 align-items-center mt-3">
+                <span class="w-100 text-center my-3">11:00</span>
+                <div class="d-flex w-100">
+                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-secondary">
+                        <span class="w-100 text-center">Design meeting</span>
+                        <span class="w-100 text-center">11:00 - 11:30</span>
+                    </div>
+                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-primary">
+                        <span class="w-100 text-center">Design meeting</span>
+                        <span class="w-100 text-center">11:00 - 11:30</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row align-items-center mt-4">
+        <h3 class="text-center text-success my-3">Tareas Semanal</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-info">
+                <thead>
+                    <tr>
+                        <th scope="col">Prioridad</th>
+                        <th width="40%" scope="col" >Tarea</th>
+                        <th scope="col">Miembros</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="bg-danger text-white border rounded" scope="row">Alta</th>
+                        <td>Validation HTML</td>
+                        <td>juan, andres, pedro</td>
+                        <td class="bg-warning text-white border rounded">En Progreso</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="bg-success text-white border rounded" scope="row">Baja</th>
+                        <td>Fixed DB Error</td>
+                        <td>Thornton</td>
+                        <td class="bg-success text-white border rounded">Acabada</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="text-white bg-secondary border rounded" scope="row">Media</th>
+                        <td>Configure apache</td>
+                        <td>Juan, messi, kids</td>
+                        <td class="bg-warning text-white border rounded">En Progreso</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="bg-danger text-white border rounded" scope="row">Alta</th>
+                        <td>Validation HTML</td>
+                        <td>juan, andres, pedro</td>
+                        <td class="bg-warning text-white border rounded">En Progreso</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="bg-success text-white border rounded" scope="row">Baja</th>
+                        <td>Fixed DB Error</td>
+                        <td>Thornton</td>
+                        <td class="bg-success text-white border rounded">Acabada</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="text-white bg-secondary border rounded" scope="row">Media</th>
+                        <td>Configure apache</td>
+                        <td>Juan, messi, kids</td>
+                        <td class="bg-warning text-white border rounded">En Progreso</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="bg-danger text-white border rounded" scope="row">Alta</th>
+                        <td>Validation HTML</td>
+                        <td>juan, andres, pedro</td>
+                        <td class="bg-warning text-white border rounded">En Progreso</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="bg-success text-white border rounded" scope="row">Baja</th>
+                        <td class="">Fixed DB Error</td>
+                        <td>Thornton</td>
+                        <td class="bg-success text-white border rounded">Acabada</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                    <tr>
+                        <th class="text-white bg-secondary border rounded" scope="row">Media</th>
+                        <td>Configure apache</td>
+                        <td>Juan, messi, kids</td>
+                        <td class="bg-warning text-white border rounded">En Progreso</td>
+                        <td>15-02-2021</td>
+
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

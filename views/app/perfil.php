@@ -1,6 +1,6 @@
-<form action="/perfil" class="d-flex flex-column w-100 m-2" method="post" enctype="multipart/form-data">
+<form action="/perfil" class="d-flex flex-column w-100 mt-5 p-4" method="post" enctype="multipart/form-data">
     <div class="row d-flex justify-content-center">
-        <div class="col-md-6 col-12 px-2 shadow  mx-2 border d-flex flex-column">
+        <div class="col-md-6 col-12 px-2 shadow  mx-2 border d-flex flex-column p-4">
             <?php include_once __DIR__ . "/../templates/alerts.php" ?>
 
             <h1 class="text-center">Mi cuenta</h1>

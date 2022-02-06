@@ -29,15 +29,18 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <header class="flex-column" data-cy=''>
         <div class="container-fluid ">
             <div class="row">
-                <picture class="col-6">
+                <picture class="col-1 col-sm-4 col-md-6">
                     <a href="/"><i class="fas text-dark fa-crop fs-1"></i></a>
                 </picture>
-                <nav class="col-6 my-4 d-flex justify-content-end">
-                    <div class="row nav_wrap_panel">
+                <nav class="col-11 col-sm-8 col-md-6 my-4 d-flex justify-content-end">
+                    <div class="row nav_wrap_panel w-100">
                         <div class="nav__panel col-12 align-self-center" id="nav-menu">
 
                             <ul class="nav__list  d-flex justify-content-center w-100">
                                 <li class="nav__item"><i class="fas fa-bell text-dark fs-2 mx-4"></i></li>
+                                <li><a href="#" class="text-decoration-none text-dark"><i class="fas fa-users fs-2 mx-4"></i></a>
+
+                                <li><a href="#" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-4"></i></a>
                                 <li class="nav__item"><a href="/perfil" class="text-decoration-none text-dark"><i class="far fa-user text-dark fs-2"></i></a></li>
 
                             </ul>
