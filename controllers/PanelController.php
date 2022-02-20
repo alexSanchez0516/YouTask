@@ -74,15 +74,15 @@ class PanelController
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $Task->synchronize($_POST);
-            if ($Task->createTask($User, $Project->getProjects($User))) {
-                $typeAlert = true;
-                $Task->setAlert("Proyecto creado correctamente");
+            $typeAlert = $Task->createTask($User, $Project->getProjects($User));
+            if ($typeAlert) {
+                $Task->setAlert("Tarea creado correctamente");
             } else {
                 $Task->setAlert("Ups tenemos un problema con tu solicitud");
             }
         }
         $router->render('app/createTask', [
-            'alerts' => Project::getAlerts(),
+            'alerts' => Task::getAlerts(),
             'typeAlert' => $typeAlert,
             'projects' => $Project->getProjects($User)
         ]);
@@ -105,5 +105,25 @@ class PanelController
             'alerts' => Users::getAlerts(),
             'typeAlert' => $typeAlert,
         ]);
+    }
+
+    public static function Calendar(Router $router) {
+        $router->render('app/calendar');
+    }
+
+    public static function showProjects(Router $router) {
+        $router->render('app/projects');
+    }
+
+    public static function showProject(Router $router) {
+        $router->render('app/project');
+    }
+
+    public static function showTasks(Router $router) {
+        $router->render('app/tasks');
+    }
+
+    public static function showTask(Router $router) {
+        $router->render('app/task');
     }
 }

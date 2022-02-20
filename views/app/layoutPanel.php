@@ -19,7 +19,8 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/build/img/seo.webp" type="image/x-icon">
     <link rel="stylesheet" href="../build/css/app.css">
-
+    <link href='/build/fullcalendar/packages/core/main.css' rel='stylesheet' />
+    <link href='/build/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
     <!-- Primary Meta Tags -->
     <title>YouTask Panel</title>
 </head>
@@ -65,9 +66,9 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                 <div class="col-1 " id="menu-left-panel">
                     <ul class="d-flex flex-column align-items-center">
                         <li class="nav__item my-5"><a href="/panel"><i class="fas fa-chart-line text-dark fs-1"></i></a></li>
-                        <li class="nav__item my-5"><i class="far fa-calendar-check text-dark fs-1"></i></li>
-                        <li class="nav__item my-5"><i class="fas fa-project-diagram text-dark fs-1"></i></li>
-                        <li class="nav__item my-5"><i class="fas fa-tasks text-dark fs-1"></i></li>
+                        <li class="nav__item my-5"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1"></i></a> </li>
+                        <li class="nav__item my-5"> <a href="/proyectos"><i class="fas fa-project-diagram text-dark fs-1"></i></a> </li>
+                        <li class="nav__item my-5"> <a href="/tareas"><i class="fas fa-tasks text-dark fs-1"></i></a></li>
                         <li class="nav__item my-5"><i class="fas fa-sign-out-alt text-dark fs-1"></i></li>
 
                     </ul>

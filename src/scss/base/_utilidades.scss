@@ -4,7 +4,7 @@
 .custom-input-file {
     width: 100% !important;
     @include tablet {
-        width: 70% !important;
+        width: 40% !important;
     }
     background-color: $lightBlue;
     color: #fff;
@@ -72,15 +72,10 @@
 .w-30 { 
     width: 30%;
 }
-.w-30 { 
-    width: 30%;
+.w-35 { 
+    width: 35% !important;
 }
-.w-30 { 
-    width: 30%;
-}
-.w-30 { 
-    width: 30%;
-}
+
 .w-95 { 
     width: 95%;
 }

@@ -18,24 +18,9 @@
     </div>
 
 <?php else : ?>
-    <div class="row flex-column flex-md-row">
-        <div class="col-md-3 border col-12 d-flex justify-content-evenly bg-warning p-3" style="border-radius:1em;">
-            <i class="fas fa-comment-dots fs-1"></i>
-            <span class="fs-4">Mensajes</span>
-        </div>
-        <div class="col-md-3 border col-12 d-flex justify-content-evenly bg-secondary p-3" style="border-radius:1em" ;>
-            <i class="far fa-calendar-alt fs-1"></i>
-            <span class="fs-4">Calendario</span>
-        </div>
-        <div class="col-md-3  border col-12 d-flex justify-content-evenly bg-light-green p-3" style="border-radius:1em;">
-            <a href="/crear-tarea" class="text-decoration-none text-white"><i class="fas fa-plus-circle fs-1 text-white fs-1 create_task"></i></a>
-            <a href="/crear-tarea" class="text-decoration-none text-white"><span class="fs-5" class="create_task text-white">Crear Tarea</span></a>
-        </div>
-        <div class="col-md-3 border col-12 d-flex justify-content-evenly   bg-primary p-3" style="border-radius:1em" ;>
-            <a href="/crear-proyecto" class="text-decoration-none"><i class="fas fa-plus-circle fs-1 text-white"></i></a>
-            <a href="/crear-proyecto" class="text-decoration-none"><span class="fs-5 text-white">Crear Proyecto</span></a>
-        </div>
-    </div>
+
+    <?php include_once __DIR__ . "/../templates/menuTopPanel.php"; ?>
+
     <div class="row align-items-center mt-5">
         <div class="col-12 d-flex flex-column align-items-center">
             <h2 class="text-uppercase text-success">Últimos avances</h2>
@@ -46,28 +31,33 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Tarea</th>
-                                <th scope="col">Autor</th>
-                                <th scope="col">Fecha</th>
+                                <th scope="col">Projecto</th>
+                                <th scope="col">Inicio</th>
+                                <th scope="col">FIN</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <th scope="row">1</th>
                                 <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                <td>Mark</td>
+                                <td>15-02-2021</td>
+                                <td>15-02-2021</td>
                             </tr>
                             <tr>
                                 <th scope="row">2</th>
                                 <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
+                                <td>Mark</td>
+                                <td>15-02-2021</td>
+                                <td>15-02-2021</td>
                             </tr>
                             <tr>
                                 <th scope="row">3</th>
                                 <td>Larry the Bird</td>
-                                <td>@twitter</td>
-                                <td>@twitter</td>
+                                <td>Mark</td>
+                                <td>15-02-2021</td>
+                                <td>15-02-2021</td>
                             </tr>
                         </tbody>
                     </table>
@@ -110,40 +100,43 @@
     <div class="row align-items-center my-3">
         <span class="col-12 text-center my-2 fs-3">Tareas diarias</span>
         <div class="col-12 d-flex flex-column align-items-center">
-            <div class="d-flex flex-column w-30 align-items-center">
-                <span class="w-100 text-center my-2">10:00</span>
-                <div class="d-flex w-100 justify-content-center align-items-center">
-                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-danger">
-                        <span class="w-100 text-center">Design meeting</span>
-                        <span class="w-100 text-center">11:00 - 11:30</span>
+            <div class="row">
+                <div class="d-flex flex-column align-items-center">
+                    <span class="w-100 text-center my-2">10:00</span>
+                    <div class="d-flex w-100 justify-content-center align-items-center">
+                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-danger">
+                            <span class="w-100 text-center">Design meeting</span>
+                            <span class="w-100 text-center">11:00 - 11:30</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex flex-column w-50 align-items-center mt-3">
-                <span class="w-100 text-center my-3">11:00</span>
-                <div class="d-flex w-100">
-                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-info">
-                        <span class="w-100 text-center">Design meeting</span>
-                        <span class="w-100 text-center">11:00 - 11:30</span>
-                    </div>
-                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-success">
-                        <span class="w-100 text-center">Design meeting</span>
-                        <span class="w-100 text-center">11:00 - 11:30</span>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-column w-50 align-items-center mt-3">
-                <span class="w-100 text-center my-3">11:00</span>
-                <div class="d-flex w-100">
-                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-secondary">
-                        <span class="w-100 text-center">Design meeting</span>
-                        <span class="w-100 text-center">11:00 - 11:30</span>
-                    </div>
-                    <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-primary">
-                        <span class="w-100 text-center">Design meeting</span>
-                        <span class="w-100 text-center">11:00 - 11:30</span>
+                <div class="d-flex flex-column align-items-center mt-3">
+                    <span class="w-100 text-center my-3">11:00</span>
+                    <div class="d-flex w-100">
+                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-info">
+                            <span class="w-100 text-center">Design meeting</span>
+                            <span class="w-100 text-center">11:00 - 11:30</span>
+                        </div>
+                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-success">
+                            <span class="w-100 text-center">Design meeting</span>
+                            <span class="w-100 text-center">11:00 - 11:30</span>
+                        </div>
                     </div>
                 </div>
+                <div class="d-flex flex-column align-items-center mt-3">
+                    <span class="w-100 text-center my-3">11:00</span>
+                    <div class="d-flex w-100">
+                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-secondary">
+                            <span class="w-100 text-center">Design meeting</span>
+                            <span class="w-100 text-center">11:00 - 11:30</span>
+                        </div>
+                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-primary">
+                            <span class="w-100 text-center">Design meeting</span>
+                            <span class="w-100 text-center">11:00 - 11:30</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -156,7 +149,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Prioridad</th>
-                        <th width="40%" scope="col" >Tarea</th>
+                        <th width="40%" scope="col">Tarea</th>
                         <th scope="col">Miembros</th>
                         <th scope="col">Estado</th>
                         <th scope="col">fecha</th>

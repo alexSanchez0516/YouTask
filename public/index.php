@@ -46,14 +46,23 @@ $router->get('/crear-proyecto', [PanelController::class, 'createProject']);
 $router->post('/crear-proyecto', [PanelController::class, 'createProject']); 
 
 $router->get('/crear-tarea', [PanelController::class, 'createTask']); 
-$router->post('/crear-tarea', [PanelController::class, 'createTask']); 
+$router->post('/crear-tarea', [PanelController::class, 'createTask']);
 
+$router->get('/calendario', [PanelController::class, 'Calendar']);
 
-//debug("LEER DOCUMENTO WORD");
+$router->get('/proyectos', [PanelController::class, 'showProjects']);
+
+$router->get('/proyecto', [PanelController::class, 'showProject']);
+
+$router->get('/tareas', [PanelController::class, 'showTasks']);
+$router->get('/tarea', [PanelController::class, 'showTask']);
+
 
 //API
 $router->get('/api/proyects', [APIController::class, 'listProjects']);
 $router->get('/api/tasks', [APIController::class, 'listTasks']);
 
+
+debug("Asiganr grupoID a la la tabla projects, una vez inicia, para crear un projecto/tarea, debe crea run grupo ");
 
 $router->checkRutes();

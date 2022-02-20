@@ -33,7 +33,6 @@ class Task extends ActiveRecord {
         if ($this->validateAttributes($this->sanitizeData())) {
             $this->state = "EN PROCESO";
             $this->id = $user->id; 
-            debug($this);
             return $this->create();
 
         }
