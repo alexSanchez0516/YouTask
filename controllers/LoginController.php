@@ -17,7 +17,7 @@ class LoginController
         if (!empty($_GET['token'])) {
             $token = filter_var(s($_GET['token']), FILTER_SANITIZE_STRING);
             $userToken = Users::find("token", $token, false);
-            
+
             if (!empty($userToken)) {
                 $typeAlert = $userToken->validateUser($typeAlert);
             } else {
@@ -89,19 +89,14 @@ class LoginController
         $typeAlert = Users::checkToken();
 
         if ($typeAlert) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $password = new Users($_POST);
+                $user = $_SESSION['user'];
+                session_destroy();
 
+                $user->recoveryPassword($password, $typeAlert);
+            }
         }
-        
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $password = new Users($_POST);
-            $user = $_SESSION['user'];
-            session_destroy();
-
-            $user->recoveryPassword($password, $typeAlert);
-
-        }
-
 
 
         $router->render('auth/recoveryPassword', [

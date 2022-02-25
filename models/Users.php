@@ -163,7 +163,7 @@ class Users extends ActiveRecord
     {
         $typeAlert = true;
 
-        $token = filter_var(s($_GET['token'] ?? null), FILTER_SANITIZE_STRING);
+        $token = s($_GET['token'] ?? null);
         $user = NULL;
 
 

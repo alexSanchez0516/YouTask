@@ -126,4 +126,8 @@ class PanelController
     public static function showTask(Router $router) {
         $router->render('app/task');
     }
+
+    public static function showFriends(Router $router) {
+        $router->render('app/friends');
+    }
 }

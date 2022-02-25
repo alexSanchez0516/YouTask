@@ -57,12 +57,10 @@ $router->get('/proyecto', [PanelController::class, 'showProject']);
 $router->get('/tareas', [PanelController::class, 'showTasks']);
 $router->get('/tarea', [PanelController::class, 'showTask']);
 
-
 //API
 $router->get('/api/proyects', [APIController::class, 'listProjects']);
 $router->get('/api/tasks', [APIController::class, 'listTasks']);
 
 
-debug("Asiganr grupoID a la la tabla projects, una vez inicia, para crear un projecto/tarea, debe crea run grupo ");
 
 $router->checkRutes();

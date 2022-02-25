@@ -1,10 +1,23 @@
+
+
+//https://www.bootdey.com/snippets/view/bs4-profile-friend-list
+
+<div class="row">
+    <div class="col-4">
+        <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid " alt=""></img>
+    </div>
+    <div class="col-8">
+        Alexander Sanchez
+    </div>
+</div>
+
 <form action="/perfil" class="d-flex flex-column w-100 mt-5 p-4" method="post" enctype="multipart/form-data">
     <div class="row d-flex flex-column justify-content-center">
         <h1 class="text-center">Mi cuenta</h1>
 
 
         <div class=" d-flex flex-column align-items-center">
-            <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid" alt=""></img>
+            <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid " alt=""></img>
 
             <div class="custom-input-file col-md-6 mt-2 col-sm-6 col-xs-6">
                 <input type="file" name="avatar" id="fichero-tarifas" class="input-file" value="">
