@@ -41,7 +41,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                                 <li class="nav__item"><i class="fas fa-bell text-dark fs-2 mx-4"></i></li>
                                 <li><a href="#" class="text-decoration-none text-dark"><i class="fas fa-users fs-2 mx-4"></i></a>
 
-                                <li><a href="#" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-4"></i></a>
+                                <li><a href="/amigos" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-4"></i></a>
                                 <li class="nav__item"><a href="/perfil" class="text-decoration-none text-dark"><i class="far fa-user text-dark fs-2"></i></a></li>
 
                             </ul>

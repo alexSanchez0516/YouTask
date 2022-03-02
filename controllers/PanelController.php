@@ -100,7 +100,7 @@ class PanelController
             $typeAlert = $user->alterUser($typeAlert);
         }
 
-        $router->render('app/perfil', [
+        $router->render('app/profile', [
             'user' => $user,
             'alerts' => Users::getAlerts(),
             'typeAlert' => $typeAlert,
@@ -129,5 +129,9 @@ class PanelController
 
     public static function showFriends(Router $router) {
         $router->render('app/friends');
+    }
+
+    public static function editProfile(Router $router) {
+        $router->render('app/edit_profile');
     }
 }

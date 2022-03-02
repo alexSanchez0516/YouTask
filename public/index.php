@@ -8,6 +8,8 @@ use Controllers\LoginController;
 use Controllers\PageController;
 use Controllers\PanelController;
 use Controllers\APIController;
+
+
 $router = new Router();
 
 
@@ -37,9 +39,17 @@ $router->post('/recovery-password', [LoginController::class, 'recoveryPassword']
 $router->get('/panel', [PanelController::class, 'index']); 
 $router->post('/panel', [PanelController::class, 'index']); 
 
+$router->get('/amigos', [PanelController::class, 'showFriends']);
+$router->post('/amigos', [PanelController::class, 'showFriends']);
+
 
 $router->get('/perfil', [PanelController::class, 'showPerfil']);
 $router->post('/perfil', [PanelController::class, 'showPerfil']);
+
+
+$router->get('/editar-perfil', [PanelController::class, 'editProfile']);
+$router->post('/editar-perfil', [PanelController::class, 'editProfile']);
+
 
 
 $router->get('/crear-proyecto', [PanelController::class, 'createProject']); 
