@@ -28,8 +28,7 @@ class Router
 
         self::$urlsProtected = ['/panel', '/perfil', '/crear-proyecto', '/crear-tarea', '/calendario', '/proyectos', '/proyecto', '/tareas', '/tarea'];
 
-        self::$currentUrl = $_SERVER['PATH_INFO'] ?? '/';
-        
+        self::$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
         for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
             # code...
             if (self::$currentUrl === '?') {
