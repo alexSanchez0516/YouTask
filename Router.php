@@ -28,17 +28,15 @@ class Router
 
         self::$urlsProtected = ['/panel', '/perfil', '/amigos', '/editar-perfil', '/crear-proyecto', '/crear-tarea', '/calendario', '/proyectos', '/proyecto', '/tareas', '/tarea'];
 
-        self::$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
-        for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
-            # code...
-            if (self::$currentUrl === '?') {
-               
-                self::$currentUrl = substr(self::$currentUrl, 0, $i);
+	
+	
+	self::$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        for ($i=0; $i < strlen(self::$currentUrl); $i++) { 
+            if (self::$currentUrl[$i] === '?') {
+		self::$currentUrl = substr(self::$currentUrl,0, $i);
                 break;
             }
         }
-
-
 
         $method = $_SERVER['REQUEST_METHOD'];
 

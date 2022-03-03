@@ -54,8 +54,8 @@ class Users extends ActiveRecord
             $user_data =  static::find('email', $data['email'], false);
 
             if (isset($user_data) && $user_data->validate === "1") {
-                $auth = password_verify($this->password, $user_data->password);
-                if ($auth) {
+		$auth = password_verify( $this->password, $user_data->password );
+		if ($auth) {
                     session_start();
                     $_SESSION['user'] = $user_data;
 
