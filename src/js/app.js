@@ -3,10 +3,29 @@ document.addEventListener('DOMContentLoaded', function () {
     checkAlerts();
     showMenuResponse();
     showCreateProject();
+    close_activity_perfil();
 });
 
+function close_activity_perfil() { 
+    const close_activity_perfil = document.querySelector('#close_activity_perfil');
+    const  activity_perfil = document.querySelectorAll('.activity_perfil');
 
+    if (close_activity_perfil != null) {
+        close_activity_perfil.addEventListener('click', function () {
+            activity_perfil.forEach(element => {
+                element.classList.toggle('d-none')
+                if (element.classList.contains('d-none')) {
+                    close_activity_perfil.textContent = "mostrar";
+                } else {
+                    close_activity_perfil.textContent = "ocultar";
+                }
+            });
+        });
+        
+        
+    }
 
+}
 
 function showCreateProject() {
 

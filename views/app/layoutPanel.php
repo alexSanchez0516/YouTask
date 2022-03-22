@@ -105,7 +105,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
         <div class="container-fluid">
             <div class="row">
                 <div class="col-1 " id="menu-left-panel">
-                    <ul class="d-none d-md-flex flex-column align-items-center">
+                    <ul class="d-none d-md-flex flex-column align-items-center position-fixed">
                         <li class="nav__item my-5"><a href="/panel"><i class="fas fa-chart-line text-dark fs-1"></i></a></li>
                         <li class="nav__item my-5"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1"></i></a> </li>
                         <li class="nav__item my-5"> <a href="/proyectos"><i class="fas fa-project-diagram text-dark fs-1"></i></a> </li>

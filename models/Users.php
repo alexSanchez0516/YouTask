@@ -3,13 +3,14 @@
 namespace Model;
 
 use Classes\Email;
+use Model\Group;
 
 
 class Users extends ActiveRecord
 {
 
     protected static $db;
-    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description'];
+    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description', 'rol'];
     protected static $tabla = 'users';
 
 
@@ -23,6 +24,8 @@ class Users extends ActiveRecord
     public  $admin;
     public String $avatar;
     public String $description;
+    public String $rol;
+    public $isSocial;
 
     function __construct($args = [])
     {
@@ -35,6 +38,8 @@ class Users extends ActiveRecord
         $this->admin = $args['admin'] ?? '0';
         $this->avatar = $args['avatar'] ?? '';
         $this->description = $args['description'] ?? '';
+        $this->rol = '';
+        $this->isSocial = '1';
     }
 
     public static function setDB($database)
@@ -52,14 +57,15 @@ class Users extends ActiveRecord
         }
         if (empty(static::$alerts)) {
             $user_data =  static::find('email', $data['email'], false);
-
             if (isset($user_data) && $user_data->validate === "1") {
                 $auth = password_verify($this->password, $user_data->password);
                 if ($auth) {
                     session_start();
-                    $_SESSION['user'] = $user_data;
-
+                    $_SESSION['user'] = $user_data->id;
+                    $_SESSION['avatar'] = $user_data->avatar;
                     $_SESSION['auth'] = true;
+                    $_SESSION['username'] = $user_data->username;
+                    $_SESSION['rol'] = $user_data->rol;
 
 
                     header('Location: /panel');
@@ -95,7 +101,7 @@ class Users extends ActiveRecord
             }
         }
 
-        return $typeAlert;
+        return $typeAlert; //ha sido o no ha sido creado correctamente
     }
 
 
@@ -115,8 +121,14 @@ class Users extends ActiveRecord
     }
 
 
+    public function changePassword(): bool {
+        return false;
+    }
 
-    public function deleteUser(): bool
+
+
+
+    public function deleteAccount(): bool
     {
         return true;
     }
@@ -210,7 +222,8 @@ class Users extends ActiveRecord
     }
 
     public function alterUser(bool $typeAlert)
-    {
+    { /* se debe controlar que datos son los que se han enviado
+         y guardar solo esos datos que sean modificado  */
         if ($this->validateAttributes($_POST)) {
             $typeAlert = true;
             $this->username = $_POST['username'];
@@ -223,8 +236,30 @@ class Users extends ActiveRecord
             }
 
             $this->save() ? $this->setAlert("Cambios guardados correctamente") : false;
-        }
+        } //Hay cosas raras con $tyAlert
 
         return $typeAlert;
     }
+
+
+    public function addPermissionsGroup(Group $group) : bool {
+        return true;
+    }
+
+    public function sendRequestFriend(Users $user) : bool {
+        return true;
+    }
+
+    public function setSkill(String $skill) : void {
+
+    }
+    public function getSkills() : Array {
+        $query = "SELECT skills.name FROM skill_users ";
+        $query .= "INNER JOIN users ON skill_users.id_user = users.id";
+        $query .= " INNER JOIN skills on skill_users.id_skill = skills.id";
+        $query .= " WHERE users.id = $this->id";
+        return (static::$db->query($query)->fetch_array(MYSQLI_ASSOC));
+        
+    }
 }
+

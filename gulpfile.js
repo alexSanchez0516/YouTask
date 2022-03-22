@@ -64,7 +64,13 @@ function watchArchivos() {
     watch( paths.imagenes, imagenes );
     watch( paths.imagenes, versionWebp );
 }
+
+function watchStatic() {
+    watch( paths.scss, css );
+    watch( paths.js, javascript );
+}
   
 exports.css = css;
 exports.watchArchivos = watchArchivos;
-exports.default = parallel(css, javascript,  imagenes, versionWebp,  watchArchivos ); 
+//exports.default = parallel(css, javascript,  imagenes, versionebp,  watchArchivos ); 
+exports.static = parallel(css, javascript,watchStatic ); 

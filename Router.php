@@ -30,14 +30,21 @@ class Router
 
         self::$currentUrl = $_SERVER['PATH_INFO'] ?? '/';
         
-        for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
-            # code...
+
+        /*problema con los parametros en la url,
+         debemos quitar todo el fragmento del parametros
+         para dejar la url limpia para que se valide en el index
+
+         for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
             if (self::$currentUrl === '?') {
                
                 self::$currentUrl = substr(self::$currentUrl, 0, $i);
                 break;
             }
         }
+
+        */
+
 
 
 
@@ -54,6 +61,8 @@ class Router
         if (in_array(self::$currentUrl, self::$urlsProtected) && !$auth) {
             header('Location: /');
         }
+
+
         if ($fn) {
             // Call user fn va a llamar una función cuando no sabemos cual sera
             call_user_func($fn, $this); // This es para pasar argumentos

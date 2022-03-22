@@ -1,7 +1,8 @@
 <?php 
 namespace Model;
+use interfaces\crud;
 
-class Task extends ActiveRecord {
+class Task extends ActiveRecord implements crud{
     protected static $db;
     protected static $colDB = ['id', 'name', 'description', 'adminID', 'state', 'priority', 'date_end', 'projectID' ];
     protected static $tabla = 'Tasks';
@@ -29,20 +30,35 @@ class Task extends ActiveRecord {
         $this->projectID = $args['projectID'] ?? 0;
     }
 
-    public function createTask(Users $user, $project) {
+    public function createC(int $project) : bool {
         if ($this->validateAttributes($this->sanitizeData())) {
             $this->state = "EN PROCESO";
-            $this->id = $user->id; 
+            $this->id = $_SESSION['user'];
+            
+            if ($project > 0) {
+
+            } else {
+                $this->projectID = $project;
+            }
+            
             return $this->create();
 
         }
     }
 
-    public function updateTask() {
-
+    public function updateC(int $user) : bool {
+        return true;
     }
 
-    public function deleteTask() {
-        
+    public function deleteC(int $user) : bool {
+        return true;
+    }
+
+    public function getAllC(int $user) : Array {
+        return [];
+    }
+
+    public function deleteMemberC(int $user) : bool {
+        return true;
     }
 }

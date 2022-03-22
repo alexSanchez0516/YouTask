@@ -1,10 +1,10 @@
 <div class="row " id="cover-profile">
     <div class="col-5 col-sm-4 col-md-2">
-        <img src="/build/img/<?php echo $_SESSION['user']->avatar ?>" class="img-fluid " alt=""></img>
+        <img src="/build/img/<?php echo $_SESSION['avatar'] ?>" class="img-fluid " alt=""></img>
     </div>
     <div class="col-7 d-flex flex-column justify-content-center">
-        <span>Alexander Sanchez</span><br>
-        <span>UXUI + Frontend Developer</span>
+        <span><?php echo $_SESSION['username'] ?></span><br>
+        <span><?php echo $_SESSION['rol'] ?></span>
         <a href="/editar-perfil" class="text-decoration-none mt-2">Editar Perfil</a>
     </div>
 </div>

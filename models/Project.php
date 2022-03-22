@@ -1,8 +1,9 @@
 <?php 
 namespace Model;
+use interfaces\crud;
 
 
-class Project extends ActiveRecord {
+class Project extends ActiveRecord implements crud {
     protected static $db;
     protected static $colDB = ['id', 'name', 'description', 'adminID', 'state', 'priority', 'date_end' ];
     protected static $tabla = 'Projects';
@@ -12,26 +13,29 @@ class Project extends ActiveRecord {
     public int $id;
     public String $name;
     public String $description;
-    public int $adminID;
+    public  $adminID;
     public String $state;
     public String $priority;
     public $date_end;
+
+    public $members = [];
 
 
     public function __construct($args = []) {
         $this->id = $args['id'] ?? 0;
         $this->name = $args['name'] ?? '';
         $this->description = $args['description'] ?? '';
-        $this->adminID = $args['adminID'] ?? 0;
+        $this->adminID = $args['adminID'] ?? '0';
+       
         $this->state = $args['state'] ?? '';
         $this->priority = $args['priority'] ?? '';
         $this->date_end = $args['date_end'] ?? '';
     }
 
-    public function createProject(Users $user) : bool {
+    public function createC(int $user) : bool {
         if ($this->validateAttributes($this->sanitizeData())) {
             $this->state = "EN PROCESO";
-            $this->id = $user->id; 
+            $this->adminID = $user; 
             
             return $this->create();
 
@@ -42,16 +46,16 @@ class Project extends ActiveRecord {
 
 
 
-    public function deleteProject() {
-
+    public function deleteC(int $user) : bool {
+        return true;
     }
 
-    public function alterProject() {
-
+    public function updateC(int $user): bool {
+        return true;
     }
 
-    public  function getProjects(Users $user) {
-       return $this->find("adminID", $user->id, true);
+    public  function getAllC(int $user) : Array{
+       return $this->find("adminID", $user, true);
     }
 
     public function getID() {
@@ -119,5 +123,7 @@ class Project extends ActiveRecord {
         return $this->date_end;
     }
 
-       
+    public function deleteMemberC(int $user) : bool {
+        return true;
+    }
 }

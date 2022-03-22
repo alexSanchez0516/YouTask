@@ -28,7 +28,6 @@ class ActiveRecord
         $atributes = $this->sanitizeData();
 
 
-
         $query = "INSERT INTO " . static::$tabla . " (";
         $query .= join(', ', array_keys($atributes));
         $query .= " ) VALUES ('";
@@ -180,6 +179,7 @@ class ActiveRecord
     public static function consulSQL($query): array
     {
         $data = static::$db->query($query); //puede dar false 
+        
         $services = [];
 
         if ($data) {
@@ -254,4 +254,11 @@ class ActiveRecord
         }
         return empty(static::$alerts);
     }
+
+    public function getAnyAll(String $table) : Array {
+        $query = "SELECT * FROM $table";
+        return static::consulSQL($query);
+    }
+
+
 }

@@ -8,7 +8,7 @@
     </div>
     <div class="col-12 bg-white border rounded shadow p-3 w-100">
         <div class="row align-items-center justify-content-center w-100">
-            <nav class="navbar navbar-expand navbar-light bg-light">
+            <nav class="navbar navbar-expand navbar-light ">
                 <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                     <div class="row w-100">
                         <ul class="navbar-nav col-12 col-md-7 justify-content-center">
@@ -71,16 +71,19 @@
                     <th scope="col">Miembros</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Cierre</th>
+                    <th scope="col"><button  class="btn btn-primary">Todos</button></th>
+
                 </tr>
             </thead>
 
             <tbody>
-                <tr onclick="window.location.href='/proyecto'">
+                <tr>
                     <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td>Validation HTML</td>
+                    <td onclick="window.location.href='/proyecto'">Validation HTML</td>
                     <td>juan, andres, pedro</td>
                     <td class="bg-warning text-white border rounded">En Progreso</td>
                     <td class="bg-danger text-center">15-02-2021</td>
+                    <td class="btn btn-danger bg-danger border rounded">Eliminar</td>
 
                 </tr>
                 <tr>

@@ -6,6 +6,9 @@ use MVC\Router;
 use Model\Users;
 use Model\Project;
 use Model\Task;
+use Model\ActiveRecord;
+use Model\Post;
+use Model\Action;
 
 class PanelController
 {
@@ -21,7 +24,7 @@ class PanelController
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $project->synchronize($_POST);
-            if ($project->createProject($user)) {
+            if ($project->createC($user)) {
                 $typeAlert = true;
                 $project->setAlert("Proyecto creado correctamente");
             } else {
@@ -34,7 +37,7 @@ class PanelController
             'user' => $user,
             'alerts' => Project::getAlerts(),
             'typeAlert' => $typeAlert,
-            'projects' => $project->getProjects($user)
+            'projects' => $project->getAllC($user)
 
         ]);
     }
@@ -50,7 +53,8 @@ class PanelController
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $project->synchronize($_POST);
-            if ($project->createProject($user)) {
+            debug($project);
+            if ($project->createC($user)) {
                 $typeAlert = true;
                 $project->setAlert("Proyecto creado correctamente");
             } else {
@@ -66,15 +70,14 @@ class PanelController
 
     public static function createTask(Router $router)
     {
-        $Project = new Project();
         $Task = new Task();
         $User = $_SESSION['user'];
         $typeAlert = false;
-
+        $idProject = 0; //debemos sacar esto en caso de estar en grupo
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $Task->synchronize($_POST);
-            $typeAlert = $Task->createTask($User, $Project->getProjects($User));
+            $typeAlert = $Task->createC($idProject);
             if ($typeAlert) {
                 $Task->setAlert("Tarea creado correctamente");
             } else {
@@ -84,7 +87,6 @@ class PanelController
         $router->render('app/createTask', [
             'alerts' => Task::getAlerts(),
             'typeAlert' => $typeAlert,
-            'projects' => $Project->getProjects($User)
         ]);
     }
 
@@ -92,18 +94,29 @@ class PanelController
 
     public static function showPerfil(Router $router)
     {
+        $activity = new Action();
         $typeAlert = false;
-        $user = $_SESSION['user'];
-        $imgDelete = NULL;
+        $user = Users::find('id', $_SESSION['user'], false);
+        $skills = $user->getSkills();
+        $posts = Post::getAllC($user->id, 4); //LIMIT 4
+        $activity = $activity->getAll($user->id, 0, 4); //LIMIT 4, type 1-post
+        debug($activity);
+    
+    
 
+       //$imgDelete = NULL;
+
+        /* CHANGE***
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $typeAlert = $user->alterUser($typeAlert);
-        }
+        }*/
 
         $router->render('app/profile', [
             'user' => $user,
             'alerts' => Users::getAlerts(),
             'typeAlert' => $typeAlert,
+            'skills' => $skills,
+            'posts' => $posts,
         ]);
     }
 
