@@ -36,7 +36,7 @@ class Task extends ActiveRecord implements crud{
             $this->id = $_SESSION['user'];
             
             if ($project > 0) {
-
+                //add id project
             } else {
                 $this->projectID = $project;
             }
