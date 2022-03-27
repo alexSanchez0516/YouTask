@@ -144,14 +144,14 @@ class ActiveRecord
     }
 
 
-    public function delete(): void
+    public function delete(): bool
     {
         //Services all tables db
         //Delete on cascade
-        $query = "DELETE FROM services WHERE id = " . static::$db->escape_string($this->id) . " LIMIT 1";
+        $query = "DELETE FROM ". static::$tabla . " WHERE id = " . static::$db->escape_string($this->id) . " LIMIT 1";
 
         file_exists(FOLDER_IMG . $this->avatar) ? unlink(FOLDER_IMG . $this->avatar) : false;
-        static::$db->query($query) ? header('Location: /admin?state=3') : header('Location: /404.html');
+        return static::$db->query($query);
     }
 
     public static function all(): array
@@ -167,7 +167,6 @@ class ActiveRecord
     {
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
         $data = static::consulSQL($query);
-
         if ($isAll) {
             return $data;
         }

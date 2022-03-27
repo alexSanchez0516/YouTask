@@ -99,10 +99,9 @@ class PanelController
         $user = Users::find('id', $_SESSION['user'], false);
         $skills = $user->getSkills();
         $posts = Post::getAllC($user->id, 4); //LIMIT 4
-        $activity = $activity->getAll($user->id, 0, 4); //LIMIT 4, type 1-post
-        debug($activity);
-    
-    
+        $activities = $activity->getAll($user->id, 4, 4); //LIMIT 4, type 1-post-2project-3task
+
+      
 
        //$imgDelete = NULL;
 
@@ -117,6 +116,7 @@ class PanelController
             'typeAlert' => $typeAlert,
             'skills' => $skills,
             'posts' => $posts,
+            'activities' => $activities,
         ]);
     }
 
@@ -141,10 +141,68 @@ class PanelController
     }
 
     public static function showFriends(Router $router) {
-        $router->render('app/friends');
+        $user = Users::find('id', $_SESSION['user'], false);
+       
+
+
+        $router->render('app/friends',[
+        ]);
+    }
+
+    public static function showPosts(Router $router) {
+        $user = Users::find('id', $_SESSION['user'], false);
+        $posts = Post::getAllC($user->id, 0); //LIMIT 0
+
+
+        $router->render('app/posts', [
+            'posts' => $posts,
+            
+        ]);
+    }
+
+    public static function showPost(Router $router) {
+        $router->render('app/post');
     }
 
     public static function editProfile(Router $router) {
         $router->render('app/edit_profile');
+    }
+
+    public static function showActivity(Router $router) {
+        $user = Users::find('id', $_SESSION['user'], false);
+        $activity = new Action();
+
+        $activities = $activity->getAll($user->id, 0, 4); //LIMIT 4, type 1-post-2project-3task
+
+        debug("queck que nno ponga tu nombre, que ponga has echo o escrito etc el la activity");
+
+        $router->render('app/activity', [
+            'activities' => $activities,
+        ]);
+    }
+
+    public static function showFriend(Router $router) {
+        
+        $id = validateOrRedirect('/amigos');
+        
+        $user = Users::find('id', $id, false);
+        $skills = $user->getSkills();
+        $posts = Post::getAllC($user->id, 4); //LIMIT 4
+ 
+        
+        
+        $router->render('app/friend', [
+            'user' => $user,
+            'skills' => $skills,
+            'posts' => $posts
+        ]);
+    }
+
+    public static function showMessages(Router $router) {
+
+
+        
+
+        $route = $router->render('app/messages',[]);
     }
 }

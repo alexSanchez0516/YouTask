@@ -1,6 +1,11 @@
 @import 'variables';
 @import 'mixins';
 
+
+.raidius_max {
+    border-radius: 10rem;
+}
+
 .custom-input-file {
     width: 100% !important;
     @include tablet {

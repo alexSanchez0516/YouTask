@@ -1,63 +1,24 @@
-<?php include_once __DIR__ . "/../templates/perfil_header.php"; ?>
 
-<div class="row mt-3">
-    <div class="activity_perfil col">
-        <div class="d-flex flex-column">
-            <h3 class="text-center text-secondary mb-2">Actividad Reciente </h3>
-        </div>
+<div class="row " id="cover-profile">
+    <div class="col-5 col-sm-4 col-md-2">
+        <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid " alt=""></img>
     </div>
-    <div class="col d-flex justify-content-end">
-        <button type="button" id="close_activity_perfil" class="btn btn-primary mb-2">Ocultar</button>
+    <div class="col-7 d-flex flex-column justify-content-center">
+        <span><?php echo $user->username ?></span><br>
+        <span><?php echo $user->rol ?></span>
     </div>
 </div>
 
-<div class="table-responsive activity_perfil">
-    <table class="table">
-        <tbody>
+<nav class="mt-2 d-flex justify-content-center" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/actividad" class="text-decoration-none ">Actividad</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="/perfil" class="breadcrumb-item active text-decoration-none">Perfil</a></li>
+        <li class="breadcrumb-item"><a href="/posts" class="text-decoration-none ">Post</a></li>
+        <li class="breadcrumb-item"><a href="/amigos" class="text-decoration-none ">Amigos</a></li>
+    </ol>
+</nav>
 
-            <?php foreach ($activities as $activity) : ?>
 
-                <?php
-
-
-                $item_name = null;
-
-                if ($activity->project_name != null) {
-                    $item_name = $activity->project_name;
-                }
-
-                if ($activity->task_name != null) {
-                    $item_name = $activity->task_name;
-                }
-
-                if ($activity->post_name != null) {
-                    $item_name = $activity->post_name;
-                }
-
-                ?>
-
-                <tr>
-                    <td class="text-center">
-                        <i class="fa fa-comment"></i>
-                    </td>
-                    <td>
-                        <?php echo $activity->username . " ";
-                        echo $activity->action;
-
-                        ?> <a href="#"><?php echo $item_name; ?></a> .
-                    </td>
-                    <td>
-                        <?php echo $activity->create_at; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-center mb-4">
-        <button class="btn btn-secondary" onclick="window.location.href='/actividad'">Ver más</button>
-    </div>
-</div>
 
 
 
@@ -68,13 +29,20 @@
                         <circle cx="12" cy="12" r="1"></circle>
                         <circle cx="19" cy="12" r="1"></circle>
                         <circle cx="5" cy="12" r="1"></circle>
-                    </svg></a> <br> <?php echo $user->description; ?>
+                    </svg></a> <br> <?php echo $user->description ?? 'No tiene descripción'; ?>
             </span>
             <div class="col mt-2 border shadow p-2">
                 <h3 class="bg-grey p-2">Skills <i class="fa fa-trophy fs-4"></i></h3>
 
+                <?php 
+                
+                
+                if (sizeof($skills) < 1)
+                    $skills[] = "No tiene skills añadidas";
+                ?>
+
                 <?php foreach ($skills as $skill) : ?>
-                    <span class="badge bg-primary"><?php echo $skill ?></span>
+                    <span class="badge bg-primary <?php if ($skill = "No tiene skills añadidas") echo 'bg-danger' ?> "><?php echo $skill ?? 'No tiene skills añadidas' ?></span>
                 <?php endforeach; ?>
 
             </div>
@@ -85,6 +53,9 @@
 
     <section id="wrap-articles" class="col-md-12 col-lg-6 border shadow mx-2 p-4 mb-2">
         <h2 class="text-uppercase font-weight-bold fs-1 text-secondary text-shadow">Últimos articulos</h2>
+        
+       
+
         <?php foreach ($posts as $post) : ?>
             <article class="wrap-article m-2">
                 <span class="text-right d-block w-100 text-end"><?php echo $post->create_at ?></span>
@@ -126,15 +97,28 @@
             </article>
             <hr />
         <?php endforeach; ?>
+        
+        
+     
+        
+            
         <div class="d-flex justify-content-center mt-5">
-            <button class="btn btn-secondary" onclick="window.location.href='/posts'">Ver más</button>
+            <?php if (sizeof($posts) > 1): ?>
+                <button class="btn btn-secondary" onclick="window.location.href='/posts'">Ver más</button>
+            
+            <?php else: ?>
+                <p>No tiene artículos</p>
+
+            <?php endif; ?>
         </div>
+
     </section>
 
-    <?php if ($user->isSocials = "1") : ?>
+    <?php if($user->isSocials != null && $user->isSocials == "1"): ?>
         <div class="col-md-12 col-lg-2  mx-2">
             <div class="row border shadow p-4">
                 <strong class="mb-2">Redes Sociales</strong>
+                <!-- comprobar longituyd y mostrar o no -->
                 <div class="col">
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
                 </div>
@@ -146,7 +130,7 @@
                 </div>
             </div>
         </div>
-
     <?php endif; ?>
+    
 
 </div>

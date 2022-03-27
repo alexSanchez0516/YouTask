@@ -10,22 +10,22 @@ class Users extends ActiveRecord
 {
 
     protected static $db;
-    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description', 'rol'];
+    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description', 'rol' , 'isSocials'];
     protected static $tabla = 'users';
 
 
 
     public int $id;
-    public String $username;
-    public String $password;
-    public String $email;
-    public String $token;
+    public  $username;
+    public  $password;
+    public  $email;
+    public  $token;
     public  $validate;
     public  $admin;
-    public String $avatar;
-    public String $description;
-    public String $rol;
-    public $isSocial;
+    public  $avatar;
+    public  $description;
+    public  $rol;
+    public $isSocials;
 
     function __construct($args = [])
     {
@@ -38,8 +38,8 @@ class Users extends ActiveRecord
         $this->admin = $args['admin'] ?? '0';
         $this->avatar = $args['avatar'] ?? '';
         $this->description = $args['description'] ?? '';
-        $this->rol = '';
-        $this->isSocial = '1';
+        $this->rol = $args['rol'] ?? '';
+        $this->isSocials = $args['isSocial'] ?? '0';
     }
 
     public static function setDB($database)
@@ -253,13 +253,69 @@ class Users extends ActiveRecord
     public function setSkill(String $skill) : void {
 
     }
-    public function getSkills() : Array {
+    public function getSkills() : Array  {
         $query = "SELECT skills.name FROM skill_users ";
         $query .= "INNER JOIN users ON skill_users.id_user = users.id";
         $query .= " INNER JOIN skills on skill_users.id_skill = skills.id";
         $query .= " WHERE users.id = $this->id";
-        return (static::$db->query($query)->fetch_array(MYSQLI_ASSOC));
+        $skills = [];
+
+        try {
+            $validation_row = static::$db->query($query);
+            if ($validation_row->num_rows > 0) {
+                $skills = $validation_row->fetch_array(MYSQLI_ASSOC);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return $skills;
         
     }
+
+    public function getFriends() : Array {
+        $query = "select DISTINCT user.id, username, avatar"; 
+        $query .= " from users as user";
+        $query .= " inner join requests_friends as request on user.id = request.transmitter or user.id = request.receiver";
+        $query .= " where isAccept = 1 and user.id != $this->id ";
+        
+        $data = static::$db->query($query); //puede dar false 
+        
+        $friends = [];
+
+        if ($data) {
+            while ($record = $data->fetch_array(MYSQLI_ASSOC)) {
+                $friends[] = $record;
+            }
+            $data->free(); //Liberar memoria
+        }
+
+        return $friends; 
+
+   
+    }
+
+    public function getQuantityFriends() : int {
+        $query = "
+        select  count(*) as quantity from 
+        (select  username from users as user
+        inner join requests_friends as request
+        on user.id = request.transmitter or user.id = request.receiver where isAccept = 1 and user.id != $this->id
+        group by user.id) as data
+        ";
+
+        return( (int)static::$db->query($query)->fetch_array(MYSQLI_ASSOC)['quantity']);
+
+    }
+
+    public function deleteFriend($id) : bool {
+        $query = "DELETE FROM requests_friends "; 
+        $query .= "WHERE (transmitter = $id OR receiver = $id) and ";
+        $query .= "(transmitter = $this->id OR receiver = $this->id) LIMIT 1";
+
+        return static::$db->query($query);
+    }
+
+   
 }
 

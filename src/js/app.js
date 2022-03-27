@@ -4,7 +4,22 @@ document.addEventListener('DOMContentLoaded', function () {
     showMenuResponse();
     showCreateProject();
     close_activity_perfil();
+    showFriends();
+    deleteFriend();
 });
+
+function deleteFriend() { 
+    $(document).on('click', '.delete_friend', (element) => {
+        if (confirm("Estas seguro que quieres eliminar este amigo")) {
+            let id_element = element.target.parentElement.parentElement.children[2].textContent;
+        
+            $.post('http://127.0.0.1:8080/api/friends/delete', {id_element}, (response) => {
+                showFriends();
+            });
+        }
+    });
+} 
+
 
 function close_activity_perfil() { 
     const close_activity_perfil = document.querySelector('#close_activity_perfil');
@@ -25,6 +40,76 @@ function close_activity_perfil() {
         
     }
 
+}
+
+async function showFriends() { 
+  
+
+    try {
+        
+        const url = "http://127.0.0.1:8080/api/friends";
+        const result = await fetch(url);
+        const friends = await result.json();
+        
+
+        createFriendsList(friends[1], friends[0]);
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+function createFriendsList(friends, count) { 
+    const container_friends = document.querySelector('#container_friends');
+    const countFriends = document.querySelector('#countFriends');
+
+    countFriends.textContent = "Lista de amigos (" + count + ")";
+
+    let template = "";
+
+    if (friends.length > 0) {
+
+        friends.forEach( (friend) => {
+            console.log(friend);
+            template += `
+            <div class="col-12 col-md-5 border shadow m-2">
+                <div class="row">
+                    <div class="col-3" id="">
+                        <img id="avatar" src="/build/img/${friend.avatar}" alt="avatar" srcset="" class="img-fluid m-2">
+                    </div>
+                    <div class="col-4 d-flex justify-content-center align-items-center">
+                        <span id="friend_username">${friend.username}</span>
+                    </div>
+                    <div class="col-5 d-flex">
+                        <nav class="navbar navbar-expand-sm">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acciones
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="/amigo?id=${friend.id}">Ver Perfil</a></li>
+                                        <li><a class="dropdown-item delete_friend" href="#">Eliminar</a></li>
+                                        <li class="d-none">${friend.id}</li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">Enviar mensaje</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+    } else {
+        template = `<p class="text-center text-danger">No tienes amigos agregados</p>`
+    }
+
+    container_friends.innerHTML = template;
 }
 
 function showCreateProject() {

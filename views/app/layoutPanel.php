@@ -33,12 +33,12 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                 <picture class="col-1 col-sm-4 col-md-6">
                     <a href="/"><i class="fas text-dark fa-crop fs-1"></i></a>
                 </picture>
-                <nav class="col-11 col-sm-8 col-md-6 my-4 d-flex justify-content-end">
+                <nav class="col-11 col-sm-8 col-md-6 my-4 d-flex justify-content-end" >
                     <div class="row nav_wrap_panel w-100">
                         <div class="nav__panel col-12 align-self-center" id="nav-menu">
 
                             <ul class="nav__list  d-flex justify-content-center w-100">
-                                <li class="nav__item"><i class="fas fa-bell text-dark fs-2 mx-4"></i></li>
+                                <li class="nav__item"><a href="/mensajes" class="text-decoration-none text-dark"><i class="fa-solid fa-message text-dark fs-2 mx-4"></i></a></li>
                                 <li><a href="#" class="text-decoration-none text-dark"><i class="fas fa-users fs-2 mx-4"></i></a>
 
                                 <li><a href="/amigos" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-4"></i></a>
@@ -69,7 +69,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                                         <li class=" col-2 col-sm-1 my-2"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1 mx-2"></i></a> </li>
                                         <li class=" col-2 col-sm-1 my-2"> <a href="/proyectos"><i class="fas fa-project-diagram text-dark fs-1 mx-2"></i></a> </li>
                                         <li class=" col-2 col-sm-1 my-2"> <a href="/tareas"><i class="fas fa-tasks text-dark fs-1 mx-2"></i></a></li>
-                                        <li class=" col-2 col-sm-1 my-2"><i class="fas fa-sign-out-alt text-dark fs-1 mx-2"></i></li>
+                                        <li class=" col-2 col-sm-1 my-2"><a href="/salir"><i class="fas fa-sign-out-alt text-dark fs-1 mx-2"></i></a></li>
                                     </ul>
 
                                 </div>
@@ -110,11 +110,11 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                         <li class="nav__item my-5"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1"></i></a> </li>
                         <li class="nav__item my-5"> <a href="/proyectos"><i class="fas fa-project-diagram text-dark fs-1"></i></a> </li>
                         <li class="nav__item my-5"> <a href="/tareas"><i class="fas fa-tasks text-dark fs-1"></i></a></li>
-                        <li class="nav__item my-5"><i class="fas fa-sign-out-alt text-dark fs-1"></i></li>
+                        <li class="nav__item my-5"><a href="/salir"><i class="fas fa-sign-out-alt text-dark fs-1"></i></a></li>
 
                     </ul>
                 </div>
-                <div class="col-12 col-md-10 mx-md-2 d-flex border shadow flex-column " style="border-radius:1em" ;>
+                <div class="col-12 col-md-10 mx-md-2 d-flex border shadow flex-column " style="border-radius:1em;" >
                     <?php include_once __DIR__ . "/../templates/alerts.php"; ?>
 
                     <?php echo $content; ?>

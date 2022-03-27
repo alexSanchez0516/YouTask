@@ -26,6 +26,9 @@ $router->post('/login', [LoginController::class, 'auth']);
 
 $router->get('/registro', [LoginController::class, 'register']);
 $router->post('/registro', [LoginController::class, 'register']);
+$router->get('/salir', [LoginController::class, 'logout']);
+
+
 
 //Send EMAIL request
 $router->get('/recuperar-password', [LoginController::class, 'forgetPassword']); //OlvidePaswword
@@ -65,9 +68,34 @@ $router->get('/proyectos', [PanelController::class, 'showProjects']);
 $router->get('/proyecto', [PanelController::class, 'showProject']);
 
 $router->get('/tareas', [PanelController::class, 'showTasks']);
-$router->get('/tarea', [PanelController::class, 'showTask']);
+$router->post('/tarea', [PanelController::class, 'showTask']);
+
+
+$router->get('/posts', [PanelController::class, 'showPosts']);
+$router->post('/posts', [PanelController::class, 'showPosts']);
+
+$router->get('/post', [PanelController::class, 'showPost']);
+$router->post('/post', [PanelController::class, 'showPost']);
+
+
+$router->get('/actividad', [PanelController::class, 'showActivity']);
+
+
+$router->get('/amigo', [PanelController::class, 'showFriend']);
+$router->post('/amigo', [PanelController::class, 'showFriend']);
+
+
+$router->get('/mensajes', [PanelController::class, 'showMessages']);
+$router->post('/mensajes', [PanelController::class, 'showMessages']);
+
+
+
 
 //API
+$router->get('/api/friends', [APIController::class, 'listFriends']);
+$router->post('/api/friends/delete', [APIController::class, 'deleteFriend']);
+$router->post('/api/friends/update', [APIController::class, 'updateFriend']);
+
 $router->get('/api/proyects', [APIController::class, 'listProjects']);
 $router->get('/api/tasks', [APIController::class, 'listTasks']);
 
