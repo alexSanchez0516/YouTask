@@ -61,6 +61,8 @@ class Router
         if (in_array(self::$currentUrl, self::$urlsProtected) && !$auth) {
             header('Location: /');
         }
+        
+        debug("https://parzibyte.me/blog/2020/11/21/select-2-counts-mysql/");
 
 
         if ($fn) {
