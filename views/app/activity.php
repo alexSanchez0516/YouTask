@@ -8,7 +8,7 @@
 
 </div>
 
-<div class="table-responsive activity_perfil vh-100">
+<div class="table-responsive activity_perfil">
     <table class="table">
         <tbody>
 

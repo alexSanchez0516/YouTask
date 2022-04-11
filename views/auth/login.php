@@ -16,7 +16,7 @@
                             <div class="text w-100">
                                 <h2>Bienvenido a YouTask</h2>
                                 <p>¿No tienes una cuenta?</p>
-                                <a href="/register" class="btn btn-dark btn-outline-white">Crear cuenta</a>
+                                <a href="/registro" class="btn btn-dark btn-outline-white">Crear cuenta</a>
                             </div>
                         </div>
                         <div class="login-wrap p-4 p-lg-5 shadow">

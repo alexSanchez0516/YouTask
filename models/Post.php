@@ -25,7 +25,7 @@ class Post extends ActiveRecord
         $this->id = $args['id'] ?? 0;
         $this->name = $args['name'] ?? '';
         $this->content = $args['content'] ?? '';
-        $this->id_user = $args['id_user'] ?? '0';
+        $this->id_user = $args['id_user'] ?? 0;
         $this->create_at = $args['create_at'] ?? '';
         $this->likes = $args['likes'] ?? 0;
     }
@@ -33,11 +33,12 @@ class Post extends ActiveRecord
 
     public function createC(int $user): bool
     {
-        return true;
+        $this->id_user = $user;
+        return $this->save();
     }
-    public function updateC(int $user): bool
+    public function updateC(): bool
     {
-        return true;
+        return $this->save();
     }
 
     public function deleteC(int $user): bool
@@ -49,7 +50,7 @@ class Post extends ActiveRecord
     {
 
 
-        $query = "SELECT post.name, post.content, post.create_at, count(*) as likes FROM post";
+        $query = "SELECT post.id ,post.name, post.content, post.create_at, count(*) as likes FROM post";
         $query .= " left JOIN users ON post.id_user = users.id";
         $query .= " left join post_likes as likes on post_id = post.id";
         $query .= " WHERE users.id = $user";
@@ -61,6 +62,20 @@ class Post extends ActiveRecord
         return static::consulSQL($query);
         
     
+    }
+
+    public function getComments($idPost) {
+        $query = "SELECT comments_post.id, comments_post.post_id, comments_post.create_at, content, avatar, username FROM comments_post inner join users on comments_post.user_id = users.id WHERE post_id = $idPost;";
+        
+        $result = static::$db->query($query);
+
+        $rows = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+        
     }
 
 

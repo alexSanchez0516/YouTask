@@ -160,9 +160,79 @@ class PanelController
         ]);
     }
 
-    public static function showPost(Router $router) {
-        $router->render('app/post');
+   public static function showPost(Router $router) {
+        
+        if (!empty($_GET['id'])) {
+            $id = validateOrRedirect("/panel");
+            $post = Post::find('id', $id, false);
+            $comments = $post->getComments($post->id);
+            $router->render('app/post', [
+                'post' => $post,
+                'comments' => $comments,
+            ]);
+        } else {
+            header('location: /panel');
+        }
+        
     }
+
+
+    public static function create_post(Router $router) {
+        
+        $post = new Post();
+        
+        $user = $_SESSION['user'];
+        $typeAlert = false;
+        
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
+            $typeAlert = $post->validateAttributes($_POST);
+            
+            if ($typeAlert) {
+                $post->synchronize($_POST);
+                
+                if ($post->createC($user)) {
+                    header('location: /posts');
+                }
+            }
+
+        }
+
+        $router->render('app/create_post',[
+            'typeAlert' => $typeAlert,
+            'alerts' => Post::getAlerts(),
+        ]);
+    }
+
+    public static function update_post(Router $router) {
+        
+        $id_post = validateOrRedirect("/");
+        
+        $post = Post::find('id', $id_post, false);
+
+        $typeAlert = null;
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $typeAlert = $post->validateAttributes($_POST);
+            
+            if ($typeAlert) {
+                $post->synchronize($_POST);
+                $post->updateC() ? Post::setAlert("Guardado correctamente") : Post::setAlert("No ha podido ser creado");
+                $typeAlert = true;
+                
+                header('location: /posts');
+            }
+        }
+
+
+        $router->render('app/update_post', [
+            'post' => $post,
+            'alerts' => Post::getAlerts(),
+            'typeAlert' => $typeAlert,
+        ]);
+    }
+
 
     public static function editProfile(Router $router) {
         $router->render('app/edit_profile');
@@ -174,7 +244,7 @@ class PanelController
 
         $activities = $activity->getAll($user->id, 0, 4); //LIMIT 4, type 1-post-2project-3task
 
-        debug("queck que nno ponga tu nombre, que ponga has echo o escrito etc el la activity");
+        //debug("queck que nno ponga tu nombre, que ponga has echo o escrito etc el la activity");
 
         $router->render('app/activity', [
             'activities' => $activities,
@@ -184,17 +254,20 @@ class PanelController
     public static function showFriend(Router $router) {
         
         $id = validateOrRedirect('/amigos');
-        
+        $limit = 5;
         $user = Users::find('id', $id, false);
         $skills = $user->getSkills();
-        $posts = Post::getAllC($user->id, 4); //LIMIT 4
+        $friends =  $user->getFriends();
+
+
+        $posts = Post::getAllC($user->id, $limit); //LIMIT 5
  
-        
-        
+        //debug($posts);
         $router->render('app/friend', [
             'user' => $user,
             'skills' => $skills,
-            'posts' => $posts
+            'posts' => $posts,
+            'friends' => $friends,
         ]);
     }
 
@@ -203,6 +276,8 @@ class PanelController
 
         
 
-        $route = $router->render('app/messages',[]);
+        $router = $router->render('app/messages',[]);
     }
+
+    
 }

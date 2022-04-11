@@ -3,7 +3,7 @@
         <?php include_once __DIR__ . "/../templates/alerts.php" ?>
 
         <picture class="col-12 col-md-6 ">
-            <img src="/build/img/banner-recuperar-contraseña.webp" alt="" class="img-fluid" />
+            <img src="/build/img/banner-recuperar-contraseña.webp" alt="" class="img-fluid" />
         </picture>
         <section class="col-12 col-md-6 ">
             <h1>Recuperar contraseña</h1>

@@ -70,12 +70,19 @@ $router->get('/proyecto', [PanelController::class, 'showProject']);
 $router->get('/tareas', [PanelController::class, 'showTasks']);
 $router->post('/tarea', [PanelController::class, 'showTask']);
 
-
+//POST
 $router->get('/posts', [PanelController::class, 'showPosts']);
 $router->post('/posts', [PanelController::class, 'showPosts']);
 
 $router->get('/post', [PanelController::class, 'showPost']);
 $router->post('/post', [PanelController::class, 'showPost']);
+
+$router->get('/crear-post', [PanelController::class, 'create_post']);
+$router->post('/crear-post', [PanelController::class, 'create_post']);
+
+$router->get('/modificar-post', [PanelController::class, 'update_post']);
+$router->post('/modificar-post', [PanelController::class, 'update_post']);
+
 
 
 $router->get('/actividad', [PanelController::class, 'showActivity']);
@@ -89,9 +96,19 @@ $router->get('/mensajes', [PanelController::class, 'showMessages']);
 $router->post('/mensajes', [PanelController::class, 'showMessages']);
 
 
-
-
 //API
+
+$router->get('/api/posts', [APIController::class, 'listPosts']);
+$router->post('/api/posts', [APIController::class, 'listPosts']);
+
+$router->get('/api/post/delete', [APIController::class, 'deletePost']);
+$router->post('/api/post/delete', [APIController::class, 'deletePost']);
+
+$router->post('/api/post/update', [APIController::class, 'updatePost']);
+$router->get('/api/post/update', [APIController::class, 'updatePost']);
+
+
+
 $router->get('/api/friends', [APIController::class, 'listFriends']);
 $router->post('/api/friends/delete', [APIController::class, 'deleteFriend']);
 $router->post('/api/friends/update', [APIController::class, 'updateFriend']);
@@ -99,6 +116,8 @@ $router->post('/api/friends/update', [APIController::class, 'updateFriend']);
 $router->get('/api/proyects', [APIController::class, 'listProjects']);
 $router->get('/api/tasks', [APIController::class, 'listTasks']);
 
+
+debug("Validar que el comentario ternga como maxc 300 chars y validarlo");
 
 
 $router->checkRutes();

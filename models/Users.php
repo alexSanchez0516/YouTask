@@ -15,7 +15,7 @@ class Users extends ActiveRecord
 
 
 
-    public int $id;
+    public  $id;
     public  $username;
     public  $password;
     public  $email;
@@ -29,7 +29,7 @@ class Users extends ActiveRecord
 
     function __construct($args = [])
     {
-        $this->id = $args['id'] ?? 0;
+        $this->id = $args['id'] ?? '0';
         $this->username = $args['username'] ?? '';
         $this->password = $args['password'] ?? '';
         $this->email = $args['email'] ?? '';
@@ -303,8 +303,7 @@ class Users extends ActiveRecord
         on user.id = request.transmitter or user.id = request.receiver where isAccept = 1 and user.id != $this->id
         group by user.id) as data
         ";
-
-        return( (int)static::$db->query($query)->fetch_array(MYSQLI_ASSOC)['quantity']);
+        return((int)static::$db->query($query)->fetch_array(MYSQLI_ASSOC)['quantity']);
 
     }
 

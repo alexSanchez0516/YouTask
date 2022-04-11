@@ -43,7 +43,6 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
                         <ul class="nav__list d-flex justify-content-around w-100 mt-3">
                             <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Inicio</a></li>
-                            <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Blog</a></li>
                             <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Contacto</a></li>
                             
                             <?php if (!array_key_exists('auth', $_SESSION)): ?>

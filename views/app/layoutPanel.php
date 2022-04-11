@@ -26,7 +26,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 </head>
 
 
-<body class="container-fluid">
+<body class="container-fluid" >
     <header class="flex-column" data-cy=''>
         <div class="container-fluid ">
             <div class="row d-none d-md-flex">
@@ -114,7 +114,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
                     </ul>
                 </div>
-                <div class="col-12 col-md-10 mx-md-2 d-flex border shadow flex-column " style="border-radius:1em;" >
+                <div class="col-12 col-md-10 mx-md-2 d-flex flex-column w-80" style="border-radius:1em;" >
                     <?php include_once __DIR__ . "/../templates/alerts.php"; ?>
 
                     <?php echo $content; ?>

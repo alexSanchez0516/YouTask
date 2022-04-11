@@ -26,6 +26,11 @@ class ActiveRecord
     {
 
         $atributes = $this->sanitizeData();
+        
+        if (array_key_exists('create_at', $atributes)) {
+            unset($atributes['create_at']);
+        }
+
 
 
         $query = "INSERT INTO " . static::$tabla . " (";
@@ -33,7 +38,8 @@ class ActiveRecord
         $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributes));
         $query .= "')";
-      
+        
+
         return static::$db->query($query);
     }
 
@@ -150,8 +156,12 @@ class ActiveRecord
         //Delete on cascade
         $query = "DELETE FROM ". static::$tabla . " WHERE id = " . static::$db->escape_string($this->id) . " LIMIT 1";
 
-        file_exists(FOLDER_IMG . $this->avatar) ? unlink(FOLDER_IMG . $this->avatar) : false;
+        if ($this instanceof Users) {
+            file_exists(FOLDER_IMG . $this->avatar) ? unlink(FOLDER_IMG . $this->avatar) : false;
+            
+        }
         return static::$db->query($query);
+        
     }
 
     public static function all(): array
@@ -246,6 +256,12 @@ class ActiveRecord
             if ($key == 'description') {
                 if (strlen($this->$key) < 1) {
                     static::$alerts[] = 'La descripcion no puede ir vacia';
+                }
+            }
+
+            if ($key == 'content') {
+                if (strlen($this->$key) < 1) {
+                    static::$alerts[] = 'El contenido no puede ir vacia';
                 }
             }
          
