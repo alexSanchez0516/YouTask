@@ -14,10 +14,10 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"  />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/build/img/seo.webp" type="image/x-icon">
+    <link rel="icon" href="/build/img/logo_oficial.png" type="image/x-icon">
     <link rel="stylesheet" href="../build/css/app.css">
 
     <!-- Primary Meta Tags -->
@@ -32,8 +32,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                 <nav class="nav d-flex ">
                     <div class="nav_wrapper d-flex">
                         <div class="w-75 d-flex">
-                            <a class="nav__logo mx-2" href=""><i class="fas text-white fa-crop fs-1 "></i></a>
-                            <p class="align-self-center  fs-4 fw-bold text-white text-uppercase ">YouTask.</p>
+                            <a href="/"><img src="/build/img/logo_oficial.png" class="img-responsive w-50 nav__logo my-2 mx-2" alt=""></a>
                         </div>
                         <div class="nav__response">
                             <i class="fas fa-bars h2 "></i>
@@ -44,12 +43,12 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                         <ul class="nav__list d-flex justify-content-around w-100 mt-3">
                             <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Inicio</a></li>
                             <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Contacto</a></li>
-                            
-                            <?php if (!array_key_exists('auth', $_SESSION)): ?>
+
+                            <?php if (!array_key_exists('auth', $_SESSION)) : ?>
                                 <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Crear cuenta</a></li>
                                 <li class="nav__item"><a href="/login" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Ingresar</a></li>
-                            
-                            <?php else: ?>
+
+                            <?php else : ?>
                                 <li class="nav__item"><a href="/panel" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Panel</a></li>
                                 <li class="nav__item"><a href="/logout" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Cerrar sesión</a></li>
                             <?php endif; ?>

@@ -1,18 +1,36 @@
 @import 'variables';
 
-
-*, *:before, *:after {
-    box-sizing: inherit;
-
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 .list-unset {
-    list-style: unset !important;
+  list-style: unset !important;
 }
+
+html {
+  box-sizing: border-box;
+  min-height: 100%;
+  position: relative;
+}
+body {
+  margin: 0;
+}
+
 li {
-    list-style: none;
+  list-style: none;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  overflow-y: scroll;
 }

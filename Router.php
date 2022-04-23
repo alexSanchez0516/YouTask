@@ -26,10 +26,10 @@ class Router
 
         $auth = $_SESSION['auth'] ?? null;
 
-        self::$urlsProtected = ['/crear-post', '/modificar-post' ,'/panel', '/mensajes' ,'/post', '/posts', '/actividad','/perfil', '/amigos', '/amigo', '/editar-perfil', '/crear-proyecto', '/crear-tarea', '/calendario', '/proyectos', '/proyecto', '/tareas', '/tarea'];
+        self::$urlsProtected = ['/crear-post', '/modificar-post', '/panel', '/mensajes', '/post', '/posts', '/actividad', '/perfil', '/seguidores', '/seguidor', '/editar-perfil', '/crear-proyecto', '/crear-tarea', '/calendario', '/proyectos', '/proyecto', '/tareas', '/tarea'];
 
         self::$currentUrl = $_SERVER['PATH_INFO'] ?? '/';
-        
+
 
         /*problema con los parametros en la url,
          debemos quitar todo el fragmento del parametros
@@ -61,8 +61,7 @@ class Router
         if (in_array(self::$currentUrl, self::$urlsProtected) && !$auth) {
             header('Location: /');
         }
-        
-        debug("https://parzibyte.me/blog/2020/11/21/select-2-counts-mysql/");
+
 
 
         if ($fn) {
@@ -90,13 +89,12 @@ class Router
         if (array_key_exists('auth', $_SESSION)) {
             if ($_SESSION['auth']) {
                 if (in_array(self::$currentUrl, self::$urlsProtected)) {
-    
+
                     include_once __DIR__ . '/views/app/layoutPanel.php';
                 } else {
                     include_once __DIR__ . '/views/layout.php';
                 }
-        }
-        
+            }
         } else {
             include_once __DIR__ . '/views/layout.php';
         }

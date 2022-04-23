@@ -1,7 +1,7 @@
 <main class="wrap d-flex flex-column">
     <!-- Sign up form -->
 
-    <?php include_once __DIR__ . "/../templates/alerts.php"?>
+    <?php include_once __DIR__ . "/../templates/alerts.php" ?>
 
     <section class=" shadow">
         <div class="container">
@@ -16,14 +16,35 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
-                                                <input type="text" id="form3Example1c" name="username" required value="<?php echo s($user->username); ?>" class="form-control" />
+                                                <input type="text" id="form3Example1c" name="username" required class="form-control" />
                                                 <label class="form-label" for="form3Example1c">Tu nombre de usuario</label>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <input type="text" id="form3Example1c" name="apellidos" required class="form-control" />
+                                                <label class="form-label" for="form3Example1c">Tus apellidos</label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <select name="gen" id="" required class="form-control">
+                                                    <option value="0">Mujer</option>
+                                                    <option value="1">Hombre</option>
+                                                </select>
+                                                <label class="form-label" for="form3Example1c">Genero</label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
-                                                <input type="email" id="form3Example3c" name="email" name="email" required value="<?php echo s($user->email); ?>" class="form-control" />
+                                                <input type="email" id="form3Example3c" name="email" name="email" required class="form-control" />
                                                 <label class="form-label" for="form3Example3c">Email</label>
                                             </div>
                                         </div>

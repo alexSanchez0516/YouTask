@@ -1,12 +1,5 @@
-<nav class="mt-3 d-flex justify-content-center" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#" class="text-decoration-none ">Actividad</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a href="/perfil" class="breadcrumb-item active text-decoration-none">Perfil</a></li>
-        <li class="breadcrumb-item"><a href="#" class="text-decoration-none ">Post</a></li>
-        <li class="breadcrumb-item"><a href="/amigos" class="text-decoration-none ">Amigos</a></li>
-    </ol>
-</nav>
-<div class=" mt-2">
+<?php include_once __DIR__ . "/../templates/nav_perfil.php"; ?>
+<form method="post" class=" mt-2" enctype="multipart/form-data">
     <div class="row flex-lg-nowrap">
         <div class="col">
             <div class="row">
@@ -17,59 +10,49 @@
                                 <div class="row">
                                     <div class="col-12 col-sm-auto mb-3">
                                         <div class="mx-auto" style="width: 140px;">
-                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
+                                            <div class="d-flex justify-content-center align-items-center rounded">
+                                                <img src="/build/img/<?php echo $user->avatar ?>" id="current_img" alt="avatar" class="w-75">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                    <div class=" col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                         <div class="text-center text-sm-left mb-2 mb-sm-0">
-                                            <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                                            <p class="mb-0">@johnny.s</p>
-                                            <div class="text-muted"><small>Last seen 2 hours ago</small></div>
-                                            <div class="mt-2">
-                                                <button class="btn btn-primary" type="button">
-                                                    <i class="fa fa-fw fa-camera"></i>
-                                                    <span>Cambiar Foto</span>
-                                                </button>
-                                            </div>
+                                            <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap"><?php echo s($user->username); ?></h4>
+                                            <button class="bg-white border-0 w-25" onclick="openFileDialog();" type="button">
+                                                <i class="fa fa-fw fa-camera text-dark"></i>
+                                                <input class="form-control w-100" type="file" id="image_avatar" hiden name="avatar" accept="image/jpeg, image/png, image/webp" />
+                                            </button>
                                         </div>
                                         <div class="text-center text-sm-right">
-                                            <div class="text-muted"><small><?php echo date("Y-m-d ") ?></small></div>
+                                            <div class="text-muted"><small><?php echo date("Y-m-d h:i:s A") ?></small></div>
                                         </div>
                                     </div>
                                 </div>
-       
+
                                 <div class="tab-content pt-3">
                                     <div class="tab-pane active">
-                                        <form class="form" novalidate="">
+                                        <div class="form">
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="row">
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>Nombre</label>
-                                                                <input class="form-control" type="text" name="name" placeholder="John Smith" value="John Smith">
+                                                                <input class="form-control" minlength="3" type="text" name="username" value="<?php echo s($user->username) ?>" />
                                                             </div>
                                                         </div>
-                                                        <div class="col">
+                                                        <div class=" col">
                                                             <div class="form-group">
                                                                 <label>Apellidos</label>
-                                                                <input class="form-control" type="text" name="username" placeholder="johnny.s" value="johnny.s">
+                                                                <input class="form-control" minlength="3" type="text" name="apellidos" value="<?php echo s($user->apellidos) ?>" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
-                                                        <div class="col">
-                                                            <div class="form-group">
-                                                                <label>Email</label>
-                                                                <input class="form-control" type="email" placeholder="user@example.com">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col">
+                                                        <div class="col-4">
                                                             <div class="form-group">
                                                                 <label>Rol</label>
-                                                                <input class="form-control" type="text" placeholder="Programador...">
+                                                                <input class="form-control" minlength="3" name="rol" type="text" value="<?php echo s($user->rol) ?>" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -77,19 +60,19 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>Instagram</label>
-                                                                <input class="form-control" type="text" placeholder="https://www.instagram.com/">
+                                                                <input class="form-control" minlength="3" name="instagram" type="text" placeholder="https://www.instagram.com/" value="<?php echo s($user->instagram) ?>" />
                                                             </div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>GitHub</label>
-                                                                <input class="form-control" type="text" placeholder="https://github.com/alexSanchez0516/">
+                                                                <input class="form-control" minlength="3" name="gitHub" type="text" placeholder="https://github.com/" value="<?php echo s($user->github) ?>" />
                                                             </div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>LinkedIn</label>
-                                                                <input class="form-control" type="text" placeholder="https://www.linkedin.com/in/alexander-sanchez-423260184/">
+                                                                <input class="form-control" minlength="3" name="linkedin" type="text" placeholder="https://www.linkedin.com/" value="<?php echo s($user->linkedin) ?>" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -97,7 +80,7 @@
                                                         <div class="col mb-3">
                                                             <div class="form-group">
                                                                 <label>Descripción</label>
-                                                                <textarea class="form-control" rows="5" placeholder="My Bio"></textarea>
+                                                                <textarea class="form-control" name="description" id="descripcion" minlength="3" rows="5"><?php echo s($user->description); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -105,50 +88,60 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 col-sm-6 mb-3">
-                                                    <div class="mb-2"><b>Cambiar Contraseña</b></div>
                                                     <div class="row my-2">
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>Contraseña Actual</label>
-                                                                <input class="form-control" type="password" placeholder="••••••">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <div class="form-group">
-                                                                <label>Nueva Contraseña</label>
-                                                                <input class="form-control" type="password" placeholder="••••••">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row my-2">
-                                                        <div class="col">
-                                                            <div class="form-group">
-                                                                <label>Confirma <span class="d-none d-xl-inline">Contraseña</span></label>
-                                                                <input class="form-control" type="password" placeholder="••••••">
+                                                                <input class="form-control" required name="password" type="password" placeholder="••••••">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-sm-5 offset-sm-1 mb-3">
+                                                <div class="col-12" id="container_skills">
+                                                    <label for="members[]">Skills</label>
+
+                                                    <!-- MODAL -->
+                                                    <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#skills" data-bs-whatever="@mdo">Crear nueva skill</button>
+                                                    <div class="modal fade" id="skills" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Crear skill</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="skill_name" class="col-form-label">Escribe la skill</label>
+                                                                        <input type="text" name="skill_name" class="form-control" id="skill_name">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" id="btn_close_skill_user" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                    <button type="button" onclick="createSkill();" class="btn btn-primary">Crear</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END MODAL -->
+
+                                                    <!-- AQUI SE PINTAN LAS SKILLS-->
+
+                                                </div>
+                                                <div class="col-12 col-sm-5 offset-sm-1 mt-4 mb-3">
                                                     <div class="mb-2"><b>Mostrar Redes</b></div>
                                                     <div class="row">
                                                         <div class="col">
                                                             <div class="custom-controls-stacked px-2">
 
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="notifications-news" checked="">
-                                                                    <label class="custom-control-label" for="notifications-news">Instagram</label>
+                                                                    <?php if ($user->isSocials == "1") : ?>
+                                                                        <input type="checkbox" name="isSocials" class="custom-control-input" value="0" id="notifications-news" checked />
+                                                                    <?php else : ?>
+                                                                        <input type="checkbox" name="isSocials" class="custom-control-input" value="1" id="notifications-news" />
+                                                                    <?php endif; ?>
+                                                                    <label class="custom-control-label" for="notifications-news">Si</label>
                                                                 </div>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="notifications-offers" checked="">
-                                                                    <label class="custom-control-label" for="notifications-offers">GitHub</label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="notifications-offers" checked="">
-                                                                    <label class="custom-control-label" for="notifications-offers">LinkedIn</label>
-                                                                </div>
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -156,10 +149,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col d-flex justify-content-end">
-                                                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                    <button class="btn btn-primary" type="submit">Guardar Cambios</button>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -181,4 +174,4 @@
 
         </div>
     </div>
-</div>
+</form>

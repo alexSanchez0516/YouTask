@@ -6,7 +6,7 @@
             <img src="/build/img/banner-recuperar-contraseña.webp" alt="" class="img-fluid" />
         </picture>
         <section class="col-12 col-md-6 ">
-            <h1>Recuperar contraseña</h1>
+            <h1>Cambiar contraseña</h1>
             <form method="post" class="d-flex flex-column " action="/recuperar-password">
                 <div class="d-flex">
                     <label for="email" class="w-15 m-1">Email</label>

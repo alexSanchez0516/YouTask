@@ -4,13 +4,13 @@ namespace Model;
 
 use Classes\Email;
 use Model\Group;
-
+use Controllers\APIController;
 
 class Users extends ActiveRecord
 {
 
     protected static $db;
-    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description', 'rol' , 'isSocials'];
+    protected static $colDB = ['id', 'username', 'password', 'email', 'validate', 'token', 'admin', 'avatar', 'description', 'rol', 'apellidos', 'isSocials', 'instagram', 'github', 'linkedin', 'gen'];
     protected static $tabla = 'users';
 
 
@@ -25,8 +25,12 @@ class Users extends ActiveRecord
     public  $avatar;
     public  $description;
     public  $rol;
+    public $apellidos;
     public $isSocials;
-
+    public $instagram;
+    public $github;
+    public $linkedin;
+    public $skills;
     function __construct($args = [])
     {
         $this->id = $args['id'] ?? '0';
@@ -36,10 +40,23 @@ class Users extends ActiveRecord
         $this->validate = $args['validate'] ?? '0';
         $this->token = $args['token'] ?? '';
         $this->admin = $args['admin'] ?? '0';
-        $this->avatar = $args['avatar'] ?? '';
+
         $this->description = $args['description'] ?? '';
         $this->rol = $args['rol'] ?? '';
+        $this->apellidos = $args['apellidos'] ?? '';
         $this->isSocials = $args['isSocial'] ?? '0';
+        $this->instagram = $args['instagram'] ?? '';
+        $this->github = $args['github'] ?? '';
+        $this->linkedin = $args['linkedin'] ?? '';
+        $this->skills = $args['skills'] ?? '';
+
+        $this->gen = $args['gen'] ?? '0';
+
+        if ($args['gen'] == '0') { //mujer
+            $this->avatar = $args['avatar'] ?? 'fem.png';
+        } else { //hombre
+            $this->avatar = $args['avatar'] ?? 'male.png';
+        }
     }
 
     public static function setDB($database)
@@ -58,6 +75,7 @@ class Users extends ActiveRecord
         if (empty(static::$alerts)) {
             $user_data =  static::find('email', $data['email'], false);
             if (isset($user_data) && $user_data->validate === "1") {
+                //pasword-->hash
                 $auth = password_verify($this->password, $user_data->password);
                 if ($auth) {
                     session_start();
@@ -86,8 +104,7 @@ class Users extends ActiveRecord
             $this->createToken();
 
             $email = new Email($this->token, $this->username, $this->email);
-
-            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+            $this->encryptPassword();
             if ($this->save()) {
                 if ($email->sendConfirmation()) {
                     $typeAlert = true;
@@ -121,11 +138,17 @@ class Users extends ActiveRecord
     }
 
 
-    public function changePassword(): bool {
-        return false;
+    public function encryptPassword(): void
+    {
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
     }
 
 
+    public function checkPassword($password): bool
+    {
+
+        return password_verify($password, $this->password);
+    }
 
 
     public function deleteAccount(): bool
@@ -217,70 +240,107 @@ class Users extends ActiveRecord
             } else {
                 static::$alerts[] = "Este email no está registrado";
             }
-            return $typeAlert;
         }
+        return $typeAlert;
     }
 
-    public function alterUser(bool $typeAlert)
-    { /* se debe controlar que datos son los que se han enviado
-         y guardar solo esos datos que sean modificado  */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function alterUser()
+    {
+        $typeAlert = false;
+
+
+        //debug($_POST);
+
         if ($this->validateAttributes($_POST)) {
-            $typeAlert = true;
-            $this->username = $_POST['username'];
-            $this->description = $_POST['description'];
-            if (strlen($_FILES['avatar']['name']) > 0) {
-                if (strlen($this->avatar) > 0) { //Comprobamos si hay imagen
-                    $imgDelete = $this->avatar;
+            if ($this->checkPassword($_POST['password'])) { //check current password    
+                $typeAlert = true;
+                unset($_POST['password']);
+                $this->synchronize($_POST);
+                if (strlen($_FILES['avatar']['name']) > 0) {
+
+                    if (strlen($this->avatar) > 0) { //Comprobamos si hay imagen
+                        $imgDelete = $this->avatar;
+                    }
+                    $this->uploadImg($_FILES['avatar'], $imgDelete, true);
+
+                    /*
+                    ERROR : GD Library extension not available with this PHP installation.
+                    sudo apt-get install php8.1-gd replace ;extension=gd with extension=gd restart apache
+                    */
                 }
-                $this->uploadImg($_FILES['avatar'], $imgDelete);
+                $this->saveSkills($this->skills);
+                $this->save() ? $this->setAlert("Cambios guardados correctamente") : false;
+            } else {
+                $this->setAlert("Contraseña incorrecta");
             }
-
-            $this->save() ? $this->setAlert("Cambios guardados correctamente") : false;
-        } //Hay cosas raras con $tyAlert
-
+        }
         return $typeAlert;
     }
 
 
-    public function addPermissionsGroup(Group $group) : bool {
-        return true;
-    }
+    private function saveSkills($skills)
+    {
 
-    public function sendRequestFriend(Users $user) : bool {
-        return true;
-    }
+        $id_user = $_SESSION['user'];
+        $query = "DELETE FROM skill_users WHERE id_user = $id_user";
 
-    public function setSkill(String $skill) : void {
+        if (Users::$db->query($query)) {
+            if (!empty($skills)) {
+                $query = "INSERT INTO skill_users (id_user, id_skill) VALUES ";
+                foreach ($skills as $skill) {
+                    $query .= " ($id_user, $skill),";
+                }
+                $query = substr($query, 0, -1);
 
-    }
-    public function getSkills() : Array  {
-        $query = "SELECT skills.name FROM skill_users ";
-        $query .= "INNER JOIN users ON skill_users.id_user = users.id";
-        $query .= " INNER JOIN skills on skill_users.id_skill = skills.id";
-        $query .= " WHERE users.id = $this->id";
-        $skills = [];
-
-        try {
-            $validation_row = static::$db->query($query);
-            if ($validation_row->num_rows > 0) {
-                $skills = $validation_row->fetch_array(MYSQLI_ASSOC);
+                Users::$db->query($query);
             }
-
-        } catch (\Throwable $th) {
-            //throw $th;
         }
-        return $skills;
-        
     }
 
-    public function getFriends() : Array {
-        $query = "select DISTINCT user.id, username, avatar"; 
+    public function addPermissionsGroup(Group $group): bool
+    {
+        return true;
+    }
+
+    public static function sendRequestFriend($receiver)
+    {
+        $transmitter = $_SESSION['user'];
+        $query = "INSERT INTO requests_friends (transmitter, receiver) VALUES ($transmitter, $receiver)";
+        $valid = true; //Cayo en excepcion?
+        try {
+            static::$db->query($query);
+        } catch (\Throwable $th) {
+            $valid = false;
+        }
+        return $valid;
+    }
+
+    public function setSkill(String $skill): void
+    {
+    }
+    public function getSkills(): array
+    {
+        $query = "SELECT skills.name FROM skill_users ";
+        $query .= " INNER JOIN skills on skill_users.id_skill = skills.id";
+        $query .= " WHERE id_user = $this->id";
+
+        return Users::getAnyQueryResult($query);
+    }
+
+    public function getFriends(): array
+    {
+        $query = "select DISTINCT user.id, username, avatar";
         $query .= " from users as user";
         $query .= " inner join requests_friends as request on user.id = request.transmitter or user.id = request.receiver";
         $query .= " where isAccept = 1 and user.id != $this->id ";
-        
+
         $data = static::$db->query($query); //puede dar false 
-        
+
         $friends = [];
 
         if ($data) {
@@ -290,12 +350,11 @@ class Users extends ActiveRecord
             $data->free(); //Liberar memoria
         }
 
-        return $friends; 
-
-   
+        return $friends;
     }
 
-    public function getQuantityFriends() : int {
+    public function getQuantityFriends(): int
+    {
         $query = "
         select  count(*) as quantity from 
         (select  username from users as user
@@ -303,18 +362,15 @@ class Users extends ActiveRecord
         on user.id = request.transmitter or user.id = request.receiver where isAccept = 1 and user.id != $this->id
         group by user.id) as data
         ";
-        return((int)static::$db->query($query)->fetch_array(MYSQLI_ASSOC)['quantity']);
-
+        return ((int)static::$db->query($query)->fetch_array(MYSQLI_ASSOC)['quantity']);
     }
 
-    public function deleteFriend($id) : bool {
-        $query = "DELETE FROM requests_friends "; 
+    public function deleteFriend($id): bool
+    {
+        $query = "DELETE FROM requests_friends ";
         $query .= "WHERE (transmitter = $id OR receiver = $id) and ";
         $query .= "(transmitter = $this->id OR receiver = $this->id) LIMIT 1";
 
         return static::$db->query($query);
     }
-
-   
 }
-

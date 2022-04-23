@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '../../includes/app.php'; 
+require_once __DIR__ . '../../includes/app.php';
 
 
 use MVC\Router;
@@ -39,11 +39,11 @@ $router->post('/recovery-password', [LoginController::class, 'recoveryPassword']
 
 
 //PANEL
-$router->get('/panel', [PanelController::class, 'index']); 
-$router->post('/panel', [PanelController::class, 'index']); 
+$router->get('/panel', [PanelController::class, 'index']);
+$router->post('/panel', [PanelController::class, 'index']);
 
-$router->get('/amigos', [PanelController::class, 'showFriends']);
-$router->post('/amigos', [PanelController::class, 'showFriends']);
+$router->get('/seguidores', [PanelController::class, 'showFriends']);
+$router->post('/seguidores', [PanelController::class, 'showFriends']);
 
 
 $router->get('/perfil', [PanelController::class, 'showPerfil']);
@@ -55,10 +55,10 @@ $router->post('/editar-perfil', [PanelController::class, 'editProfile']);
 
 
 
-$router->get('/crear-proyecto', [PanelController::class, 'createProject']); 
-$router->post('/crear-proyecto', [PanelController::class, 'createProject']); 
+$router->get('/crear-proyecto', [PanelController::class, 'createProject']);
+$router->post('/crear-proyecto', [PanelController::class, 'createProject']);
 
-$router->get('/crear-tarea', [PanelController::class, 'createTask']); 
+$router->get('/crear-tarea', [PanelController::class, 'createTask']);
 $router->post('/crear-tarea', [PanelController::class, 'createTask']);
 
 $router->get('/calendario', [PanelController::class, 'Calendar']);
@@ -88,8 +88,8 @@ $router->post('/modificar-post', [PanelController::class, 'update_post']);
 $router->get('/actividad', [PanelController::class, 'showActivity']);
 
 
-$router->get('/amigo', [PanelController::class, 'showFriend']);
-$router->post('/amigo', [PanelController::class, 'showFriend']);
+$router->get('/seguidor', [PanelController::class, 'showFriend']);
+$router->post('/seguidor', [PanelController::class, 'showFriend']);
 
 
 $router->get('/mensajes', [PanelController::class, 'showMessages']);
@@ -116,8 +116,36 @@ $router->post('/api/friends/update', [APIController::class, 'updateFriend']);
 $router->get('/api/proyects', [APIController::class, 'listProjects']);
 $router->get('/api/tasks', [APIController::class, 'listTasks']);
 
+$router->get('/api/send_response_comment', [APIController::class, 'send_response_comment']);
+$router->post('/api/send_response_comment', [APIController::class, 'send_response_comment']);
 
-debug("Validar que el comentario ternga como maxc 300 chars y validarlo");
+
+$router->post('/api/search-friends-for-name', [APIController::class, 'search_friends_for_name']);
+$router->post('/api/send-resquest-friend', [APIController::class, 'send_resquest_friend']);
+
+
+
+$router->get('/api/check-request-follower', [APIController::class, 'checkRequestFollower']);
+$router->post('/api/check-request-follower', [APIController::class, 'checkRequestFollower']);
+
+
+$router->post('/api/show-requests-followers', [APIController::class, 'getRequestsFollow']);
+$router->get('/api/show-requests-followers', [APIController::class, 'getRequestsFollow']);
+
+
+$router->post('/api/accept-follower', [APIController::class, 'acceptFollower']);
+$router->post('/api/accept-reject', [APIController::class, 'RejectFollower']);
+
+
+
+$router->get('/api/get-skills', [APIController::class, 'getAllSkills']);
+$router->post('/api/check-skill', [APIController::class, 'checkSkill']);
+
+
+$router->post('/api/create-skill', [APIController::class, 'createSkill']);
+
+
+$router->post('/api/chat/app', [APIController::class, 'showChat']);
 
 
 $router->checkRutes();

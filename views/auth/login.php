@@ -1,5 +1,5 @@
-<main class="wrap d-flex flex-column">
-    <section class="ftco-section m-4">
+<main>
+    <section class="ftco-section m-md-4 vh-100 d-flex align-items-center">
         <div class="container">
             <div class="row justify-content-center d-flex">
                 <div class="col-md-6 text-center mb-3">
@@ -55,4 +55,4 @@
             </div>
         </div>
     </section>
-    <main>
+</main>

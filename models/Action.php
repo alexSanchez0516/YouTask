@@ -8,7 +8,7 @@ class Action extends ActiveRecord
 
     protected static $db;
     protected static $colDB = ['id', 'user_id', 'action', 'project_id', 'task_id', 'post_id'];
-    protected static $tabla = 'post';
+    protected static $tabla = 'activity';
 
     protected static array $alerts = [];
     public $user_id;

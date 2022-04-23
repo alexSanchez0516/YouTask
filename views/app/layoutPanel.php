@@ -17,31 +17,67 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/build/img/seo.webp" type="image/x-icon">
+    <link rel="icon" href="/build/img/logo_oficial.png" type="image/x-icon">
     <link rel="stylesheet" href="../build/css/app.css">
     <link href='/build/fullcalendar/packages/core/main.css' rel='stylesheet' />
     <link href='/build/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
     <!-- Primary Meta Tags -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>YouTask Panel</title>
 </head>
 
 
-<body class="container-fluid" >
+<body class="container-fluid">
     <header class="flex-column" data-cy=''>
         <div class="container-fluid ">
             <div class="row d-none d-md-flex">
                 <picture class="col-1 col-sm-4 col-md-6">
-                    <a href="/"><i class="fas text-dark fa-crop fs-1"></i></a>
+                    <a href="/"><img src="/build/img/logo_oficial.png" class="img-responsive w-50 my-3" alt=""></a>
                 </picture>
-                <nav class="col-11 col-sm-8 col-md-6 my-4 d-flex justify-content-end" >
+                <nav class="col-11 col-sm-8 col-md-6 my-4 d-flex justify-content-end">
                     <div class="row nav_wrap_panel w-100">
                         <div class="nav__panel col-12 align-self-center" id="nav-menu">
 
                             <ul class="nav__list  d-flex justify-content-center w-100">
+                                <li id="nav__notification" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav__item"><i class="fa-solid fs-2 fa-bell mx-4"></i></li>
+
+
+                                <!-- Modal -->
+                                <div class="modal modal-dialog-scrollable fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Notificaciones</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div id="wrap__notifications" class="modal-body d-flex flex-column">
+
+                                                <hr />
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Tienes un nuevo mensaje de <a class=" " href="#">David Rivero</a></span>
+                                                    <i class="fa-solid fa-xmark m-2"></i>
+                                                </div>
+                                                <hr />
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Tienes una nueva tarea asignada: <a class=" " href="#">Validation HTML</a></span>
+                                                    <i class="fa-solid fa-xmark m-2"></i>
+                                                </div>
+                                                <hr />
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
                                 <li class="nav__item"><a href="/mensajes" class="text-decoration-none text-dark"><i class="fa-solid fa-message text-dark fs-2 mx-4"></i></a></li>
                                 <li><a href="#" class="text-decoration-none text-dark"><i class="fas fa-users fs-2 mx-4"></i></a>
 
-                                <li><a href="/amigos" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-4"></i></a>
+                                <li><a href="/seguidores" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-4"></i></a>
                                 <li class="nav__item"><a href="/perfil" class="text-decoration-none text-dark"><i class="far fa-user text-dark fs-2"></i></a></li>
 
                             </ul>
@@ -85,8 +121,8 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        <picture class="col-1 col-sm-4 col-md-6">
-                            <a href="/"><i class="fas text-dark fa-crop fs-1"></i></a>
+                        <picture class="col-8">
+                            <a href="/"><img src="/build/img/logo_oficial.png" class="img-responsive w-100 w-md-100" alt=""></a>
                         </picture>
                     </div>
 
@@ -114,7 +150,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
                     </ul>
                 </div>
-                <div class="col-12 col-md-10 mx-md-2 d-flex flex-column w-80" style="border-radius:1em;" >
+                <div class="col-12 col-md-10 mx-md-2 d-flex flex-column w-80" style="border-radius:1em;">
                     <?php include_once __DIR__ . "/../templates/alerts.php"; ?>
 
                     <?php echo $content; ?>

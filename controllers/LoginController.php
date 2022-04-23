@@ -13,6 +13,9 @@ class LoginController
     {
         $typeAlert = false;
 
+        if ($_SESSION['auth']) {
+            header('Location: /');
+        }
         //BEGGINING VERIFICATION TOKEN
         if (!empty($_GET['token'])) {
             $token = filter_var(s($_GET['token']), FILTER_SANITIZE_STRING);

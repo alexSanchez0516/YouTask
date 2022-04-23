@@ -2,6 +2,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+
 define('TEMPLATES_URL', __DIR__ .  '/templates');
 define('FUNCIONES_URL', '/includes/funciones.php');
 define('FOLDER_IMG', $_SERVER['DOCUMENT_ROOT'] . '/build/img/');
@@ -22,13 +23,23 @@ function isAuth(): void
     }
 }
 
-function paginateContent($page) {
+function paginateContent($page)
+{
     //mostrar 5
     //si hay mas de 5 paginas
     //si pulsa siguiente limpiar div y mostrar limit + 5
     //calcular las 5 a mostrar limit - 5 => de la 5 a la 10
     //mostrar
 }
+function checkString($text)
+{
+    // Patrón para usar en expresiones regulares (admite letras acentuadas y espacios):
+    $patron_texto = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜàèìòùÀÈÌÒÙ\s]+$/";
+
+
+    return preg_match($patron_texto, $text);
+}
+
 
 
 function debug($item)

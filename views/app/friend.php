@@ -41,8 +41,8 @@
 
                 <?php if (sizeof($friends) > 0) : ?>
                     <?php foreach ($friends as $friend) : ?>
-                        
-                        <a href="/amigo?id=<?php echo $friend['id'] ; ?>">
+
+                        <a href="/seguidor?id=<?php echo $friend['id']; ?>">
                             <img src="/build/img/<?php echo $friend['avatar'] ?>" class="img-fluid w-15 rounded-circle" alt=""></img>
                         </a>
                     <?php endforeach; ?>
@@ -68,7 +68,7 @@
                 <?php foreach ($posts as $post) : ?>
                     <article class="wrap-article m-2">
                         <span class="text-right d-block w-100 text-end"><?php echo $post->create_at ?></span>
-                        <a href="/post?id=<?php echo $post->id ?>">
+                        <a class="text-decoration-none text-dark" href="/post?id=<?php echo $post->id ?>">
                             <h3><?php echo $post->name ?></h3>
                         </a>
                         <p>
@@ -87,7 +87,6 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart icon-md">
                                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                     </svg>
-                                    <p class="d-none d-md-block mx-2">(<?php echo $post->likes ?>)</p>
                                 </a>
                                 <a href="javascript:;" class="d-flex mx-2 align-items-center text-muted mr-4">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square icon-md">
@@ -107,7 +106,7 @@
                                         <line x1="12" y1="2" x2="12" y2="15"></line>
                                     </svg>
 
-                                    <p class="d-none share d-md-block ml-2" data-text='https://www.youtask.es/post?<?php echo $post->name . '-' . $post->id; ?>' onclick="copyToClipboard();">Compartir</p>
+                                    <p class="d-none share d-md-block ml-2" data-text='https://www.youtask.es/post?id=<?php echo $post->id; ?>' onclick="copyToClipboard();">Compartir</p>
                                 </a>
                             </div>
                         </div>

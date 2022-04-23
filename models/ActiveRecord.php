@@ -26,7 +26,8 @@ class ActiveRecord
     {
 
         $atributes = $this->sanitizeData();
-        
+
+
         if (array_key_exists('create_at', $atributes)) {
             unset($atributes['create_at']);
         }
@@ -38,8 +39,7 @@ class ActiveRecord
         $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributes));
         $query .= "')";
-        
-
+        //debug($query);
         return static::$db->query($query);
     }
 
@@ -58,7 +58,9 @@ class ActiveRecord
 
         $atributes = $this->sanitizeData();
 
-
+        if (array_key_exists('gen', $atributes)) {
+            unset($atributes['gen']);
+        }
 
 
         foreach ($atributes as $key => $value) {
@@ -119,8 +121,11 @@ class ActiveRecord
         }
     }
 
-    public function uploadImg($image, $imgDelete)
+    public function uploadImg($image, $imgDelete, bool $isProfile)
     {
+
+
+
         $nameImage =  md5(uniqid(rand(), true));
         $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $completeImg = $nameImage . "." . $extension;
@@ -132,6 +137,9 @@ class ActiveRecord
         $this->setImage($completeImg);
 
         $image->save(FOLDER_IMG . $completeImg);
+        if ($isProfile) {
+            $_SESSION['avatar'] = $completeImg;
+        }
     }
 
 
@@ -154,14 +162,12 @@ class ActiveRecord
     {
         //Services all tables db
         //Delete on cascade
-        $query = "DELETE FROM ". static::$tabla . " WHERE id = " . static::$db->escape_string($this->id) . " LIMIT 1";
+        $query = "DELETE FROM " . static::$tabla . " WHERE id = " . static::$db->escape_string($this->id) . " LIMIT 1";
 
         if ($this instanceof Users) {
             file_exists(FOLDER_IMG . $this->avatar) ? unlink(FOLDER_IMG . $this->avatar) : false;
-            
         }
         return static::$db->query($query);
-        
     }
 
     public static function all(): array
@@ -183,12 +189,26 @@ class ActiveRecord
         return array_shift($data); //Devuelve primer elemento de arreglo
     }
 
+    public static function findLike($col, $item, bool $isAll)
+    {
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} LIKE  '%$item%' ";
+
+
+        $data = static::consulSQL($query);
+
+        if ($isAll) {
+            return $data;
+        }
+
+        return array_shift($data); //Devuelve primer elemento de arreglo
+    }
+
 
 
     public static function consulSQL($query): array
     {
         $data = static::$db->query($query); //puede dar false 
-        
+
         $services = [];
 
         if ($data) {
@@ -223,21 +243,24 @@ class ActiveRecord
     {
         foreach ($attributes as $key => $value) {
             if ($key != 'repeatPassword' && $key != 'members') {
-                $this->$key = trim($value);
-
-                if ($key == 'email') {
-                    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                        static::$alerts[] = 'Correo inválido';
-                    }
-                }
+                //$this->$key = trim($value); DESCOMENTAR EN CASO DE FALLO
 
 
                 if ($key == 'password') {
-                    $repeatPassword = trim($attributes['repeatPassword']);
                     if (strlen($this->$key) < 8) {
                         static::$alerts[] = 'La contraseña debe tener minimo 8 carácteres';
-                    } 
-                    if ($repeatPassword != $this->password) {
+                    }
+                    if (array_key_exists('repeatPassword', $attributes)) {
+                        $repeatPassword = trim($attributes['repeatPassword']);
+
+                        if ($repeatPassword != $this->password) {
+                            static::$alerts[] = 'No coinciden las contraseñas';
+                        }
+                    }
+                }
+
+                if ($key == 'new_password' && strlen($value) > 0) { //confirm_new_password
+                    if (trim($value) != trim($attributes['confirm_new_password'])) {
                         static::$alerts[] = 'No coinciden las contraseñas';
                     }
                 }
@@ -253,6 +276,13 @@ class ActiveRecord
                     static::$alerts[] = 'El nombre no puede ir vacio';
                 }
             }
+
+            if ($key == 'apellidos') {
+                if (strlen($this->$key) < 1) {
+                    static::$alerts[] = 'Los apellidos no pueden ir vacios';
+                }
+            }
+
             if ($key == 'description') {
                 if (strlen($this->$key) < 1) {
                     static::$alerts[] = 'La descripcion no puede ir vacia';
@@ -260,20 +290,45 @@ class ActiveRecord
             }
 
             if ($key == 'content') {
+
                 if (strlen($this->$key) < 1) {
                     static::$alerts[] = 'El contenido no puede ir vacia';
                 }
             }
-         
-        
         }
         return empty(static::$alerts);
     }
 
-    public function getAnyAll(String $table) : Array {
+    public function getAnyAll(String $table): array
+    {
         $query = "SELECT * FROM $table";
         return static::consulSQL($query);
     }
 
+    public static function insertAny($query)
+    {
+        return static::$db->query($query);
+    }
 
+    public static function getAnyQuery($query)
+    {
+        return static::$db->query($query)->fetch_assoc();
+    }
+
+    public static function getAnyQueryResult($query)
+    {
+        $data_res = [];
+        //echo json_encode(Users::getAnyQuery($query));
+
+        $data = static::$db->query($query);
+        if ($data) {
+            while ($record = $data->fetch_array(MYSQLI_ASSOC)) {
+                $data_res[] = $record;
+            }
+            $data->free(); //Liberar memoria
+        }
+
+
+        return $data_res;
+    }
 }

@@ -74,7 +74,7 @@
                 <h3 class="bg-grey p-2">Skills <i class="fa fa-trophy fs-4"></i></h3>
 
                 <?php foreach ($skills as $skill) : ?>
-                    <span class="badge bg-primary"><?php echo $skill ?></span>
+                    <span class="badge bg-primary"><?php echo $skill['name'] ?></span>
                 <?php endforeach; ?>
 
             </div>
@@ -92,13 +92,13 @@
             <div class="row border shadow p-4">
                 <strong class="mb-2">Redes Sociales</strong>
                 <div class="col">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="<?php echo $user->instagram ?>"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <div class="col ">
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="<?php echo $user->linkedin ?>"><i class="fa-brands fa-linkedin"></i></a>
                 </div>
                 <div class="col">
-                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                    <a href="<?php echo $user->github ?>"><i class="fa-brands fa-github"></i></a>
                 </div>
             </div>
         </div>
