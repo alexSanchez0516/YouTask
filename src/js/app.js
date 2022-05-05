@@ -47,13 +47,14 @@ async function showContacts() {
         `
       container__users.innerHTML = template
     })
-    showChatOnClick()
+    let execution = 0
+    showChatOnClick(execution)
   } catch (error) {
     console.log(error)
   }
 }
 
-function showChatOnClick() {
+function showChatOnClick(execution) {
   const follower__contacts = document.querySelectorAll('.follower__contact')
   const selected_user = document.querySelector('#selected-user') //text-content
   const chat__box__container = document.querySelector('#chat__box__container')
@@ -64,21 +65,22 @@ function showChatOnClick() {
     contact.addEventListener('click', (e) => {
       //pasar id del usuario selected
       //buscar los msg del usuario actual con dicho seleccionado
-      let idSelected = Number(contact.getAttribute('data-chat'))
-      let url_api = 'http://127.0.0.1:8080/api/chat/app'
-      $.post(url_api, { idSelected }, (response) => {
-        const mensages = JSON.parse(response)
+      if (execution != contact.dataset.chat) {
+        let idSelected = Number(contact.getAttribute('data-chat'))
+        let url_api = 'http://127.0.0.1:8080/api/chat/app'
+        $.post(url_api, { idSelected }, (response) => {
+          const mensages = JSON.parse(response)
 
-        let name_users_on_chat = contact.children[1].children[0].textContent
-        let image_avatar = contact.children[0].children[0].getAttribute(
-          'data-avatar',
-        )
-        selected_user.textContent = name_users_on_chat
-        mensages.forEach((msg) => {
-          let isGroup = msg.isGroup == 1
-          let isSender = msg.isSender == 1
-          if (!isSender) {
-            template += ` 
+          let name_users_on_chat = contact.children[1].children[0].textContent
+          let image_avatar = contact.children[0].children[0].getAttribute(
+            'data-avatar',
+          )
+          selected_user.textContent = name_users_on_chat
+          mensages.forEach((msg) => {
+            let isGroup = msg.isGroup == 1
+            let isSender = msg.isSender == 1
+            if (!isSender) {
+              template += ` 
                 <li class="chat-right d-flex justify-content-end my-2">
                     <div class="chat-text">
                       ${msg.msg}
@@ -89,9 +91,9 @@ function showChatOnClick() {
                     </div>
                 </li>
             `
-          } else {
-            console.log('es sender')
-            template += `
+            } else {
+              console.log('es sender')
+              template += `
             <li class="chat-left d-flex align-items-center my-2">
                 <div class="chat-avatar w-10">
                     <img src="${image_avatar}"  class="raidius_max w-100" alt="Retail Admin">
@@ -102,10 +104,14 @@ function showChatOnClick() {
                 </div>
             </li>
              `
-          }
+            }
+          })
+
+          execution = contact.dataset.chat
+
+          chat__box__container.innerHTML = template
         })
-        chat__box__container.innerHTML = template
-      })
+      }
     })
   })
 }

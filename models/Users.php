@@ -222,6 +222,7 @@ class Users extends ActiveRecord
     public function forgetPassword($typeAlert): bool
     {
         if ($this->validateAttributes($_POST)) {
+            $this->synchronize($_POST);
             $this->sanitizeData();
             $user = $this->find("email", $this->email, false);
             if (!empty($user)) {
