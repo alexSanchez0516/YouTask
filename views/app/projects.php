@@ -3,7 +3,7 @@
 
 <div class="row align-items-center justify-content-center mt-4">
     <div class="col-6 d-flex justify-content-center align-items-center w-100 align-items-center">
-        <h3 class="text-center text-dark fs-2 my-5 text-uppercase ">Proyectos</h3>
+        <h3 id="id_user" class="text-center text-dark fs-2 my-5 text-uppercase" data-id="<?php echo ($id); ?>">Proyectos</h3>
         <i class="fa-solid fa-diagram-project fs-1 mx-4"></i>
     </div>
     <div class="col-12 bg-white border rounded shadow p-3 w-100">
@@ -63,110 +63,67 @@
         </div>
     </div>
     <div class="table-responsive m-3 bg-white w-100 rounded">
-        <table class="table table-dark">
+        <table class="table ">
             <thead class="">
                 <tr>
                     <th scope="col">Prioridad</th>
                     <th width="40%" scope="col">Nombre</th>
-                    <th scope="col">Miembros</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Cierre</th>
-                    <th scope="col"><button  class="btn btn-primary">Todos</button></th>
+                    <th scope="col"></th>
 
                 </tr>
             </thead>
 
-            <tbody>
-                <tr>
-                    <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td onclick="window.location.href='/proyecto'">Validation HTML</td>
-                    <td>juan, andres, pedro</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-danger text-center">15-02-2021</td>
-                    <td class="btn btn-danger bg-danger border rounded">Eliminar</td>
+            <tbody id="content_projects">
+                <?php for ($i = 1; $i < count($results->data); $i++) : ?>
+                    <tr>
 
-                </tr>
-                <tr>
-                    <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                    <td>Fixed DB Error</td>
-                    <td>Thornton</td>
-                    <td class="bg-success text-white border rounded">Acabada</td>
-                    <td>15-02-2021</td>
 
-                </tr>
-                <tr>
-                    <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                    <td>Configure apache</td>
-                    <td>Juan, messi, kids</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td>15-02-2021</td>
 
-                </tr>
-                <tr>
-                    <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td>Validation HTML</td>
-                    <td>juan, andres, pedro</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td>15-02-2021</td>
+                        <?php if ($results->data[$i]['priority'] == 'ALTA') : ?>
+                            <td class="bg-danger text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
+                        <?php endif; ?>
 
-                </tr>
-                <tr>
-                    <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                    <td>Fixed DB Error</td>
-                    <td>Thornton</td>
-                    <td class="bg-success text-white border rounded">Acabada</td>
-                    <td>15-02-2021</td>
+                        <?php if ($results->data[$i]['priority'] == 'BAJA') : ?>
+                            <td class="bg-primary text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
+                        <?php endif; ?>
 
-                </tr>
-                <tr>
-                    <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                    <td>Configure apache</td>
-                    <td>Juan, messi, kids</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td>15-02-2021</td>
+                        <?php if ($results->data[$i]['priority'] == 'MEDIA') : ?>
+                            <td class="bg-secondary text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
+                        <?php endif; ?>
 
-                </tr>
-                <tr>
-                    <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td>Validation HTML</td>
-                    <td>juan, andres, pedro</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td>15-02-2021</td>
 
-                </tr>
-                <tr>
-                    <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                    <td class="">Fixed DB Error</td>
-                    <td>Thornton</td>
-                    <td class="bg-success text-white border rounded">Acabada</td>
-                    <td>15-02-2021</td>
+                        <td><?php echo $results->data[$i]['name']; ?></td>
 
-                </tr>
-                <tr>
-                    <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                    <td>Configure apache</td>
-                    <td>Juan, messi, kids</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td>15-02-2021</td>
 
-                </tr>
+
+                        <?php if ($results->data[$i]['state'] == 'REALIZADO') : ?>
+                            <td class="bg-success text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
+                        <?php endif; ?>
+
+                        <?php if ($results->data[$i]['state'] == 'EN PROCESO') : ?>
+                            <td class="bg-secondary text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
+                        <?php endif; ?>
+
+                        <?php if ($results->data[$i]['state'] == 'CANCELADO') : ?>
+                            <td class="bg-danger text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
+                        <?php endif; ?>
+
+
+
+                        <td><?php echo $results->data[$i]['date_end']; ?></td>
+
+                        <td class="mx-2 btn btn-danger bg-danger border rounded"><i class="fa-solid fa-trash-can"></i></td>
+                        <td class="btn btn-danger bg-primary border rounded"><i class="fa-solid fa-pen-to-square"></i></td>
+
+                    </tr>
+                <?php endfor; ?>
             </tbody>
         </table>
-        <nav aria-label="...">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
+
+        <?php echo $Paginator->buildLinks(); ?>
+
     </div>
 
 </div>

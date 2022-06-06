@@ -12,6 +12,22 @@
 .d-none {
   display: none !important;
 }
+.show {
+  display: block !important;
+}
+
+.bg-messages_sender {
+  background-color: $color_messages_sender;
+}
+
+p {
+  word-wrap: anywhere;
+}
+
+.bg-messages_response {
+  background-color: $color_messages_response;
+}
+
 .bg-white {
   background: $white;
 }

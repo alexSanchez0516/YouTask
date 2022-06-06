@@ -62,125 +62,73 @@
         </div>
     </div>
     <div class="table-responsive  m-3 bg-white w-100 rounded">
-        <table class="table table-dark">
+        <table class="table ">
             <thead>
                 <tr>
                     <th scope="col">Prioridad</th>
                     <th width="40%" scope="col">Tarea</th>
-                    <th scope="col">Miembros</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Proyecto</th>
-                    <th scope="col">fecha</th>
-                    <th scope="col"><button  class="btn btn-primary">Todos</button></th>
+                    <th scope="col">Cierre</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td onclick="window.location.href='/tarea'">Validation HTML</td>
-                    <td>juan, andres, pedro</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td class="bg-dark text-white border rounded">15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
 
-                </tr>
-                <tr>
-                    <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                    <td>Fixed DB Error</td>
-                    <td>Thornton</td>
-                    <td class="bg-success text-white border rounded">Acabada</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
+                <?php for ($i = 1; $i < count($results->data); $i++) : ?>
+                    <tr>
 
-                </tr>
-                <tr>
-                    <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                    <td>Configure apache</td>
-                    <td>Juan, messi, kids</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
 
-                </tr>
-                <tr>
-                    <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td>Validation HTML</td>
-                    <td>juan, andres, pedro</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
+                        <!-- PRIORITY -->
+                        <?php if ($results->data[$i]['priority'] == 'ALTA') : ?>
+                            <td class="bg-danger text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
+                        <?php endif; ?>
 
-                </tr>
-                <tr>
-                    <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                    <td>Fixed DB Error</td>
-                    <td>Thornton</td>
-                    <td class="bg-success text-white border rounded">Acabada</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
+                        <?php if ($results->data[$i]['priority'] == 'BAJA') : ?>
+                            <td class="bg-primary text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
+                        <?php endif; ?>
 
-                </tr>
-                <tr>
-                    <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                    <td>Configure apache</td>
-                    <td>Juan, messi, kids</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
+                        <?php if ($results->data[$i]['priority'] == 'MEDIA') : ?>
+                            <td class="bg-secondary text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
+                        <?php endif; ?>
 
-                </tr>
-                <tr>
-                    <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                    <td>Validation HTML</td>
-                    <td>juan, andres, pedro</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
 
-                </tr>
-                <tr>
-                    <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                    <td class="">Fixed DB Error</td>
-                    <td>Thornton</td>
-                    <td class="bg-success text-white border rounded">Acabada</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
+                        <td><?php echo $results->data[$i]['name']; ?></td>
 
-                </tr>
-                <tr>
-                    <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                    <td>Configure apache</td>
-                    <td>Juan, messi, kids</td>
-                    <td class="bg-warning text-white border rounded">En Progreso</td>
-                    <td class="bg-info text-white border rounded">Divisione</td>
-                    <td>15-02-2021</td>
-                    <td class="bg-danger text-white border rounded">Eliminar</td>
 
-                </tr>
+
+                        <!-- SSTATE -->
+
+                        <?php if ($results->data[$i]['state'] == 'REALIZADO') : ?>
+                            <td class="bg-success text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
+                        <?php endif; ?>
+
+                        <?php if ($results->data[$i]['state'] == 'EN PROCESO') : ?>
+                            <td class="bg-secondary text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
+                        <?php endif; ?>
+
+                        <?php if ($results->data[$i]['state'] == 'CANCELADO') : ?>
+                            <td class="bg-danger text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
+                        <?php endif; ?>
+
+
+                        <!-- NOMBRE PROYECTO -->
+                        <td><?php echo $results->data[$i]['Project']; ?></td>
+
+                        <!-- FECHA -->
+
+                        <td><?php echo $results->data[$i]['date_end']; ?></td>
+
+
+                        <td class=" btn btn-danger bg-danger border rounded"><i class="fa-solid fa-trash-can"></i></td>
+                        <td class="btn btn-danger bg-primary border rounded"><i class="fa-solid fa-pen-to-square"></i></td>
+
+                    </tr>
+                <?php endfor; ?>
+
             </tbody>
         </table>
-        <nav aria-label="..." class="">
-            <ul class="pagination justify-content-center ">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
+        <?php echo $Paginator->buildLinks(); ?>
+
     </div>
 </div>

@@ -10,6 +10,7 @@ use Model\ActiveRecord;
 use Model\Post;
 use Model\Action;
 use Model\Comment;
+use Model\Paginator;
 
 class PanelController
 {
@@ -48,24 +49,63 @@ class PanelController
 
         $project = new Project();
         $user = $_SESSION['user'];
-        $typeAlert = false;
+        $typeAlert = true;
+
+        //OBTER USUARIO ACTUAL
+        $user_find = Users::find('id', $user, false);
+
+        //DEBEMOS OBTENER SUS CONTACTOS getFriends
+        $contacts = $user_find->getFriends();
 
 
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $project->synchronize($_POST);
-            debug($project);
-            if ($project->createC($user)) {
-                $typeAlert = true;
-                $project->setAlert("Proyecto creado correctamente");
-            } else {
-                $project->setAlert("Web fuera de servicio temporalmente");
+
+            //COMPROBAR FECHA
+            if (!Project::validateDate($project->date_end)) {
+                $typeAlert = false;
+                $project->setAlert("Fecha invalidad");
+            }
+
+            //COMPROBAR LONGITUD NAME
+            if (strlen($project->name) > 40) {
+                $typeAlert = false;
+                $project->setAlert("El nombre debe ser inferior a 40 caracteres");
+            }
+
+
+
+            if ($typeAlert) {
+                if ($project->createC($user)) {
+                    $typeAlert = true;
+
+                    $id_project = Project::getLastId();
+
+                    //COMPROBAR CANTIDAD DE MIEMBROS Y LLAMAR AL QUE CONVERNGA
+                    $addMerbers = null;
+                    if (count($project->members) > 1) {
+                        $addMerbers = $project->addMembers($project->members, (int)$id_project);
+                    } else {
+                        $addMerbers = $project->addMember((int) $project->members[0], (int)$id_project);
+                    }
+
+                    if ($addMerbers) {
+                        header('Location: /proyecto?id=' . $id_project);
+                    } else {
+                        $typeAlert = false;
+                        $project->setAlert("Proyecto no ha podido ser creado correctamente");
+                    }
+                } else {
+                    $project->setAlert("Web fuera de servicio temporalmente");
+                }
             }
         }
 
         $router->render('app/createProject', [
             'alerts' => Project::getAlerts(),
             'typeAlert' => $typeAlert,
+            'contacts' => $contacts
         ]);
     }
 
@@ -75,19 +115,54 @@ class PanelController
         $User = $_SESSION['user'];
         $typeAlert = false;
         $idProject = 0; //debemos sacar esto en caso de estar en grupo
+        $seguir = true;
+        $project = new Project();
+
+        //get projects
+        $projects = $project->getAllC($User);
+
+
+
+        //OBTER USUARIO ACTUAL
+        $user_find = Users::find('id', $User, false);
+
+
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $Task->synchronize($_POST);
-            $typeAlert = $Task->createC($idProject);
-            if ($typeAlert) {
-                $Task->setAlert("Tarea creado correctamente");
-            } else {
-                $Task->setAlert("Ups tenemos un problema con tu solicitud");
+
+            //COMPROBAR FECHA
+            if (!Project::validateDate($Task->date_end)) {
+                $seguir = false;
+                $typeAlert = false;
+                $Task->setAlert("Fecha invalidad");
+            }
+
+            //COMPROBAR LONGITUD NAME
+            if (strlen($Task->name) > 40) {
+                $seguir = false;
+                $typeAlert = false;
+                $Task->setAlert("El nombre debe ser inferior a 40 caracteres");
+            }
+
+            //seteamos el projectID
+
+            $idProject = $Task->projectID;
+
+
+            if ($seguir) {
+                $typeAlert = $Task->createC($idProject);
+                if ($typeAlert) {
+                    header('Location: /tarea?id=' . Task::getLastId());
+                } else {
+                    $Task->setAlert("Ups tenemos un problema con tu solicitud");
+                }
             }
         }
         $router->render('app/createTask', [
             'alerts' => Task::getAlerts(),
             'typeAlert' => $typeAlert,
+            'projects' => $projects
         ]);
     }
 
@@ -118,7 +193,27 @@ class PanelController
 
     public static function showProjects(Router $router)
     {
-        $router->render('app/projects');
+        $id = $_SESSION['user'];
+
+
+        $limit      = (isset($_GET['limit'])) ? $_GET['limit'] : 25;
+        $page       = (isset($_GET['page'])) ? $_GET['page'] : 1;
+        $links      = (isset($_GET['links'])) ? $_GET['links'] : 7;
+
+
+        $query      = "SELECT name, description, state, priority, date_end FROM  Projects where adminID = $id order by create_at desc";
+
+        $Paginator  = new Paginator($query);
+
+        $results    = $Paginator->getData($limit, $page);
+
+
+        $router->render('app/projects', [
+            'id' => $id,
+            'results' => $results,
+            'Paginator' => $Paginator,
+            'links' => $links,
+        ]);
     }
 
     public static function showProject(Router $router)
@@ -128,7 +223,28 @@ class PanelController
 
     public static function showTasks(Router $router)
     {
-        $router->render('app/tasks');
+        $id = $_SESSION['user'];
+
+
+        $limit      = (isset($_GET['limit'])) ? $_GET['limit'] : 25;
+        $page       = (isset($_GET['page'])) ? $_GET['page'] : 1;
+        $links      = (isset($_GET['links'])) ? $_GET['links'] : 7;
+
+
+        $query      = "SELECT task.name, task.state, task.priority, task.date_end,  project.name as Project FROM Tasks as task";
+        $query     .= " left join Projects as project on projectID = project.id";
+        $query     .= " where task.adminID = $id order by task.create_at desc";
+
+        $Paginator  = new Paginator($query);
+
+        $results    = $Paginator->getData($limit, $page);
+
+        $router->render('app/tasks', [
+            'id' => $id,
+            'results' => $results,
+            'Paginator' => $Paginator,
+            'links' => $links,
+        ]);
     }
 
     public static function showTask(Router $router)
@@ -317,10 +433,6 @@ class PanelController
 
     public static function showMessages(Router $router)
     {
-
-
-
-
         $router = $router->render('app/messages', []);
     }
 }

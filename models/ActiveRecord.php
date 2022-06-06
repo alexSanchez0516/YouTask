@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use DateTime;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class ActiveRecord
@@ -39,7 +40,8 @@ class ActiveRecord
         $query .= " ) VALUES ('";
         $query .= join("', '", array_values($atributes));
         $query .= "')";
-        //debug($query);
+
+
         return static::$db->query($query);
     }
 
@@ -90,6 +92,7 @@ class ActiveRecord
     //Sincroniza el objeto en memoria con  los nuevos cambios
     public function synchronize($args = [])
     {
+
         foreach ($args as $key => $value) {
             if (property_exists($this, $key) && !is_null($value)) {
                 $this->$key = $value;
@@ -179,9 +182,27 @@ class ActiveRecord
 
     }
 
+    public static function getLastId(): int
+    {
+        return static::$db->insert_id;
+    }
+
+    public static function validateDate($date)
+    {
+        $format = 'Y-m-d H:i:s';
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
+    }
+
+
+
     public static function find($col, $item, bool $isAll)
     {
-        $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}'";
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}' ";
+
+
+
+
         $data = static::consulSQL($query);
         if ($isAll) {
             return $data;

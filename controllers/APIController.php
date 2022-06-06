@@ -7,7 +7,7 @@ use Model\Users;
 use Model\Project;
 use Model\Post;
 use Model\Comment;
-
+use Model\Paginator;
 
 use MVC\Router;
 
@@ -86,7 +86,7 @@ class APIController
         $sender = $_SESSION['user'];
         $receiver = $_POST['idSelected'];
 
-        $query = "select id, sender, receiver, msg, create_at,  if (group_chat = null, 1, 0 ) as isGroup, if (sender = $sender, 1,0) as isSender from chat where (sender = $sender or receiver = $sender) and (receiver = $receiver or sender = $receiver)";
+        $query = "select id, sender, receiver, msg, create_at,  if (group_chat = null, 1, 0 ) as isGroup, if (sender = $sender, 1,0) as isSender from chat where (sender = $sender or receiver = $sender) and (receiver = $receiver or sender = $receiver) ORDER BY create_at desc";
         echo json_encode(Users::getAnyQueryResult($query));
     }
 
@@ -233,5 +233,38 @@ class APIController
         } catch (\Throwable $th) {
             echo json_encode(false);
         }
+    }
+
+    public static function sendMessage()
+    {
+        header("Access-Control-Allow-Origin: *");
+        $sender = $_SESSION['user'];
+        $receiver = $_POST['receiver'];
+        $message = $_POST['message'];
+        $query = "INSERT INTO chat(sender, receiver, msg) VALUES ($sender, $receiver, '$message')";
+        try {
+            Users::insertAny($query);
+            echo json_encode(true);
+        } catch (\Throwable $th) {
+            echo json_encode(false);
+        }
+    }
+
+    public static function getProjects()
+    {
+        header("Access-Control-Allow-Origin: *");
+        $project = new Project();
+        $id = (int) filter_var((int) $_POST['id'], FILTER_SANITIZE_NUMBER_INT);
+
+
+        echo json_encode($project->getAllC($id));
+    }
+
+
+    public static function getTasks()
+    {
+        header("Access-Control-Allow-Origin: *");
+
+        echo json_encode("hola desde api");
     }
 }

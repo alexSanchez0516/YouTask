@@ -5,8 +5,7 @@
 <div class="col-md-4">
     <label for="adminID" class="form-label">Administrador</label>
     <select id="adminID" name="adminID" class="form-select" required>
-        <option value=15 selected>Tú</option>
-        <option value=2>...</option>
+        <option value=<?php echo $_SESSION['user'] ?> selected>Tú</option>
     </select>
 </div>
 
@@ -16,11 +15,13 @@
 </div>
 
 <div class="col-md-4">
+
     <label for="members" class="form-label">Miembros</label>
     <select id="members" name="members[]" class="form-select" multiple required>
-        <option value="tu" selected>Tú</option>
-        <option value="juan">juan</option>
-        <option value="miguel">miguel</option>
+        <option value="<?php echo $_SESSION['user'] ?>" selected>Tú</option>
+        <?php foreach ($contacts as $contact) : ?>
+            <option value="<?php echo $contact['id'] ?>"><?php echo $contact['username'] ?></option>
+        <?php endforeach; ?>
 
     </select>
 </div>
@@ -32,13 +33,19 @@
         <option value="ALTA">Alta</option>
     </select>
 </div>
-<div class="col-md-2">
-    <label for="date_end" class="form-label">Fecha Fin</label>
+<div class="d-flex flex-column align-items-center">
+    <div class="col-md-2">
+        <label for="date_end" class="form-label">Fecha Fin</label>
+    </div>
+    <div class="col-md-2">
+        <label for="date_end" class="form-label">(Y-m-d H:i:s)</label>
 
-    <input type="datetime-local" requiredclass="form-control" id="inputDate" name="date_end" value="<?php echo date("Y-m-d H:i:s") ?>" min="" max="">
+        <input type="datetime" requiredclass="form-control" id="inputDate" name="date_end" value="" " min="" max="" required>
+</div>
 </div>
 
-<div class="col-12 mb-2 d-flex justify-content-center">
-    <button type="button" onclick="window.location.href='/panel'" class="btn btn-danger mx-2" data-bs-dismiss="modal">Cancelar</button>
-    <button type="submit"  class="btn btn-primary">Crear</button>
-</div>
+
+<div class=" col-12 mb-2 d-flex justify-content-center">
+        <button type="button" onclick="window.location.href='/panel'" class="btn btn-danger mx-2" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Crear</button>
+    </div>

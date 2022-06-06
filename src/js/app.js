@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
   if (currentURL == '/mensajes') {
     showContacts()
   }
+  if (currentURL == '/proyectos') {
+    getProjectsPaginate()
+    //getDataForProjects()
+  }
 })
 
 async function showContacts() {
@@ -47,73 +51,108 @@ async function showContacts() {
         `
       container__users.innerHTML = template
     })
-    let execution = 0
-    showChatOnClick(execution)
+    showChatOnClick()
   } catch (error) {
     console.log(error)
   }
 }
 
-function showChatOnClick(execution) {
+function showChatOnClick() {
   const follower__contacts = document.querySelectorAll('.follower__contact')
+
+  follower__contacts.forEach((contact) => {
+    contact.addEventListener('click', (e) => {
+      //llamamos al metodo que refresca mensajes de
+      setMessages(contact, 0)
+      setInterval(() => {
+        setMessages(contact, 0)
+      }, 20500)
+    })
+  })
+}
+
+function setMessages(contact, execution) {
   const selected_user = document.querySelector('#selected-user') //text-content
   const chat__box__container = document.querySelector('#chat__box__container')
 
   let template = ''
 
-  follower__contacts.forEach((contact) => {
-    contact.addEventListener('click', (e) => {
-      //pasar id del usuario selected
-      //buscar los msg del usuario actual con dicho seleccionado
-      if (execution != contact.dataset.chat) {
-        let idSelected = Number(contact.getAttribute('data-chat'))
-        let url_api = 'http://127.0.0.1:8080/api/chat/app'
-        $.post(url_api, { idSelected }, (response) => {
-          const mensages = JSON.parse(response)
+  chat__box__container.innerHTML = template
 
-          let name_users_on_chat = contact.children[1].children[0].textContent
-          let image_avatar = contact.children[0].children[0].getAttribute(
-            'data-avatar',
-          )
-          selected_user.textContent = name_users_on_chat
-          mensages.forEach((msg) => {
-            let isGroup = msg.isGroup == 1
-            let isSender = msg.isSender == 1
-            if (!isSender) {
-              template += ` 
-                <li class="chat-right d-flex justify-content-end my-2">
-                    <div class="chat-text">
-                      ${msg.msg}
+  $('#msg').val('')
+  //pasar id del usuario selected
+  //buscar los msg del usuario actual con dicho seleccionado
+  if (execution != contact.dataset.chat) {
+    let idSelected = Number(contact.getAttribute('data-chat'))
+
+    let url_api = 'http://127.0.0.1:8080/api/chat/app'
+    $.post(url_api, { idSelected }, (response) => {
+      const mensages = JSON.parse(response)
+
+      let name_users_on_chat = contact.children[1].children[0].textContent
+      let image_avatar = contact.children[0].children[0].getAttribute(
+        'data-avatar',
+      )
+      selected_user.textContent = name_users_on_chat
+      mensages.forEach((msg) => {
+        let isGroup = msg.isGroup == 1
+        let isSender = msg.isSender == 1
+        if (!isSender) {
+          template += ` 
+                <li class="chat-right d-flex flex-column flex-md-row flex p-2 bg-messages_response border rounded justify-content-end my-2">
+                    <div class="chat-text d-flex flex-column align-items-center justify-content-center w-100">
+                      <span>${msg.create_at}</span>
+                      <p class="m-2">${msg.msg}</p>
                     </div>
-                    <div class="chat-avatar mx-2 w-10">
-                        <img src="${image_avatar}" class="raidius_max w-100" alt="Retail Admin">
-                        <div class="chat-name">${name_users_on_chat}</div>
+                    <div class="chat-avatar mx-5 w-50">
+                        <img src="${image_avatar}" class="raidius_max w-50" alt="Retail Admin">
+                        <p class="chat-name">${name_users_on_chat}</p>
                     </div>
                 </li>
             `
-            } else {
-              console.log('es sender')
-              template += `
-            <li class="chat-left d-flex align-items-center my-2">
-                <div class="chat-avatar w-10">
-                    <img src="${image_avatar}"  class="raidius_max w-100" alt="Retail Admin">
-                    <div class="chat-name">Tú</div>
+        } else {
+          template += `
+            <li class="chat-left d-flex flex-column flex-md-row flex align-items-center bg-messages_sender border rounded p-2 my-2">
+                <div class="chat-avatar w-50">
+                    <img src="${image_avatar}"  class="raidius_max w-50" alt="Retail Admin">
+                    <p class="chat-name">Tú</p>
                 </div>
-                <div class="chat-text mb-2 mx-2">
-                  ${msg.msg}
+                <div class="chat-text d-flex flex-column mb-2 mx-2 w-100">
+                  <span>${msg.create_at}</span>
+                  <p class="m-2">${msg.msg}</p>
                 </div>
             </li>
              `
-            }
-          })
+        }
+        template += `<hr />`
+      })
 
-          execution = contact.dataset.chat
-
-          chat__box__container.innerHTML = template
-        })
-      }
+      execution = contact.dataset.chat
+      chat__box__container.setAttribute('data-id', contact.dataset.chat)
+      chat__box__container.innerHTML = template
+      $('#send_message').addClass('show')
     })
-  })
+  }
+}
+
+function sendMessage(message) {
+  const receiver = $('#chat__box__container').attr('data-id')
+  $.post(
+    'http://127.0.0.1:8080/api/chat/app/send-message',
+    { receiver, message },
+    (response) => {
+      const dataID = document
+        .querySelector('#chat__box__container')
+        .getAttribute('data-id')
+      const follower__contacts = document.querySelectorAll('.follower__contact')
+
+      follower__contacts.forEach((contact) => {
+        if (contact.getAttribute('data-chat') == dataID) {
+          setMessages(contact, 0)
+        }
+      })
+    },
+  )
 }
 
 function createSkill() {
@@ -234,6 +273,27 @@ function getRequestsFollow() {
       deleteNotifications()
     })
   }
+}
+
+/**
+ * @param String name
+ * @return String
+ */
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+    results = regex.exec(location.search)
+  return results === null
+    ? ''
+    : decodeURIComponent(results[1].replace(/\+/g, ' '))
+}
+
+function getProjectsPaginate() {
+  let url = 'http://127.0.0.1:8080/api/get-projects'
+  $.get(url, (response) => {
+    console.log('oa')
+    console.log(JSON.parse(response))
+  })
 }
 
 function accept_request_follower(id_request) {
@@ -458,7 +518,7 @@ async function showFriends() {
     try {
       const url = 'http://127.0.0.1:8080/api/friends'
       const result = await fetch(url)
-
+      console.log(result)
       const friends = await result.json()
       createFriendsList(friends[1], friends[0])
     } catch (error) {

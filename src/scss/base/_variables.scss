@@ -12,13 +12,13 @@ $desktop: 1024px;
 
 // Colores
 $white: white;
-$lightBlue: #26C6DA;
+$lightBlue: #26c6da;
 $lightGreen: #00c99a;
-$midWhite: #F7F8F8;
-$lightPurple: #8F6DCA;
+$midWhite: #f7f8f8;
+$lightPurple: #8f6dca;
 $lightAzulSpa: #568cc8;
 $darkGreen: #b0c4b1;
 $graySkills: #9999991a;
-
-
-@import "../../node_modules/bootstrap/scss/bootstrap";
+$color_messages_sender: #0742420a;
+$color_messages_response: #bdcdd5;
+@import '../../node_modules/bootstrap/scss/bootstrap';

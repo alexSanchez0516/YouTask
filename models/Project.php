@@ -1,11 +1,14 @@
-<?php 
+<?php
+
 namespace Model;
+
 use interfaces\crud;
 
 
-class Project extends ActiveRecord implements crud {
+class Project extends ActiveRecord implements crud
+{
     protected static $db;
-    protected static $colDB = ['id', 'name', 'description', 'adminID', 'state', 'priority', 'date_end' ];
+    protected static $colDB = ['id', 'name', 'description', 'adminID', 'state', 'priority', 'date_end'];
     protected static $tabla = 'Projects';
 
     protected static array $alerts = [];
@@ -21,51 +24,56 @@ class Project extends ActiveRecord implements crud {
     public $members = [];
 
 
-    public function __construct($args = []) {
+    public function __construct($args = [])
+    {
         $this->id = $args['id'] ?? 0;
         $this->name = $args['name'] ?? '';
         $this->description = $args['description'] ?? '';
         $this->adminID = $args['adminID'] ?? '0';
-       
+
         $this->state = $args['state'] ?? '';
         $this->priority = $args['priority'] ?? '';
         $this->date_end = $args['date_end'] ?? '';
     }
 
-    public function createC(int $user) : bool {
+    public function createC(int $user): bool
+    {
         if ($this->validateAttributes($this->sanitizeData())) {
             $this->state = "EN PROCESO";
-            $this->adminID = $user; 
-            
+            $this->adminID = $user;
+
+
             return $this->create();
-
         }
-            
-                
     }
 
 
 
-    public function deleteC(int $user) : bool {
+    public function deleteC(int $user): bool
+    {
         return true;
     }
 
-    public function updateC(int $user): bool {
+    public function updateC(int $user): bool
+    {
         return true;
     }
 
-    public  function getAllC(int $user) : Array{
-       return $this->find("adminID", $user, true);
+    public  function getAllC(int $user): array
+    {
+        return $this->find("adminID", $user, true);
     }
 
-    public function getID() {
+    public function getID()
+    {
         return $this->id;
     }
-    
-    public function getName() {
+
+    public function getName()
+    {
         return $this->name;
     }
-      
+
 
     public function setName(String $name)
     {
@@ -97,33 +105,69 @@ class Project extends ActiveRecord implements crud {
         $this->date_end = $date_end;
     }
 
-        
 
-    public function getDescription() {
+
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function getAdmin() {
+    public function getAdmin()
+    {
         return $this->adminID;
     }
 
-    public function getState() {
-
+    public function getState()
+    {
     }
 
-    public function getPriority() {
+    public function getPriority()
+    {
         return $this->priority;
     }
 
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->create_at;
     }
 
-    public function getDateEnd() {
+    public function getDateEnd()
+    {
         return $this->date_end;
     }
 
-    public function deleteMemberC(int $user) : bool {
+    public function deleteMemberC(int $user): bool
+    {
         return true;
+    }
+
+    public function addMember(int $user_id, int $id_project)
+    {
+        $query = "INSERT INTO Members_Projects(id_project, id_user) VALUES ($user_id, $id_project)";
+        debug($query);
+    }
+
+    public function addMembers(array $users,  int $id_project): bool
+    {
+        $valid = true;
+        //debug($users);
+        $id_user = null;
+        $query = "INSERT INTO Members_Projects(id_project, id_user) VALUES ";
+
+        foreach ($users as $user) {
+
+            $id_user = (int) $user;
+            $query .= " ($id_project, $id_user),";
+        }
+        $query = substr($query, 0, -1);
+        //debug($query);
+        try {
+            static::$db->query($query);
+        } catch (\Throwable $th) {
+
+            $valid = false;
+        }
+
+        return $valid;
     }
 }

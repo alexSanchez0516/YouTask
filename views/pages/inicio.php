@@ -9,12 +9,12 @@
         </form>
     </div>
 
-    <section class="attitudes d-flex flex-column w-75">
+    <section class="attitudes d-flex flex-column w-90">
 
         <div class="attitude w-100 mt-4 d-flex flex-column flex-md-row d-flex w-100 w-md-75  flex-column align-items-center justify-content-center">
             <div class="attitude__wrap d-flex w-100 w-md-75  flex-column align-items-center justify-content-center">
                 <h3 class="w-75 text-left">Seguridad de Alto Nivel</h3>
-                <p class="text-align-left w-75 w-md-50">Las sólidas funciones de seguridad protegen tus datos, permitiendole centrarse en las cosas importantes. <br/> Tus datos están cifrados de extremo a extremo.  </p>
+                <p class="text-align-left w-75 w-md-50">Las sólidas funciones de seguridad protegen tus datos, permitiendole centrarse en las cosas importantes. <br /> Tus datos están cifrados de extremo a extremo. </p>
             </div>
             <picture class="w-20 align-self-center m-2">
                 <img src="/build/img/seguridad.webp" class="w-75" alt="" />
@@ -36,7 +36,7 @@
                 <h3 class="attitude__title w-75 text-align-left">Comunicación Instantánea</h3>
                 <p class="text-align-left w-75">Con YouTask puedes crear y asignar tareas en cualquier sala de chat. Trabaja en colaboración con tu equipo y divide tus proyectos de manera eficiente. Monitorea todas las tareas y cumple con más metas.</p>
             </div>
-            <picture class="w-25 align-self-center" >
+            <picture class="w-25 align-self-center">
                 <img src="/build/img/speech.webp" alt="" class="w-100" />
             </picture>
         </div>
@@ -55,7 +55,7 @@
                 <h3 class="attitude__title w-75 text-align-left">Planifica tus tareas a través de nuestro calendario</h3>
                 <p class="text-align-left w-75">Con YouTask puedes crear y asignar tareas en cualquier sala de chat. Trabaja en colaboración con tu equipo y divide tus proyectos de manera eficiente. Monitorea todas las tareas y cumple con más metas.</p>
             </div>
-            <picture class="w-25 align-self-center" >
+            <picture class="w-25 align-self-center">
                 <img src="/build/img/calendar-03.webp" alt="" class="w-75" />
             </picture>
         </div>

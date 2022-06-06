@@ -64,11 +64,14 @@ $router->post('/crear-tarea', [PanelController::class, 'createTask']);
 $router->get('/calendario', [PanelController::class, 'Calendar']);
 
 $router->get('/proyectos', [PanelController::class, 'showProjects']);
+$router->post('/proyectos', [PanelController::class, 'showProjects']);
+
 
 $router->get('/proyecto', [PanelController::class, 'showProject']);
 
 $router->get('/tareas', [PanelController::class, 'showTasks']);
 $router->post('/tarea', [PanelController::class, 'showTask']);
+$router->get('/tarea', [PanelController::class, 'showTask']);
 
 //POST
 $router->get('/posts', [PanelController::class, 'showPosts']);
@@ -146,6 +149,12 @@ $router->post('/api/create-skill', [APIController::class, 'createSkill']);
 
 
 $router->post('/api/chat/app', [APIController::class, 'showChat']);
+$router->post('/api/chat/app/send-message', [APIController::class, 'sendMessage']);
+
+
+
+
+
 
 
 $router->checkRutes();

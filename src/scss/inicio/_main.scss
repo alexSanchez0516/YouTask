@@ -1,9 +1,12 @@
 @import '../base/variables';
 @import '../base/mixins';
-#attitude__picture {
-    order: 1;
-    @include tablet {
-        order: 0;
-    }
+body {
+  font-family: 'Times New Roman', Times, serif !important;
+}
 
+#attitude__picture {
+  order: 1;
+  @include tablet {
+    order: 0;
+  }
 }
