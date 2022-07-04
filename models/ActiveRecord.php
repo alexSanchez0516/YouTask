@@ -18,11 +18,20 @@ class ActiveRecord
 
 
 
+    public static function sanitizeAny($data)
+    {
+        static::$db->escape_string($data);
+    }
+
     public static function setDB($database)
     {
         static::$db = $database;
     }
 
+
+    /**
+     * @return [type]
+     */
     public function create()
     {
 
@@ -41,10 +50,12 @@ class ActiveRecord
         $query .= join("', '", array_values($atributes));
         $query .= "')";
 
-
         return static::$db->query($query);
     }
 
+    /**
+     * @return boolean
+     */
     public function save()
     {
 
@@ -55,6 +66,9 @@ class ActiveRecord
         }
     }
 
+    /**
+     * @return [boolean]
+     */
     public function update()
     {
 
@@ -78,6 +92,9 @@ class ActiveRecord
 
 
     //Identificamos cual tenemos
+    /**
+     * @return array
+     */
     public function mapAtributes(): array
     {
         $atributes = [];
@@ -101,6 +118,9 @@ class ActiveRecord
     }
 
 
+    /**
+     * @return array
+     */
     public function sanitizeData(): array
     {
         $atributes = $this->mapAtributes();
@@ -117,6 +137,11 @@ class ActiveRecord
         return $sanitize;
     }
 
+    /**
+     * @param mixed $image
+     * 
+     * @return void
+     */
     public function setImage($image): void
     {
         if ($image) {
@@ -124,6 +149,13 @@ class ActiveRecord
         }
     }
 
+    /**
+     * @param mixed $image
+     * @param mixed $imgDelete
+     * @param bool $isProfile
+     * 
+     * @return [type]
+     */
     public function uploadImg($image, $imgDelete, bool $isProfile)
     {
 
@@ -146,21 +178,36 @@ class ActiveRecord
     }
 
 
+    /**
+     * @return array
+     */
     public static function getAlerts(): array
     {
         return static::$alerts;
     }
 
+    /**
+     * @param mixed $alert
+     * 
+     * @return [type]
+     */
     public static function setAlert($alert)
     {
         static::$alerts[] = $alert;
     }
 
-    public function validateData()
+
+
+
+    public static function deleteAny($query)
     {
+        return static::$db->query($query);
     }
 
 
+    /**
+     * @return bool
+     */
     public function delete(): bool
     {
         //Services all tables db
@@ -173,6 +220,9 @@ class ActiveRecord
         return static::$db->query($query);
     }
 
+    /**
+     * @return array
+     */
     public static function all(): array
     {
         $query = $query = "SELECT * FROM " . static::$tabla;
@@ -182,11 +232,19 @@ class ActiveRecord
 
     }
 
+    /**
+     * @return int
+     */
     public static function getLastId(): int
     {
         return static::$db->insert_id;
     }
 
+    /**
+     * @param mixed $date
+     * 
+     * @return [type]
+     */
     public static function validateDate($date)
     {
         $format = 'Y-m-d H:i:s';
@@ -196,6 +254,13 @@ class ActiveRecord
 
 
 
+    /**
+     * @param mixed $col
+     * @param mixed $item
+     * @param bool $isAll
+     * 
+     * @return [type]
+     */
     public static function find($col, $item, bool $isAll)
     {
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}' ";
@@ -210,6 +275,13 @@ class ActiveRecord
         return array_shift($data); //Devuelve primer elemento de arreglo
     }
 
+    /**
+     * @param mixed $col
+     * @param mixed $item
+     * @param bool $isAll
+     * 
+     * @return array
+     */
     public static function findLike($col, $item, bool $isAll)
     {
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} LIKE  '%$item%' ";
@@ -226,6 +298,11 @@ class ActiveRecord
 
 
 
+    /**
+     * @param mixed $query
+     * 
+     * @return array
+     */
     public static function consulSQL($query): array
     {
         $data = static::$db->query($query); //puede dar false 
@@ -245,6 +322,11 @@ class ActiveRecord
 
 
 
+    /**
+     * @param mixed $record
+     * 
+     * @return object
+     */
     protected static function createObject($record)
     { //objeto en memoria espejo de la db
         $object = new static; //new self
@@ -260,6 +342,11 @@ class ActiveRecord
 
     }
 
+    /**
+     * @param mixed $attributes
+     * 
+     * @return bool
+     */
     public  function validateAttributes($attributes): bool
     {
         foreach ($attributes as $key => $value) {
@@ -320,22 +407,42 @@ class ActiveRecord
         return empty(static::$alerts);
     }
 
+    /**
+     * @param String $table
+     * 
+     * @return array
+     */
     public function getAnyAll(String $table): array
     {
         $query = "SELECT * FROM $table";
         return static::consulSQL($query);
     }
 
+    /**
+     * @param mixed $query
+     * 
+     * @return [type]
+     */
     public static function insertAny($query)
     {
         return static::$db->query($query);
     }
 
+    /**
+     * @param mixed $query
+     * 
+     * @return [type]
+     */
     public static function getAnyQuery($query)
     {
         return static::$db->query($query)->fetch_assoc();
     }
 
+    /**
+     * @param mixed $query
+     * 
+     * @return array
+     */
     public static function getAnyQueryResult($query)
     {
         $data_res = [];

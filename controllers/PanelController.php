@@ -6,11 +6,11 @@ use MVC\Router;
 use Model\Users;
 use Model\Project;
 use Model\Task;
-use Model\ActiveRecord;
 use Model\Post;
 use Model\Action;
 use Model\Comment;
 use Model\Paginator;
+use RuntimeException;
 
 class PanelController
 {
@@ -22,6 +22,9 @@ class PanelController
         $user = $_SESSION['user'];
         $typeAlert = false;
 
+        $lastProgress = Project::getLastProgress(4);
+
+        //debug($lastProgress);
 
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -87,11 +90,12 @@ class PanelController
                     if (count($project->members) > 1) {
                         $addMerbers = $project->addMembers($project->members, (int)$id_project);
                     } else {
-                        $addMerbers = $project->addMember((int) $project->members[0], (int)$id_project);
+                        $addMerbers = $project->addMember($project->members[0], (int)$id_project);
                     }
 
+
                     if ($addMerbers) {
-                        header('Location: /proyecto?id=' . $id_project);
+                        header('Location: /proyecto?id=' . $id_project . "&limit=10&page=1");
                     } else {
                         $typeAlert = false;
                         $project->setAlert("Proyecto no ha podido ser creado correctamente");
@@ -191,6 +195,40 @@ class PanelController
         $router->render('app/calendar');
     }
 
+    public static function getMembersProjectC(Router $router)
+    {
+
+        $id_user = $_SESSION['user'];
+
+        $id = validateOrRedirect("/panel");
+        $limit      = (isset($_GET['limit'])) ? $_GET['limit'] : 25;
+        $page       = (isset($_GET['page'])) ? $_GET['page'] : 1;
+        $links      = (isset($_GET['links'])) ? $_GET['links'] : 7;
+        $project = Project::find('id', $id, false);
+
+        $creator = $project->adminID;
+
+
+        $query      = "select distinct avatar, username, user.id, Projects.id as project_id, ";
+        $query     .= "administrator.id as id_admin from users as user ";
+        $query     .= "inner join Members_Projects as members on id_user = user.id ";
+        $query     .= "inner join Projects on members.id_project = Projects.id ";
+        $query     .= "left join administratorProject as administrator on administrator.id_user = user.id ";
+        $query     .= "where Projects.id = $id ";
+
+
+        $Paginator  = new Paginator($query);
+
+        $Paginator->getData($limit, $page);
+        $router->render('app/members', [
+            'Paginator' => $Paginator,
+            'links' => $links,
+            'creator' => $creator,
+            'project_name' => $project->name,
+            'id_user' => $id_user,
+        ]);
+    }
+
     public static function showProjects(Router $router)
     {
         $id = $_SESSION['user'];
@@ -205,21 +243,207 @@ class PanelController
 
         $Paginator  = new Paginator($query);
 
-        $results    = $Paginator->getData($limit, $page);
+        $Paginator->getData($limit, $page);
 
 
         $router->render('app/projects', [
             'id' => $id,
-            'results' => $results,
             'Paginator' => $Paginator,
             'links' => $links,
         ]);
     }
 
+    /**
+     * @param Router $router
+     * 
+     * @return [type]
+     */
     public static function showProject(Router $router)
     {
-        $router->render('app/project');
+
+        $id_user = $_SESSION['user'];
+        $progress = 0;
+        $total = 0;
+        $finished = 0;
+
+        $typeAlert = true;
+
+        $id = validateOrRedirect("/panel");
+        $project = Project::find('id', $id, false);
+
+
+
+        $limit      = (isset($_GET['limit'])) ? $_GET['limit'] : 25;
+        $page       = (isset($_GET['page'])) ? $_GET['page'] : 1;
+        $links      = (isset($_GET['links'])) ? $_GET['links'] : 7;
+
+
+        $query      = "SELECT task.name, task.state, task.priority, task.date_end,  project.name as Project FROM Tasks as task";
+        $query     .= " left join Projects as project on projectID = project.id";
+        $query     .= " where task.adminID = $id_user and project.id = $id ";
+
+
+        $Paginator  = new Paginator($query);
+
+        $Paginator->getData($limit, $page);
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            if ($_FILES['filesUpload']) {
+
+                $project->uploadFiles();
+            }
+            //filesUpload
+        }
+
+
+        $project->getMembers();
+
+        $countMessages = $project->getQuantityMessages();
+        $tasks = $project->getTasks();
+
+
+        foreach ($tasks as $task) {
+            $total += 1;
+            if ($task['state'] == 'REALIZADO') {
+                $finished += 1;
+            }
+        }
+        $task = null;
+        try {
+            $progress = ((($finished / $total) * 100) * 100) / 100;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+
+
+        $isAdministrator = Project::checkAdminOrCreator($project->id);
+
+
+
+        $router->render('app/project', [
+
+            'Paginator' => $Paginator,
+            'links' => $links,
+            'project' => $project,
+            'progress' => $progress,
+            'countMessages' => $countMessages,
+            'id_user' => $id_user,
+            'directory' => scandir(FOLDER_PROJECTS . $project->folderURL),
+            'folder_URL' => $project->folderURL,
+            'typeAlert' => $typeAlert,
+            'alerts' => Project::getAlerts(),
+            'admin' => $isAdministrator,
+        ]);
     }
+
+
+
+    public static function updateTask(Router $router)
+    {
+        $id_task = validateOrRedirect('/panel');
+        $typeAlert = true;
+        $Task = Task::find('id', $id_task, false);
+
+
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
+            //COMPROBAR FECHA
+            if (!Task::validateDate($Task->date_end)) {
+                $typeAlert = false;
+                $Task->setAlert("Fecha invalidad");
+            }
+
+            //COMPROBAR LONGITUD NAME
+            if (strlen($Task->name) > 40) {
+                $typeAlert = false;
+                $Task->setAlert("El nombre debe ser inferior a 40 caracteres");
+            }
+
+
+            if ($typeAlert) {
+                $Task->synchronize($_POST);
+                if ($Task->save()) {
+                    $typeAlert = true;
+                    $Task->setAlert("Actualizado correctamente");
+                } else {
+                    $typeAlert = false;
+                    $Task->setAlert("Error, No se ha actualizado correctamente");
+                }
+            }
+        }
+
+        $router->render('app/update_task', [
+            'Task' => $Task,
+            'alerts' => $Task->getAlerts(),
+            'typeAlert' => $typeAlert,
+        ]);
+    }
+
+    /**
+     * @param Router $router
+     * metodo para actualizar los projectos
+     * @return [type]
+     */
+    public static function updateProject(Router $router)
+    {
+
+        $project = new Project();
+        $user = $_SESSION['user'];
+        $typeAlert = true;
+        $id_project = validateOrRedirect("/panel");
+
+        $project = Project::find('id', $id_project, false);
+        $project->getMembers();
+        $isAdministrator = false;
+        $creator = Users::find('id', $project->adminID, false);
+
+        $currentAdministrators = $project->getAdministrators();
+
+        //debug($project);
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
+            //COMPROBAR FECHA
+            if (!Project::validateDate($project->date_end)) {
+                $typeAlert = false;
+                $project->setAlert("Fecha invalidad");
+            }
+
+            //COMPROBAR LONGITUD NAME
+            if (strlen($project->name) > 40) {
+                $typeAlert = false;
+                $project->setAlert("El nombre debe ser inferior a 40 caracteres");
+            }
+
+
+            if ($typeAlert) {
+                $project->synchronize($_POST);
+                if ($project->save()) {
+                    $typeAlert = true;
+                    $project->setAlert("Actualizado correctamente");
+                } else {
+                    $typeAlert = false;
+                    $project->setAlert("Error, No se ha actualizado correctamente");
+                }
+            }
+        }
+
+        $router->render('app/update_project', [
+            'project' => $project,
+            'creator' => $creator,
+            'typeAlert' => $typeAlert,
+            'alerts' => $project->getAlerts(),
+
+        ]);
+    }
+
 
     public static function showTasks(Router $router)
     {
@@ -237,11 +461,10 @@ class PanelController
 
         $Paginator  = new Paginator($query);
 
-        $results    = $Paginator->getData($limit, $page);
+        $Paginator->getData($limit, $page);
 
         $router->render('app/tasks', [
             'id' => $id,
-            'results' => $results,
             'Paginator' => $Paginator,
             'links' => $links,
         ]);
@@ -249,7 +472,40 @@ class PanelController
 
     public static function showTask(Router $router)
     {
-        $router->render('app/task');
+
+        $id_task = validateOrRedirect("/panel");
+        $typeAlert = true;
+
+
+        $Task = Task::find("id", $id_task,  false);
+        $Project = Project::find("id", $Task->projectID, false);
+        $totalComents = $Task->getTotalComents();
+        $isAdministrator = Project::checkAdminOrCreator($Task->projectID);
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            if ($_FILES['filesUpload']) {
+
+                $Project->uploadFiles();
+            }
+            //filesUpload
+        }
+
+
+
+
+        $router->render('app/task', [
+            'Task' => $Task,
+            'typeAlert' => $typeAlert,
+            'alerts' => Task::getAlerts(),
+            'directory' => scandir(FOLDER_PROJECTS . $Project->folderURL),
+            'folder_URL' => $Project->folderURL,
+            'Project' => $Project,
+            'TotalComents' => $totalComents,
+            'admin' => $isAdministrator,
+
+        ]);
     }
 
     public static function showFriends(Router $router)

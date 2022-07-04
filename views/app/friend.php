@@ -6,8 +6,8 @@
         <img src="/build/img/<?php echo $user->avatar ?>" class="img-fluid " alt=""></img>
     </div>
     <div class="col-7 d-flex flex-column justify-content-center">
-        <span><?php echo $user->username ?></span><br>
-        <span><?php echo $user->rol ?></span>
+        <span class="text-white"><?php echo $user->username ?></span><br>
+        <span class="text-white"><?php echo $user->rol ?></span>
     </div>
 </div>
 

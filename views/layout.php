@@ -99,6 +99,11 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
             </div>
         </div>
         <div class="darkGreen footer__Copyright">
+            <form action="https://www.paypal.com/donate" method="post" class="text-center mt-2" target="_top">
+                <input type="hidden" name="hosted_button_id" value="XHQ4DBH5MP7HL" />
+                <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Botón Donar con PayPal" />
+                <img alt="" border="0" src="https://www.paypal.com/es_ES/i/scr/pixel.gif" width="1" height="1" />
+            </form>
             <p class="text-dark text-center mt-3">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-dark ">Alexander Sánchez</a></p>
         </div>
     </footer>

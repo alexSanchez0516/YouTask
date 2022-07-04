@@ -68,6 +68,8 @@ $router->post('/proyectos', [PanelController::class, 'showProjects']);
 
 
 $router->get('/proyecto', [PanelController::class, 'showProject']);
+$router->post('/proyecto', [PanelController::class, 'showProject']);
+
 
 $router->get('/tareas', [PanelController::class, 'showTasks']);
 $router->post('/tarea', [PanelController::class, 'showTask']);
@@ -97,6 +99,19 @@ $router->post('/seguidor', [PanelController::class, 'showFriend']);
 
 $router->get('/mensajes', [PanelController::class, 'showMessages']);
 $router->post('/mensajes', [PanelController::class, 'showMessages']);
+
+$router->get('/actualizar-proyecto', [PanelController::class, 'updateProject']);
+$router->post('/actualizar-proyecto', [PanelController::class, 'updateProject']);
+
+
+$router->post('/actualizar-tarea', [PanelController::class, 'updateTask']);
+$router->get('/actualizar-tarea', [PanelController::class, 'updateTask']);
+
+
+$router->get('/miembros-proyecto', [PanelController::class, 'getMembersProjectC']);
+$router->post('/miembros-proyecto', [PanelController::class, 'getMembersProjectC']);
+
+
 
 
 //API
@@ -152,6 +167,47 @@ $router->post('/api/chat/app', [APIController::class, 'showChat']);
 $router->post('/api/chat/app/send-message', [APIController::class, 'sendMessage']);
 
 
+
+
+$router->get('/api/get-projects-paginate', [APIController::class, 'getProjectsPaginate']);
+$router->post('/api/get-projects-paginate', [APIController::class, 'getProjectsPaginate']);
+
+$router->get('/api/get-tasks-paginate', [APIController::class, 'getProjectsPaginate']);
+$router->post('/api/get-tasks-paginate', [APIController::class, 'getTasksPaginate']);
+
+$router->post('/api/delete', [APIController::class, 'delete']); //delete task and project
+
+
+$router->post('/api/getMembersByProject', [APIController::class, 'getMembers']);
+
+$router->post('/api/sendMessageProject', [APIController::class, 'sendMessageProject']);
+
+$router->post('/api/getMessagesProjects', [APIController::class, 'getMessagesProjects']);
+
+$router->post('/api/to-do-list', [APIController::class, 'getTaskByProject']);
+
+$router->post('/api/addTaskByProject', [APIController::class, 'addTaskByProject']);
+
+
+
+$router->post('/api/deleteFileByProject', [APIController::class, 'deleteFileByProject']);
+
+$router->post('/api/getFriendsNotMembersByGroup', [APIController::class, 'getFriendsNotMembersByGroup']);
+
+$router->post('/api/sendInvitationProject', [APIController::class, 'sendInvitationProject']);
+
+$router->post('/api/insertAdminByProject', [APIController::class, 'insertAdminByProject']);
+$router->get('/api/insertAdminByProject', [APIController::class, 'insertAdminByProject']);
+
+
+$router->get('/api/dismisAdminByProject', [APIController::class, 'dismisAdminByProject']);
+$router->post('/api/dismisAdminByProject', [APIController::class, 'dismisAdminByProject']);
+
+$router->post('/api/checkAdminOrCreator', [APIController::class, 'checkAdminOrCreator']);
+
+$router->post('/api/sendCommentChat', [APIController::class, 'sendCommentChat']);
+
+$router->post('/api/showMessagesTask', [APIController::class, 'showMessagesTask']);
 
 
 

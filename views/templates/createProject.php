@@ -41,11 +41,12 @@
         <label for="date_end" class="form-label">(Y-m-d H:i:s)</label>
 
         <input type="datetime" requiredclass="form-control" id="inputDate" name="date_end" value="" " min="" max="" required>
-</div>
+    </div>
 </div>
 
 
 <div class=" col-12 mb-2 d-flex justify-content-center">
         <button type="button" onclick="window.location.href='/panel'" class="btn btn-danger mx-2" data-bs-dismiss="modal">Cancelar</button>
         <button type="submit" class="btn btn-primary">Crear</button>
+
     </div>

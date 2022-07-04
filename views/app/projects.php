@@ -17,26 +17,26 @@
                                     Estado
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Realizado</a></li>
-                                    <li><a class="dropdown-item" href="#">En progreso</a></li>
+                                    <li><a onclick="getProjectsPaginate('state','REALIZADO');" class="dropdown-item">Realizado</a></li>
+                                    <li><a onclick="getProjectsPaginate('state','EN PROCESO');" class="dropdown-item">En progreso</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Cancelado</a></li>
+                                    <li><a onclick="getProjectsPaginate('state','CANCELADO');" class="dropdown-item">Cancelado</a></li>
                                 </ul>
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Prioridad
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Alta</a></li>
-                                    <li><a class="dropdown-item" href="#">Media</a></li>
+                                    <li><a onclick="getProjectsPaginate('priority','ALTA');" class="dropdown-item">Alta</a></li>
+                                    <li><a onclick="getProjectsPaginate('priority','MEDIA');" class="dropdown-item">Media</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Baja</a></li>
+                                    <li><a onclick="getProjectsPaginate('priority','BAJA');" class="dropdown-item">Baja</a></li>
                                 </ul>
                             </li>
 
@@ -45,15 +45,14 @@
                                     Fecha
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Mas recientes</a></li>
-                                    <li><a class="dropdown-item" href="#">Mas antiguos</a></li>
+                                    <li><a onclick="getProjectsPaginate('create_at','desc');" class="dropdown-item">Mas recientes</a></li>
+                                    <li><a onclick="getProjectsPaginate('create_at','asc');" class="dropdown-item">Mas antiguos</a></li>
                                 </ul>
                             </li>
 
                         </ul>
                         <form class="d-flex col-12 col-md-5">
-                            <input class="form-control me-2 " type="search" placeholder="Escribe el nombre" aria-label="Search">
-                            <button class="btn btn-dark " type="submit">Buscar</button>
+                            <input class="form-control me-2 " id="search" type="search" placeholder="Escribe el nombre" aria-label="Search">
                         </form>
                     </div>
 
@@ -69,6 +68,7 @@
                     <th scope="col">Prioridad</th>
                     <th width="40%" scope="col">Nombre</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">Administrador</th>
                     <th scope="col">Cierre</th>
                     <th scope="col"></th>
 
@@ -76,53 +76,11 @@
             </thead>
 
             <tbody id="content_projects">
-                <?php for ($i = 1; $i < count($results->data); $i++) : ?>
-                    <tr>
 
-
-
-                        <?php if ($results->data[$i]['priority'] == 'ALTA') : ?>
-                            <td class="bg-danger text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
-                        <?php endif; ?>
-
-                        <?php if ($results->data[$i]['priority'] == 'BAJA') : ?>
-                            <td class="bg-primary text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
-                        <?php endif; ?>
-
-                        <?php if ($results->data[$i]['priority'] == 'MEDIA') : ?>
-                            <td class="bg-secondary text-white border rounded"><?php echo $results->data[$i]['priority']; ?></td>
-                        <?php endif; ?>
-
-
-                        <td><?php echo $results->data[$i]['name']; ?></td>
-
-
-
-                        <?php if ($results->data[$i]['state'] == 'REALIZADO') : ?>
-                            <td class="bg-success text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
-                        <?php endif; ?>
-
-                        <?php if ($results->data[$i]['state'] == 'EN PROCESO') : ?>
-                            <td class="bg-secondary text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
-                        <?php endif; ?>
-
-                        <?php if ($results->data[$i]['state'] == 'CANCELADO') : ?>
-                            <td class="bg-danger text-white border rounded"><?php echo $results->data[$i]['state']; ?></td>
-                        <?php endif; ?>
-
-
-
-                        <td><?php echo $results->data[$i]['date_end']; ?></td>
-
-                        <td class="mx-2 btn btn-danger bg-danger border rounded"><i class="fa-solid fa-trash-can"></i></td>
-                        <td class="btn btn-danger bg-primary border rounded"><i class="fa-solid fa-pen-to-square"></i></td>
-
-                    </tr>
-                <?php endfor; ?>
             </tbody>
         </table>
 
-        <?php echo $Paginator->buildLinks(); ?>
+        <?php echo $Paginator->buildLinks('proyectos'); ?>
 
     </div>
 

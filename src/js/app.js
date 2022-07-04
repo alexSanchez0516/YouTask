@@ -6,16 +6,19 @@ document.addEventListener('DOMContentLoaded', function () {
   showMenuResponse()
   showCreateProject()
   close_activity_perfil()
-  showFriends()
   deleteFriend()
   listPosts()
   deletePost()
   update_post()
   send_response_comment()
-  search_profile()
   getRequestsFollow()
   storage()
   previewImg()
+  if (currentURL == '/seguidores') {
+    showFriends()
+    search_profile()
+  }
+
   if (currentURL == '/editar-perfil') {
     getSkills()
   }
@@ -24,9 +27,768 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   if (currentURL == '/proyectos') {
     getProjectsPaginate()
-    //getDataForProjects()
+    getEntityByName('Projects')
+  }
+
+  if (currentURL == '/proyecto') {
+    buildMembers()
+    getMessagesProjects()
+    getListByProject()
+    loadBtnUploadFileProject()
+    searchMembers()
+    getTasksPaginate()
+
+    getEntityByName('Tasks')
+
+    setInterval(() => {
+      getMessagesProjects()
+    }, 9500)
+  }
+
+  if (currentURL == '/tareas') {
+    getTasksPaginate()
+    getEntityByName('Tasks')
+  }
+
+  if (currentURL == '/tarea') {
+    loadBtnUploadFileProject()
+    showMessagesTask()
+    setInterval(() => {
+      showMessagesTask()
+    }, 9500)
+  }
+
+  if (currentURL == '/miembros-proyecto') {
+    searchMembers()
+    getAllMembersProject()
   }
 })
+
+async function showMessagesTask() {
+  let url = 'http://127.0.0.1:8080/api/showMessagesTask'
+  const data = new FormData()
+  let id_task = getParameterByName('id')
+  data.append('id_task', id_task)
+
+  try {
+    const request = await fetch(url, {
+      method: 'POST',
+      body: data,
+    })
+
+    const response = await request.json()
+    buildMessagesTask(response)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function buildMessagesTask(messages) {
+  let template = ''
+  const container__msgs_task = document.querySelector('#container__msgs_task')
+  messages.forEach((message) => {
+    template += `
+    <li class="mt-4">
+        <div class="media activity-item d-flex">
+            <a href="#" class="pull-left w-20">
+                <img src="/build/img/${message.avatar}" alt="Avatar" class="w-50 avatar rounded-circle m-2">
+            </a>
+            <div class="media-body">
+                <strong>${message.username}</strong><br>
+                <small class="text-muted">${message.create_at}</small>
+                <a title="Eliminar" data-id="${message.id}" class="btn btn-link text-danger btn-remove"><i onclick="deleteCommentTask(${message.id});" class="fa-solid fa-trash-can"></i></a>
+                <div class="well bg-messages_response rounded p-2">
+                    ${message.msg}
+                </div>
+            </div>
+        </div>
+    </li>
+    
+    `
+  })
+  container__msgs_task.innerHTML = template
+}
+
+async function sendMessageTask() {
+  const data = new FormData()
+  let url = 'http://127.0.0.1:8080/api/sendCommentChat'
+  let id_task = getParameterByName('id')
+  data.append('id_task', id_task)
+  const msgTask = document.querySelector('#msgTask').value
+  if (validateMessage(msgTask)) {
+    data.append('msg', msgTask)
+
+    try {
+      const request = await fetch(url, {
+        method: 'POST',
+        body: data,
+      })
+
+      const response = await request.json()
+
+      if (!response) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: '¡Ha ocurrido un error!',
+        })
+      } else {
+        Swal.fire('Enviado correctamente', '', 'success')
+        $('#msgTask').val('')
+        showMessagesTask()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+function validateMessage(message) {
+  if (message.trim().length > 0) {
+    return true
+  }
+  return false
+}
+
+/**
+ * @param mixed id_user
+ *
+ * @return [type]
+ */
+async function dissmisAdmin(id_user) {
+  let url = 'http://127.0.0.1:8080/api/dismisAdminByProject'
+  const data = new FormData()
+  let id_project = getParameterByName('id')
+  data.append('id_project', id_project)
+  data.append('id_user', id_user)
+
+  const result = await Swal.fire({
+    title: 'Eliminar',
+    text: '¿Estás seguro de que ya no sea admnistrador?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#1f9bcf',
+    cancelButtonColor: '#d9534f',
+    cancelButtonText: 'No',
+    confirmButtonText: 'Si',
+  })
+
+  // Stop if user did not confirm
+  if (!result.value) {
+    return
+  }
+
+  try {
+    const request = await fetch(url, {
+      method: 'POST',
+      body: data,
+    })
+
+    const response = await request.json()
+
+    if (!response) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '¡Ha ocurrido un error!',
+      })
+    } else {
+      Swal.fire('Convertido en colaborador', '', 'success')
+      getAllMembersProject()
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+/**
+ * @param mixed receiver
+ *
+ * @return [type]
+ */
+async function dataMessageGeneral(receiver) {
+  let url = 'http://127.0.0.1:8080/api/chat/app/send-message'
+
+  const send_msg_members_page = document.querySelector('#send_msg_members_page')
+  $('#send_msg_members_page').click((event) => {
+    event.preventDefault()
+    event.stopImmediatePropagation() //evitar que se repita el evento
+    if ($('#msg_page_members').val().length > 0) {
+      $.post(
+        url,
+        { receiver: receiver, message: $('#msg_page_members').val() },
+        (response) => {
+          if (!response) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '¡Ha ocurrido un error!',
+            })
+          } else {
+            Swal.fire('Mensaje enviado correctamente', '', 'success')
+          }
+
+          $('#msg_page_members').val('')
+        },
+      )
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '¡Texto vacio!',
+      })
+    }
+  })
+}
+
+/**
+ * @param mixed id_user
+ *
+ * @return [type]
+ */
+async function converAdmin(id_user) {
+  try {
+    const result = await Swal.fire({
+      title: 'Eliminar',
+      text: '¿Estás seguro de que quieres hacerle admnistrador?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#1f9bcf',
+      cancelButtonColor: '#d9534f',
+      cancelButtonText: 'No',
+      confirmButtonText: 'Si',
+    })
+
+    // Stop if user did not confirm
+    if (!result.value) {
+      return
+    }
+
+    let url = 'http://127.0.0.1:8080/api/insertAdminByProject'
+    const data = new FormData()
+    let id_project = getParameterByName('id')
+    data.append('id_user', id_user)
+    data.append('id_project', id_project)
+
+    const request = await fetch(url, {
+      method: 'POST',
+      body: data,
+    })
+
+    const response = await request.json()
+
+    if (!response) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '¡Ha ocurrido un error!',
+      })
+    } else {
+      Swal.fire('Convertido en administrador', '', 'success')
+      getAllMembersProject()
+      //window.location.reload()
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+/**
+ * @param mixed id_user
+ *
+ * @return [type]
+ */
+async function deleteMemberProject(id_user) {
+  await deleteAny(id_user, 'Members_Projects')
+  window.location.reload()
+}
+
+/**
+ * @return [type]
+ */
+function getAllMembersProject() {
+  let template = ''
+  let id = getParameterByName('id')
+  const teams__container = document.querySelector('#container__members__pag')
+  let adminID = Number(teams__container.getAttribute('data-id'))
+  const current_id_user = document.querySelector('#current_id_user')
+  let current_id_user_val = Number(current_id_user.getAttribute('data-id'))
+  const title_team = document.querySelector('#title_team')
+  const members = getMembers(id).then((data) => {
+    data.forEach((member) => {
+      template += `
+      <div class="col-lg-4 col-md-6">
+                <div class="team-item">
+                    <div class="team-img">
+                        <img src="/build/img/${member.avatar}" alt="team Image">
+                        <div class="normal-text">
+                            <h4 class="team-name">${member.username}</h4>
+                            <span class="subtitle">${
+                              member.id_admin != null
+                                ? 'Administrador'
+                                : member.id == adminID
+                                ? 'Creador'
+                                : 'Colaborador'
+                            }</span>
+                        </div>
+                    </div>
+                    <div class="team-content">
+                        <div class="display-table">
+                            <div class="display-table-cell">
+                                <div class="share-icons">
+                                    <div class="border"></div>
+                                    <ul class="team-social icons-1">
+
+                                    `
+
+      current_id_user_val != member.id
+        ? (template += ` 
+                                        <li><a onclick="dataMessageGeneral(${member.id});" title="Enviar mensaje" data-bs-toggle="modal" data-bs-target="#modal_send_message" class="social-icon"><i class="fa-solid fa-message"></i></a>
+                                        </li> 
+      `)
+        : ''
+      template += `
+                                        <li><a href="/seguidor?id=${member.id}" title="Ver Perfil" class="social-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <ul class="team-social icons-2">
+                                        <li><a  onclick='deleteMemberProject(${member.id})' title="Eliminar Integrante" class="social-icon"><i class="fa-solid fa-trash-can"></i></a>
+                                        </li>
+                                        
+                                       `
+
+      member.id_admin != null
+        ? (template += `
+        <li><a onclick="dissmisAdmin(${member.id})" title="Quitar administrador" class="social-icon"><i class="fa-solid fa-user-minus"></i></a>
+        </li>
+
+        `)
+        : member.id == adminID
+        ? ''
+        : (template += `
+        <li><a onclick="converAdmin(${member.id})" title="Convertir en administrador" class="social-icon"><i class="fa-solid fa-plus"></i></a>
+        </li>
+
+        `)
+
+      template += `
+                                    </ul>
+                                </div>
+                                <div class="team-details">
+                                    <h4 class="team-name mt-2">
+                                        <a href="speakers-single.html">${title_team.textContent}</a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      
+      `
+    })
+    teams__container.innerHTML = template
+  })
+}
+
+/**
+ * @return [type]
+ */
+
+/**
+ * @return [type]
+ */
+
+/**
+ * @param mixed id
+ *
+ * @return [type]
+ */
+async function deleteCommentProject(id) {
+  await deleteAny(id, 'msgProjects')
+  getMessagesProjects()
+}
+
+async function deleteCommentTask(id) {
+  await deleteAny(id, 'msgTask')
+  showMessagesTask()
+}
+
+/**
+ * @param mixed id_user
+ *
+ * @return [type]
+ */
+async function sendInvitationProject(id_user) {
+  const data = new FormData()
+  let url = 'http://127.0.0.1:8080/api/sendInvitationProject'
+  let id_project = getParameterByName('id')
+
+  data.append('id_project', id_project)
+  data.append('id_user', id_user)
+
+  const request = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+
+  const response = await request.json()
+
+  if (!response) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Ya tiene una invitacion pendiente!',
+    })
+  } else {
+    Swal.fire('Invitacion enviada correctamente', '', 'success')
+    getMembers(id_project)
+  }
+}
+
+/**
+ * @return [type]
+ */
+function searchMembers() {
+  const member_project = document.querySelector('#member_project')
+  const data = new FormData()
+  let url = 'http://127.0.0.1:8080/api/getFriendsNotMembersByGroup'
+  let id_project = getParameterByName('id')
+  let template = ''
+  //content__profiles
+
+  $('#member_project').keyup(() => {
+    let nameSearch = $('#member_project').val()
+
+    $.ajax({
+      //get obtener algo y post para enviar
+      url: url,
+      type: 'POST',
+      data: { id_project, nameSearch },
+      success: (response) => {
+        if (!response.error) {
+          template = ''
+          $('#content__profiles').html(template)
+          const result = JSON.parse(response)
+
+          result.forEach((profile) => {
+            template += `<div class="d-flex flex-column align-items-center ">
+            <img src="/build/img/${profile.avatar}" class="img-responsive rounded-circle w-20" alt="avatar" />
+            <span>ID: ${profile.id}</span>
+
+            <span class="w-75 text-center">Nombre: <span class="text-primary">${profile.username}</span></span>`
+
+            if (profile.description != null) {
+              template += `
+        <span class="w-75 text-center">Descripción: <span class="text-primary">${profile.description}</span></span>`
+            }
+
+            if (profile.rol != null) {
+              template += `
+        <span class="w-75 text-center">Rol: <span class="text-primary">${profile.rol}</span></span>`
+            }
+
+            template += ` <a href="/seguidor?id=${profile.id}">Ver perfil</a>`
+            template += `<button type="button" onclick="sendInvitationProject(${profile.id});" class="btn btn-primary my-2">
+                                      Invitar
+                                      </button>
+                                      <hr/>`
+          })
+          $('#content__profiles').html(template)
+        }
+      },
+    })
+  })
+}
+
+/**
+ * @return [type]
+ */
+function loadBtnUploadFileProject() {
+  const data = document.querySelector('#image_avatar') // es el input del file de project
+  bnt__upload__Files = document.querySelector('#bnt__upload__Files')
+
+  data.addEventListener('change', (event) => {
+    const files = data.files
+    const files_parse = Array.from(files)
+
+    if (files_parse.length > 0) {
+      files_parse.forEach((file) => {
+        if (file.size > 3145728) {
+          //comprueba si es superior a 3 mb
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '¡Te excedes en tamaño(3MB MAX)!',
+          })
+          return
+        } else {
+          bnt__upload__Files.classList.add('show')
+          console.log('add')
+        }
+      })
+    }
+  })
+}
+
+/**
+ * @param mixed nameFile
+ *
+ * @return [type]
+ */
+async function deleteFileByProject(nameFile) {
+  let url = 'http://127.0.0.1:8080/api/deleteFileByProject'
+  const data = new FormData()
+  let idProject = getParameterByName('id')
+  data.append('name', nameFile)
+  data.append('id', idProject)
+
+  const result = await Swal.fire({
+    title: 'Eliminar',
+    text: '¿Estás seguro de que quieres eliminar este item?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#1f9bcf',
+    cancelButtonColor: '#d9534f',
+    cancelButtonText: 'No',
+    confirmButtonText: 'Si, eliminarlo',
+  })
+
+  // Stop if user did not confirm
+  if (!result.value) {
+    return
+  }
+  const request = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+
+  const response = await request.json()
+
+  if (!response) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Algo salió mal!',
+    })
+  } else {
+    let timerInterval
+    await Swal.fire({
+      title: 'Eliminando',
+      html: 'Se está eliminando, por favor espere',
+      timer: 1000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading()
+        const b = Swal.getHtmlContainer().querySelector('b')
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft()
+        }, 1000)
+      },
+      willClose: () => {
+        clearInterval(timerInterval)
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer')
+      }
+    })
+
+    window.location.href = window.location.href //descartamos post
+  }
+}
+
+function validateDataTask() {
+  let valid = true
+  const data = new FormData()
+  let name_task = document.querySelector('#name__task__by__project').value
+  let description__task = document.querySelector(
+    '#description__task__by__project',
+  ).value
+  let priority__task = document.querySelector('#pririty__task__by__project')
+    .value
+  let projectID = document.querySelector('#projectID').value
+  let create_end_task__by__project = document.querySelector(
+    '#create_end_task__by__project',
+  ).value
+
+  let adminID = document.querySelector('#adminID').value
+  console.log(adminID)
+
+  if (name_task.trim().length < 3) {
+    valid = false
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Nombre invalido!',
+    })
+  }
+
+  if (description__task.trim().length < 3) {
+    valid = false
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Descripción inválida!',
+    })
+  }
+  if (valid) {
+    data.append('name', name_task)
+    data.append('description', description__task)
+    data.append('priority', priority__task)
+    data.append('projectID', projectID)
+    data.append('date_end', create_end_task__by__project)
+    data.append('adminID', adminID)
+    sendTaskByProject(data)
+  }
+}
+
+async function sendTaskByProject(formdata) {
+  let url = 'http://127.0.0.1:8080/api/addTaskByProject'
+  const request = await fetch(url, {
+    method: 'POST',
+    body: formdata,
+  })
+
+  const response = await request.json()
+
+  if (!response) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Algo salió mal!',
+    })
+  } else {
+    Swal.fire('Creado correctamente', '', 'success')
+    getListByProject()
+  }
+
+  console.log(response)
+}
+
+/**
+ * METODO QUE RECOGE LOS DATOS DEL MODAL Y
+ * LO MANDA A LA API PARA SALVARLOS
+ * @return [type]
+ */
+async function sendMessagesProject() {
+  let msg = document.querySelector('#msg_project').value
+  let url = 'http://127.0.0.1:8080/api/sendMessageProject'
+  let project_id = getParameterByName('id')
+  const data = new FormData()
+
+  data.append('msg', msg)
+  data.append('project_id', project_id)
+
+  const request = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+
+  const response = await request.json()
+
+  if (!response) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Algo salió mal!',
+    })
+  } else {
+    getMessagesProjects()
+  }
+}
+
+/**
+ * METODO PARA PINTAR LOS Mensajes JUNTO A SUS DATA-ID
+ * @return [type]
+ */
+async function getMessagesProjects() {
+  let url = 'http://127.0.0.1:8080/api/getMessagesProjects'
+  const data = new FormData()
+  let id = Number(getParameterByName('id'))
+  data.append('id', id)
+
+  const request = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+
+  const response = await request.json()
+  buildMessageProject(response)
+}
+
+/**
+ * @param array messages
+ *
+ * @return [type]
+ */
+function buildMessageProject(messages) {
+  const project__msg__list = document.querySelector('#project__msg__list')
+  let template = '<h3 class="text-center">Mensajes</h3>'
+  messages.forEach((message) => {
+    template += `
+    <li class="mt-4">
+        <div class="media activity-item d-flex">
+            <a href="#" class="pull-left w-20">
+                <img src="/build/img/${message.avatar}" alt="Avatar" class="w-50 avatar rounded-circle m-2">
+            </a>
+            <div class="media-body">
+                <strong>${message.username}</strong><br>
+                <small class="text-muted">${message.create_at}</small>
+                <a title="Eliminar" data-id="${message.id}" class="btn btn-link text-danger btn-remove"><i onclick="deleteCommentProject(${message.id});" class="fa-solid fa-trash-can"></i></a>
+                <div class="well bg-messages_response rounded p-2">
+                    ${message.msg}
+                </div>
+            </div>
+        </div>
+    </li>
+    
+    `
+  })
+  project__msg__list.innerHTML = template
+}
+
+/**
+ * METODO PARA PINTAR DESDE LA API EL TODO LIST Y
+ * ASINAR SU CORRESPONDIENTE DATA-ID
+ * @return [type]
+ */
+async function deleteListProject(id) {
+  await deleteAny(id, 'Tasks')
+  getListByProject()
+}
+
+async function getListByProject() {
+  let id = getParameterByName('id')
+  let url = 'http://127.0.0.1:8080/api/to-do-list'
+  const data = new FormData()
+  data.append('id', id)
+
+  const request = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+
+  const response = await request.json()
+  buildTodoList(response)
+}
+
+function buildTodoList(tasks) {
+  const task_filter = tasks.filter((task) => task.state === 'EN PROCESO')
+  let template = ''
+  const todo__list = document.querySelector('#todo__list')
+
+  task_filter.forEach((task) => {
+    template += `
+    <li>
+        <a class="text-dark" href="/tarea?id=${task.id}"><span class="todo-text"><i class="mx-2 my-2 fa-solid fa-list-check"></i>${task.name}</span></a>
+    </li>
+
+    `
+  })
+  todo__list.innerHTML = template
+}
 
 async function showContacts() {
   const container__users = document.querySelector('#container__users')
@@ -246,6 +1008,9 @@ function deleteNotifications() {
   }
 }
 
+/**
+ * @return [type]
+ */
 function getRequestsFollow() {
   const rutesNoProtected = ['/', '/inicio', '/login', '/registro', '/contacto']
 
@@ -288,12 +1053,342 @@ function getParameterByName(name) {
     : decodeURIComponent(results[1].replace(/\+/g, ' '))
 }
 
-function getProjectsPaginate() {
-  let url = 'http://127.0.0.1:8080/api/get-projects'
-  $.get(url, (response) => {
-    console.log('oa')
-    console.log(JSON.parse(response))
+async function getEntityByName(entity) {
+  const data = new FormData()
+
+  $('#search').keyup(() => {
+    if ($('#search').val()) {
+      let search = $('#search').val()
+      console.log(search)
+      if (entity === 'Projects') {
+        getProjectsPaginate(null, search)
+      } else {
+        getTasksPaginate(null, search)
+      }
+    }
   })
+}
+
+/**
+ * @param null filter
+ * @param null value
+ *
+ * @return [type]
+ */
+async function getProjectsPaginate(filter = null, value = null) {
+  const data = new FormData()
+  let url = 'http://127.0.0.1:8080/api/get-projects-paginate'
+  let page = getParameterByName('page')
+  let limit = getParameterByName('limit')
+
+  if (filter != null) {
+    data.append('filter', filter)
+  }
+  if (value != null) {
+    data.append('value', value)
+  }
+
+  data.append('page', page)
+  data.append('limit', limit)
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+  const results = await response.json()
+  buildProjects(results.data)
+}
+
+/**
+ * @param null filter
+ * @param null value
+ *
+ * @return object
+ */
+async function getTasksPaginate(filter = null, value = null) {
+  let currentURL = window.location.pathname
+
+  const data = new FormData()
+  let url = 'http://127.0.0.1:8080/api/get-tasks-paginate'
+  let page = getParameterByName('page')
+  let limit = getParameterByName('limit')
+
+  let id_project = 0
+
+  if (currentURL == '/proyecto') {
+    id_project = getParameterByName('id')
+    data.append('id_project', id_project)
+  }
+
+  if (filter != null) {
+    data.append('filter', filter)
+  }
+  if (value != null) {
+    data.append('value', value)
+  }
+
+  data.append('page', page)
+  data.append('limit', limit)
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+  const results = await response.json()
+  buildTasks(results.data)
+}
+
+async function checkAdminOrCreator() {}
+
+async function deleteAny(id, table) {
+  //comprobar si es admin o creator
+
+  /*
+  let url_check = 'http://127.0.0.1:8080/api/checkAdminOrCreator'
+  let currentURL = window.location.pathname
+  const data_check = new FormData()
+
+  if (currentURL == '/proyectos') {
+    data_check.append('id_project', id)
+  } else {
+    if (currentURL == '/tareas') {
+      data_check.append('id_task', getParameterByName('id'))
+    }
+  }
+
+  const request_check = await fetch(url_check, {
+    method: 'POST',
+    body: data_check,
+  })
+
+  const response = await request_check.json()
+
+  console.log(response)
+  */
+
+  if (true) {
+    const data = new FormData()
+    let url = 'http://127.0.0.1:8080/api/delete'
+
+    let currentURL = window.location.pathname
+    data.append('table', table)
+    if (currentURL == '/miembros-proyecto') {
+      data.append('id_user', id)
+    } else {
+      data.append('id', id)
+    }
+
+    //console.log(...data)
+    const result = await Swal.fire({
+      title: 'Eliminar',
+      text: '¿Estás seguro de que quieres eliminar este item?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#1f9bcf',
+      cancelButtonColor: '#d9534f',
+      cancelButtonText: 'No',
+      confirmButtonText: 'Si, eliminarlo',
+    })
+
+    // Stop if user did not confirm
+    if (!result.value) {
+      return
+    }
+    const request = await fetch(url, {
+      method: 'POST',
+      body: data,
+    })
+
+    const response = await request.json()
+
+    if (response) {
+      Swal.fire('Eliminado correctamente', '', 'success')
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '¡Algo salió mal!',
+      })
+    }
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡No eres administrador!',
+    })
+  }
+
+  /*
+  
+  */
+}
+
+function buildTasks(tasks) {
+  let template = ''
+  const content__tasks = document.querySelector('#content__tasks')
+
+  tasks.forEach((task) => {
+    if (task != null) {
+      template += `
+      <tr>
+      `
+      if (task.priority == 'ALTA') {
+        template += `<td class="bg-danger text-white border rounded">${task.priority}</td>`
+      }
+      if (task.priority == 'BAJA') {
+        template += `<td class="bg-primary text-white border rounded">${task.priority}</td>`
+      }
+      if (task.priority == 'MEDIA') {
+        template += `<td class="bg-secondary text-white border rounded">${task.priority}</td>`
+      }
+
+      template += `<td>${task.name}</td>`
+
+      if (task.state == 'EN PROCESO') {
+        template += `<td class="bg-secondary text-white border rounded">${task.state}</td>`
+      }
+      if (task.state == 'REALIZADO') {
+        template += `<td class="bg-success text-white border rounded">${task.state}</td>`
+      }
+      if (task.state == 'CANCELADO') {
+        template += `<td class="bg-danger text-white border rounded">${task.state}</td>`
+      }
+
+      template += `<td class="bg-success text-white border rounded">${task.Project}</td>`
+
+      template += `
+      <td>${task.date_end}</td>
+      <td id="delete__task" onclick="deleteTask(${task.id});" class="mx-2 btn btn-danger bg-danger border rounded"><i class="fa-solid fa-trash-can"></i></td>
+      <td class="btn btn-danger bg-primary border rounded"><a href="/tarea?id=${task.id}" class="text-white"><i class="fa-solid fa-pen-to-square"></i></a></td>
+
+      </tr>`
+    }
+  })
+
+  content__tasks.innerHTML = template
+}
+
+async function deleteTask(id) {
+  await deleteAny(id, 'Tasks')
+  getTasksPaginate()
+}
+async function deleteProject(id) {
+  await deleteAny(id, 'Projects')
+  getProjectsPaginate()
+}
+
+function buildProjects(projects) {
+  let template = ''
+  let templateIMG = ''
+  const content_projects = document.querySelector('#content_projects')
+  let url = 'http://127.0.0.1:8080/api/getMembersByProject'
+
+  projects.forEach((project) => {
+    if (project != null) {
+      template += `
+      <tr>
+      `
+      if (project.priority == 'ALTA') {
+        template += `<td class="bg-danger text-white border rounded">${project.priority}</td>`
+      }
+      if (project.priority == 'BAJA') {
+        template += `<td class="bg-primary text-white border rounded">${project.priority}</td>`
+      }
+      if (project.priority == 'MEDIA') {
+        template += `<td class="bg-secondary text-white border rounded">${project.priority}</td>`
+      }
+
+      template += `<td>${project.name}</td>`
+
+      if (project.state == 'EN PROCESO') {
+        template += `<td class="bg-secondary text-white border rounded">${project.state}</td>`
+      }
+      if (project.state == 'REALIZADO') {
+        template += `<td class="bg-success text-white border rounded">${project.state}</td>`
+      }
+      if (project.state == 'CANCELADO') {
+        template += `<td class="bg-danger text-white border rounded">${project.state}</td>`
+      }
+
+      template += `
+              <td class=" w-10 text-white border rounded">
+                <a href="/seguidor?id=${project.userID}">
+                  <img class="rounded-circle w-75 img-responsive" src="/build/img/${project.avatar}">
+                  </img>
+                </a>
+              </td>`
+
+      template += `
+      <td>${project.date_end}</td>
+      <td id="delete__project" onclick="deleteProject(${project.id});" class="mx-2 btn btn-danger bg-danger border rounded"><i class="fa-solid fa-trash-can"></i></td>
+      <td class="btn btn-danger bg-primary border rounded"><a href="/proyecto?id=${project.id}&limit=5&page=1" class="text-white"><i class="fa-solid fa-pen-to-square"></i></a></td>
+
+      </tr>`
+    }
+  })
+  content_projects.innerHTML = template
+}
+
+function buildMembers() {
+  const current_id_user = document.querySelector('#current_id_user')
+  let current_id_user_val = Number(current_id_user.getAttribute('data-id'))
+  let template = ''
+  let id = getParameterByName('id')
+  const teams__container = document.querySelector('#teams__container')
+  const members = getMembers(id).then((data) => {
+    data.forEach((member) => {
+      template += `
+                     <div class="col-5 d-flex justify-content-center">
+                        <nav class="navbar navbar-expand-sm">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown ">
+                                    <a class="nav-link dropdown-toggle d-flex justify-content-center" href="/seguidor?id=${member.id}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <img class="rounded-circle w-40 img-responsive" src="/build/img/${member.avatar}">
+                                      </img>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="/seguidor?id=${member.id}">Ver Perfil</a></li>
+                                        
+                                        <li class="d-none">${member.id}</li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+      `
+
+      member.id != current_id_user_val
+        ? (template += `                     <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal_send_message" onclick="dataMessageGeneral(${member.id});">Enviar mensaje</a></li>`)
+        : ''
+      template += `
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+            `
+    })
+    teams__container.innerHTML = template
+  })
+}
+
+async function getMembers(project_id) {
+  let url = 'http://127.0.0.1:8080/api/getMembersByProject'
+  const data = new FormData()
+  let currentURL = window.location.pathname
+  data.append('id', project_id)
+
+  if (currentURL == '/proyecto') {
+    data.append('limit', 4)
+  }
+
+  const request = await fetch(url, {
+    method: 'POST',
+    body: data,
+  })
+
+  const response = await request.json()
+
+  return response
 }
 
 function accept_request_follower(id_request) {
@@ -425,6 +1520,9 @@ function search_profile() {
   }
 }
 
+/**
+ * @return [type]
+ */
 function send_response_comment() {
   let url = 'http://127.0.0.1:8080/api/send_response_comment'
 
@@ -514,16 +1612,15 @@ function close_activity_perfil() {
 async function showFriends() {
   let currentURL = window.location.pathname
 
-  if (currentURL == '/seguidores') {
-    try {
-      const url = 'http://127.0.0.1:8080/api/friends'
-      const result = await fetch(url)
-      console.log(result)
-      const friends = await result.json()
+  try {
+    const url = 'http://127.0.0.1:8080/api/friends'
+    const result = await fetch(url)
+    const friends = await result.json()
+    if (currentURL == '/seguidores') {
       createFriendsList(friends[1], friends[0])
-    } catch (error) {
-      console.log(error)
     }
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -538,6 +1635,9 @@ function copyToClipboard() {
   })
 }
 
+/**
+ * @return [type]
+ */
 async function listPosts() {
   let currentURL = window.location.pathname
 
@@ -623,6 +1723,12 @@ async function listPosts() {
   }
 }
 
+/**
+ * @param mixed friends
+ * @param mixed count
+ *
+ * @return [type]
+ */
 function createFriendsList(friends, count) {
   const container_friends = document.querySelector('#container_friends') ?? 0
   const countFriends = document.querySelector('#countFriends') ?? 0
@@ -673,6 +1779,9 @@ function createFriendsList(friends, count) {
   container_friends.innerHTML = template
 }
 
+/**
+ * @return [type]
+ */
 function showCreateProject() {
   const create_project = document.querySelector('#create_project')
   const wrap_initials = document.querySelector('#wrap_initials')
@@ -694,6 +1803,9 @@ function showCreateProject() {
   }
 }
 
+/**
+ * @return [type]
+ */
 function checkPassword() {
   const password = document.querySelector('#password')
   const repeatPassword = document.querySelector('#repeatPassword')
@@ -711,6 +1823,9 @@ function checkPassword() {
   }
 }
 
+/**
+ * @return [type]
+ */
 function checkAlerts() {
   if (document.querySelectorAll('.alerts')) {
     const alerts = document.querySelectorAll('.alerts')
@@ -722,6 +1837,9 @@ function checkAlerts() {
   }
 }
 
+/**
+ * @return [type]
+ */
 function showMenuResponse() {
   const burger = document.querySelector('.fa-bars')
   const nav__menu = document.querySelector('.nav__menu')

@@ -102,7 +102,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                                         <li class=" col-2 col-sm-1 my-2"><a href="/panel"><i class="fas fa-chart-line text-dark fs-1 mx-2"></i></a></li>
                                         <li class=" col-2 col-sm-1 my-2"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1 mx-2"></i></a> </li>
                                         <li class=" col-2 col-sm-1 my-2"> <a href="/proyectos?limit=10&page=1"><i class="fas fa-project-diagram text-dark fs-1 mx-2"></i></a> </li>
-                                        <li class=" col-2 col-sm-1 my-2"> <a href="/tareas"><i class="fas fa-tasks text-dark fs-1 mx-2"></i></a></li>
+                                        <li class=" col-2 col-sm-1 my-2"> <a href="/tareas?limit=10&page=1"><i class="fas fa-tasks text-dark fs-1 mx-2"></i></a></li>
                                         <li class=" col-2 col-sm-1 my-2"><a href="/salir"><i class="fas fa-sign-out-alt text-dark fs-1 mx-2"></i></a></li>
                                     </ul>
 
@@ -138,12 +138,12 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <main class="wrap d-flex flex-column">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-1 " id="menu-left-panel">
-                    <ul class="d-none d-md-flex flex-column align-items-center position-fixed">
+                <div class="col-1 d-flex " id="menu-left-panel">
+                    <ul class="d-none d-md-flex flex-column align-items-center position-sticky">
                         <li class="nav__item my-5"><a href="/panel"><i class="fas fa-chart-line text-dark fs-1"></i></a></li>
                         <li class="nav__item my-5"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1"></i></a> </li>
                         <li class="nav__item my-5"> <a href="/proyectos?limit=10&page=1"><i class="fas fa-project-diagram text-dark fs-1"></i></a> </li>
-                        <li class="nav__item my-5"> <a href="/tareas"><i class="fas fa-tasks text-dark fs-1"></i></a></li>
+                        <li class="nav__item my-5"> <a href="/tareas?limit=10&page=1"><i class="fas fa-tasks text-dark fs-1"></i></a></li>
                         <li class="nav__item my-5"><a href="/salir"><i class="fas fa-sign-out-alt text-dark fs-1"></i></a></li>
 
                     </ul>
@@ -159,6 +159,11 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
 
     <footer class=" d-flex flex-column">
+        <form action="https://www.paypal.com/donate" method="post" class="text-center mt-2" target="_top">
+            <input type="hidden" name="hosted_button_id" value="XHQ4DBH5MP7HL" />
+            <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Botón Donar con PayPal" />
+            <img alt="" border="0" src="https://www.paypal.com/es_ES/i/scr/pixel.gif" width="1" height="1" />
+        </form>
         <div class=" footer__Copyright">
             <p class="text-dark text-center mt-3 text-dark ">Copyright © 2022 YouTask. All rights reserved. | Desarrollado por <a href="http://www.alexandersanchez.ovh" class=" text-dark ">Alexander Sánchez</a></p>
         </div>

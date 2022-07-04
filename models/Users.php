@@ -78,7 +78,9 @@ class Users extends ActiveRecord
                 //pasword-->hash
                 $auth = password_verify($this->password, $user_data->password);
                 if ($auth) {
-                    session_start();
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
                     $_SESSION['user'] = $user_data->id;
                     $_SESSION['avatar'] = $user_data->avatar;
                     $_SESSION['auth'] = true;

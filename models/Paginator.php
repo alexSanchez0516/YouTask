@@ -4,7 +4,6 @@ namespace Model;
 
 use stdClass;
 
-//debug(__DIR__ . '/../includes/config/db.php)');
 require_once __DIR__ . '/../includes/config/db.php';
 
 class Paginator
@@ -24,11 +23,21 @@ class Paginator
         $this->_query = $query;
 
         $rs = $this->_conn->query($this->_query);
+
+        if (!$rs) {
+            debug("Errormessage: %s\n", $this->_conn->error);
+        }
         $this->_total = $rs->num_rows;
     }
 
 
 
+    /**
+     * @param int $limit
+     * @param int $page
+     * 
+     * @return [object]
+     */
     public function getData($limit = 10, $page = 1)
     {
 
@@ -57,7 +66,12 @@ class Paginator
     }
 
 
-    public function buildLinks()
+    /**
+     * @param mixed $url
+     * 
+     * @return [type]
+     */
+    public function buildLinks($url)
     {
         $previus = ($this->_page - 1);
         $next = ($this->_page + 1);
@@ -71,13 +85,26 @@ class Paginator
                 <li class="page-item disabled">
                     <a class="page-link" href="#" tabindex="-1">Previous</a>
                 </li>';
-            $html .= '<li class="page-item active"><a class="page-link" href="proyectos?limit=10&page=1">1</a></li>';
+            if ($_SERVER['PATH_INFO'] == '/proyecto') {
+                $html .= '<li class="page-item active"><a class="page-link" href="' . $url . '&limit=10&page=1">1</a></li>';
+            } else {
+                $html .= '<li class="page-item active"><a class="page-link" href="' . $url . '?limit=10&page=1">1</a></li>';
+            }
         } else {
-            $html .= '
+
+            if ($_SERVER['PATH_INFO'] == '/proyecto') {
+                $html .= '
                 <li class="page-item ">
-                    <a class="page-link" href="proyectos?limit=10&page= ' . $previus . '"' . ' tabindex="-1">Anterior</a>
+                    <a class="page-link" href="' . $url . '&limit=10&page=' . $previus . '"' . ' tabindex="-1">Anterior</a>
                 </li>';
-            $html .= '<li class="page-item"><a class="page-link" href="proyectos?limit=10&page=1">1</a></li>';
+                $html .= '<li class="page-item"><a class="page-link" href="' . $url . '&limit=10&page=1">1</a></li>';
+            } else {
+                $html .= '
+                <li class="page-item ">
+                    <a class="page-link" href="' . $url . '?limit=10&page=' . $previus . '"' . ' tabindex="-1">Anterior</a>
+                </li>';
+                $html .= '<li class="page-item"><a class="page-link" href="' . $url . '?limit=10&page=1">1</a></li>';
+            }
         }
 
 
@@ -85,11 +112,22 @@ class Paginator
         //current
 
         if ($this->_page > 1) {
-            $html .= '
-            <li class="page-item active">
-                <a class="page-link" href=" ' . $current . '">' . $current . '</a>  <span class="sr-only">(current)</span></a>
-            </li>
-            ';
+
+            if ($_SERVER['PATH_INFO'] == '/proyecto') {
+
+                $html .= '
+                    <li class="page-item active">
+                        <a class="page-link" href=" ' . $url . '&limit=10&page=' . $current . '">' . $current . '</a>  <span class="sr-only">(current)</span></a>
+                    </li>
+                    ';
+            } else {
+
+                $html .= '
+                    <li class="page-item active">
+                        <a class="page-link" href=" ' . $url . '?limit=10&page=' . $current . '">' . $current . '</a>  <span class="sr-only">(current)</span></a>
+                    </li>
+                    ';
+            }
         }
 
 
@@ -100,31 +138,54 @@ class Paginator
         if ($this->_page < ceil($this->_total / 10)) {
 
 
-            //Siguiente
-            $html .= '
-            <li class="page-item  ">
-                <a class="page-link" href="proyectos?limit=10&page= ' . $next . '"' . ' tabindex="-1"> ' . $next . '</a>
-            </li>';
+            if ($_SERVER['PATH_INFO'] == '/proyecto') {
+                //Siguiente
+                $html .= '
+                    <li class="page-item  ">
+                        <a class="page-link" href="' . $url . '&limit=10&page=' . $next . '"' . ' tabindex="-1"> ' . $next . '</a>
+                    </li>';
 
 
-            if ($next < ceil($this->_total / 10)) {
-                //ultimo
+                if ($next < ceil($this->_total / 10)) {
+                    //ultimo
+                    $html .= '
+                        <li class="page-item  ">
+                            <a class="page-link" href="' . $url . '&limit=10&page=' . ceil($this->_total / 10) . '"' . ' tabindex="-1"> ' . ceil($this->_total / 10) . '</a>
+                        </li>';
+                }
+
+
                 $html .= '
                 <li class="page-item  ">
-                    <a class="page-link" href="proyectos?limit=10&page= ' . ceil($this->_total / 10) . '"' . ' tabindex="-1"> ' . ceil($this->_total / 10) . '</a>
-                </li>';
-            }
-
-
-
-
-            $html .= '
-                <li class="page-item  ">
-                    <a class="page-link" href="proyectos?limit=10&page= ' . $next . '"' . ' tabindex="-1">Siguiente</a>
+                    <a class="page-link" href="' . $url . '&limit=10&page=' . $next . '"' . ' tabindex="-1">Siguiente</a>
                 </li>
                 </ul>
                 </nav>
                 ';
+            } else {
+                //Siguiente
+                $html .= '
+                <li class="page-item  ">
+                    <a class="page-link" href="' . $url . '?limit=10&page=' . $next . '"' . ' tabindex="-1"> ' . $next . '</a>
+                </li>';
+
+
+                if ($next < ceil($this->_total / 10)) {
+                    //ultimo
+                    $html .= '
+                <li class="page-item  ">
+                    <a class="page-link" href="' . $url . '?limit=10&page=' . ceil($this->_total / 10) . '"' . ' tabindex="-1"> ' . ceil($this->_total / 10) . '</a>
+                </li>';
+                }
+
+                $html .= '
+                <li class="page-item  ">
+                    <a class="page-link" href="' . $url . '?limit=10&page=' . $next . '"' . ' tabindex="-1">Siguiente</a>
+                </li>
+                </ul>
+                </nav>
+                ';
+            }
         }
 
         return $html;
