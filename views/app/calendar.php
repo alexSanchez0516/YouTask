@@ -40,6 +40,3 @@
 <script src='https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js'></script>
 <script type="text/javascript" src='build/js/main.js'></script>
 
-<script>
-    buildEvents()
-</script>
