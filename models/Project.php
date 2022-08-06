@@ -69,8 +69,53 @@ class Project extends ActiveRecord implements crud
      */
     public static function getTaskFinishQuantity()
     {
+        $user_id    = $_SESSION['user'];
+        $query      = "select count(*) as quantity from Tasks where (Tasks.state = 'REALIZADO' AND Tasks.adminID = $user_id) ";
+        return Users::getAnyQueryResult($query);
     }
 
+    /**
+     * @return Array
+     */
+    public static function getTaskQuantity()
+    {
+        $user_id    = $_SESSION['user'];
+        $query      = "select count(*) as quantity from Tasks where (Tasks.adminID = $user_id) ";
+        return Users::getAnyQueryResult($query);
+    }
+
+
+
+    /**
+     * @return Array
+     */
+    public static function getProjectsQuantity()
+    {
+        $user_id    = $_SESSION['user'];
+        $query      = "select count(*) as quantity from Projects where (Projects.adminID = $user_id) ";
+        return Users::getAnyQueryResult($query);
+    }
+
+    /**
+     * @return Array
+     */
+    public static function getTasksFinishedCurrentMonth($month)
+    {
+        $user_id    = $_SESSION['user'];
+        $query      = "select count(*) as quantity from Tasks where (Tasks.adminID = $user_id and month(date_end)=$month and Tasks.state = 'REALIZADO' ) ";
+        return Users::getAnyQueryResult($query);
+    }
+
+
+    /**
+     * @return Array
+     */
+    public static function getTasksCurrentMonth($month)
+    {
+        $user_id    = $_SESSION['user'];
+        $query      = "select count(*) as quantity from Tasks where (Tasks.adminID = $user_id and month(date_end)=$month) ";
+        return Users::getAnyQueryResult($query);
+    }
 
     /**
      * @return Array
@@ -451,5 +496,14 @@ class Project extends ActiveRecord implements crud
             }
         }
         return $isOrNo;
+    }
+
+    public  function getEvents()
+    {
+
+        $query      = "SELECT events.id as eventID, Task.id as taskID, Task.name as title, Task.description as description ,start, end FROM events INNER JOIN Tasks as Task on events.id_task = Task.id ";
+        $query     .= "WHERE Task.projectID = $this->id and state = 'EN PROCESO' order by events.create_at desc";
+
+        return Project::getAnyQueryResult($query);
     }
 }

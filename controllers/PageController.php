@@ -3,8 +3,6 @@
 namespace Controllers;
 
 use MVC\Router;
-use PHPMailer\PHPMailer\PHPMailer;
-use Model\Users;
 
 
 class PageController
@@ -12,5 +10,10 @@ class PageController
     public static function index(Router $router)
     {
         $router->render('pages/inicio', []);
+    }
+
+    public static function contact(Router $router)
+    {
+        $router->render('pages/contact', []);
     }
 }

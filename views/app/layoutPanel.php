@@ -19,6 +19,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/build/img/logo_oficial.png" type="image/x-icon">
     <link rel="stylesheet" href="../build/css/app.css">
+
     <!-- Primary Meta Tags -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>YouTask Panel</title>

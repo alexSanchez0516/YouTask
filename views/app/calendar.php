@@ -1,82 +1,45 @@
-
-<?php include_once __DIR__ . "/../templates/menuTopPanel.php";?>
+<?php include_once __DIR__ . "/../templates/menuTopPanel.php"; ?>
 
 
 <div class="content my-5">
+    <h2 class="text-center text-primary">EVENTOS</h2>
     <div id='calendar'></div>
-    sdsd
+
 </div>
 
-<script src='/build/fullcalendar/packages/core/main.js'></script>
-<script src='/build/fullcalendar/packages/interaction/main.js'></script>
-<script src='/build/fullcalendar/packages/daygrid/main.js'></script>
+<!-- Modal INFO TASK -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Tarea</h5>
+                <button type="button" class="btn-close" onclick="closeModal('#staticBackdrop')" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal__calendar_event">
+
+            </div>
+
+            <div class="modal-footer" id="modal__footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END MODAL INFO TASK -->
+
+
+
+<!-- Modal CREATE EVENT TASK -->
+<?php include_once __DIR__ . "/../templates/createEvents.php"; ?>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="build/css/main.css" />
+<script src='https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js'></script>
+<script type="text/javascript" src='build/js/main.js'></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['interaction', 'dayGrid'],
-            defaultDate: '2020-02-12',
-            editable: true,
-            eventLimit: true, // allow "more" link when too many events
-            events: [{
-                    title: 'All Day Event',
-                    start: '2020-02-01'
-                },
-                {
-                    title: 'Long Event',
-                    start: '2020-02-07',
-                    end: '2020-02-10'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2020-02-09T16:00:00'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2020-02-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2020-02-11',
-                    end: '2020-02-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2020-02-12T10:30:00',
-                    end: '2020-02-12T12:30:00'
-                },
-                {
-                    title: 'Lunch',
-                    start: '2020-02-12T12:00:00'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2020-02-12T14:30:00'
-                },
-                {
-                    title: 'Happy Hour',
-                    start: '2020-02-12T17:30:00'
-                },
-                {
-                    title: 'Dinner',
-                    start: '2020-02-12T20:00:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2020-02-13T07:00:00'
-                },
-                {
-                    title: 'Click for Google',
-                    url: 'http://google.com/',
-                    start: '2020-02-28'
-                }
-            ]
-        });
-
-        calendar.render();
-    });
+    buildEvents()
 </script>

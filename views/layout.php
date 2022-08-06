@@ -42,7 +42,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
                         <ul class="nav__list d-flex justify-content-around w-100 mt-3">
                             <li class="nav__item"><a href="/inicio" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Inicio</a></li>
-                            <li class="nav__item"><a href="" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Contacto</a></li>
+                            <li class="nav__item"><a href="/contacto" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Contacto</a></li>
 
                             <?php if (!array_key_exists('auth', $_SESSION)) : ?>
                                 <li class="nav__item"><a href="/registro" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Crear cuenta</a></li>
@@ -50,7 +50,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
 
                             <?php else : ?>
                                 <li class="nav__item"><a href="/panel" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Panel</a></li>
-                                <li class="nav__item"><a href="/logout" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Cerrar sesión</a></li>
+                                <li class="nav__item"><a href="/salir" class="nav__link text-decoration-none text-white" style="font-weight:bold;">Cerrar sesión</a></li>
                             <?php endif; ?>
                         </ul>
                     </div>
@@ -69,6 +69,14 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <script src="/build/js/bootstrap.min.js"></script>
     <script src="/build/js/jquery.min.js"></script>
 
+
+    <div class="cookies m-4">
+        <img src="/build/img/cookie.svg" alt="politicas de cookies" class="cookies-img w-25">
+        <h3 id="cookies__title">Cookies</h3>
+        <p id="cookies__text" class="text-center">Utilizamos cookies propias y de terceros para mejorar nuestros servicios.</p>
+        <button class="btn btn-primary" id="btn-aceptar-cookies">De acuerdo</button>
+        <a class="enlace" href="politica-cookies.html">Aviso de Cookies</a>
+    </div>
 
     <?php echo $content; ?>
 

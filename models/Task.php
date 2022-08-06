@@ -88,4 +88,32 @@ class Task extends ActiveRecord implements crud
 
         return $count[0]['total'];
     }
+
+    public static function getTaskByState($state, $limit)
+    {
+        $id = $_SESSION['user'];
+        $query = "SELECT * FROM Tasks WHERE adminID = $id AND state = '$state' ";
+        $query .=  "AND priority = 'ALTA' ORDER BY create_at DESC";
+
+        if ($limit > 0) {
+            $query .= " LIMIT $limit";
+        }
+
+        return Task::getAnyQueryResult($query);
+    }
+
+    public static function getTaskByMonth()
+    {
+        $month = date('m');
+
+        $day = date('d');
+
+        $id = $_SESSION['user'];
+        $query = "SELECT * FROM Tasks WHERE adminID = $id AND state = 'EN PROCESO' ";
+        $query .=  "AND priority = 'ALTA' AND (month(date_end) = $month AND day(date_end) <= $day) ORDER BY create_at DESC";
+
+
+
+        return Task::getAnyQueryResult($query);
+    }
 }

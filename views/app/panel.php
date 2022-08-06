@@ -1,4 +1,4 @@
-<?php if (empty($projects)) : ?>
+<?php if ($projects < 1) : ?>
     <div class="d-flex flex-column w-100 align-items-center mt-5" id="wrap_initials">
         <h1 class="w-100"><span class="badge bg-success w-100">Bienvenido a YouTask</span></h1>
         <div class="d-flex w-75 flex-column mt-4 justify-content-center">
@@ -26,39 +26,30 @@
             <h2 class="text-uppercase text-success">Últimos avances</h2>
             <div class="row w-100">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-info">
+                    <table class="table table-bordered table-light">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Tarea</th>
                                 <th scope="col">Projecto</th>
                                 <th scope="col">Inicio</th>
-                                <th scope="col">FIN</th>
+                                <th scope="col">Fin</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Mark</td>
-                                <td>15-02-2021</td>
-                                <td>15-02-2021</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Mark</td>
-                                <td>15-02-2021</td>
-                                <td>15-02-2021</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry the Bird</td>
-                                <td>Mark</td>
-                                <td>15-02-2021</td>
-                                <td>15-02-2021</td>
-                            </tr>
+
+
+                            <?php foreach ($lastProgress as $project) : ?>
+                                <tr>
+                                    <th scope="row"><?php echo $project['id']; ?></th>
+                                    <td><?php echo $project['name'] ?></td>
+                                    <td><?php echo $project['NameProject']; ?></td>
+                                    <td><?php echo $project['create_at']; ?></td>
+                                    <td><?php echo $project['date_end']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -68,16 +59,15 @@
                         <h3 class="text-center fs-6">Tareas Acabadas</h3>
                         <div class="d-flex w-100 align-items-center">
                             <div class="progress w-100">
-                                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                <div class="progress-bar" role="progressbar" style="width: <?php echo $porcentTasks . '%'; ?>" aria-valuenow="<?php echo $porcentTasks; ?>" aria-valuemin="0" aria-valuemax="100"><?php echo $porcentTasks . '%'; ?></div>
                             </div>
-                            <span class="mx-2">14</span>
+                            <span class="mx-2"><?php echo $TaskQuantity; ?></span>
                         </div>
                     </div>
                     <div class="col-12 d-flex darkWhiteSpecial shadow col-sm-4 col-md-3 mt-3 flex-column align-items-center">
-                        <span class="mx-2 text-center text-white border bg-success rounded w-30">564</span>
+                        <span class="mx-2 text-center text-white border bg-success rounded w-30"><?php echo $ProjectsQuantity ?></span>
                         <div class="d-flex w-100 justify-content-evenly align-items-center">
-                            <h4 class="text-center fs-6">Nuevos Proyectos</h4>
-                            <!--<img src="build/img/graph.webp" alt="" class="img-responsive" style="width: 70px;">-->
+                            <h4 class="text-center fs-6">Cantidad Proyectos</h4>
                             <i class="far fa-chart-bar fs-1 mx-2"></i>
                         </div>
                     </div>
@@ -87,9 +77,9 @@
                         <h3 class="text-center fs-6">Avance del mes</h3>
                         <div class="d-flex w-100 align-items-center">
                             <div class="progress w-100">
-                                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                <div class="progress-bar" role="progressbar" style="width: <?php echo $porcentTasksMonth . '%'; ?>" aria-valuenow="<?php echo $porcentTasksMonth; ?>" aria-valuemin="0" aria-valuemax="100"><?php echo $porcentTasksMonth . '%'; ?></div>
                             </div>
-                            <span class="mx-2">14</span>
+                            <span class="mx-2"><?php echo $taskMonth; ?></span>
                         </div>
                     </div>
                 </div>
@@ -97,137 +87,64 @@
         </div>
     </div>
 
+    <?php //debug($tasks); 
+    ?>
     <div class="row align-items-center my-3">
-        <span class="col-12 text-center my-2 fs-3">Tareas diarias</span>
+        <span class="col-12 text-center my-2 fs-3 text-success">Tareas prioritarias</span>
         <div class="col-12 d-flex flex-column align-items-center">
-            <div class="row">
-                <div class="d-flex flex-column align-items-center">
-                    <span class="w-100 text-center my-2">10:00</span>
-                    <div class="d-flex w-100 justify-content-center align-items-center">
-                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-danger">
-                            <span class="w-100 text-center">Design meeting</span>
-                            <span class="w-100 text-center">11:00 - 11:30</span>
+            <div class="row w-md-75 w-100 d-flex justify-content-center">
+                <div class="col-md-10 col-12 d-flex flex-wrap justify-content-center">
+                    <?php foreach ($tasks as $task) : ?>
+                        <div class="card m-2 shadow border rounded" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary"><a href="/tarea?id=<?php echo $task['id'] ?>"><?php echo $task['name'] ?></a></h5>
+                                <p class="card-text"><strong>Resumen:</strong> <?php echo $task['description'] ?></p>
+                                <span><span class="text-danger">Fecha Fin:</span> <?php echo substr($task['date_end'], 0, 11) ?></span>
+                            </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="d-flex flex-column align-items-center mt-3">
-                    <span class="w-100 text-center my-3">11:00</span>
-                    <div class="d-flex w-100">
-                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-info">
-                            <span class="w-100 text-center">Design meeting</span>
-                            <span class="w-100 text-center">11:00 - 11:30</span>
-                        </div>
-                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-success">
-                            <span class="w-100 text-center">Design meeting</span>
-                            <span class="w-100 text-center">11:00 - 11:30</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex flex-column align-items-center mt-3">
-                    <span class="w-100 text-center my-3">11:00</span>
-                    <div class="d-flex w-100">
-                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center bg-secondary">
-                            <span class="w-100 text-center">Design meeting</span>
-                            <span class="w-100 text-center">11:00 - 11:30</span>
-                        </div>
-                        <div class="d-flex flex-column p-2 rounded w-100 align-items-center mx-2 bg-primary">
-                            <span class="w-100 text-center">Design meeting</span>
-                            <span class="w-100 text-center">11:00 - 11:30</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </div>
     </div>
 
     <div class="row align-items-center mt-4">
-        <h3 class="text-center text-success my-3">Tareas Semanal</h3>
+        <h3 class="text-center text-success my-3">Tareas (MES)</h3>
         <div class="table-responsive">
-            <table class="table table-bordered table-info">
+            <table class="table table-bordered table-dark">
                 <thead>
                     <tr>
                         <th scope="col">Prioridad</th>
                         <th width="40%" scope="col">Tarea</th>
-                        <th scope="col">Miembros</th>
+                        <th scope="col">Descripcion</th>
                         <th scope="col">Estado</th>
                         <th scope="col">fecha</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                        <td>Validation HTML</td>
-                        <td>juan, andres, pedro</td>
-                        <td class="bg-warning text-white border rounded">En Progreso</td>
-                        <td>15-02-2021</td>
+                    <?php foreach ($tasksMonth as $task) : ?>
+                        <?php //debug($task); 
+                        ?>
+                        <tr>
+                            <?php if ($task['priority'] == 'ALTA') : ?>
+                                <th class="bg-danger text-white border rounded" scope="row"><?php echo $task['priority']; ?></th>
+                            <?php elseif ($task['priority'] == 'MEDIA') : ?>
+                                <th class="bg-secondary text-white border rounded" scope="row"><?php echo $task['priority']; ?></th>
+                            <?php elseif ($task['priority'] == 'BAJA') : ?>
+                                <th class="bg-primary text-white border rounded" scope="row"><?php echo $task['priority']; ?></th>
+                            <?php endif; ?>
 
-                    </tr>
-                    <tr>
-                        <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                        <td>Fixed DB Error</td>
-                        <td>Thornton</td>
-                        <td class="bg-success text-white border rounded">Acabada</td>
-                        <td>15-02-2021</td>
+                            <th class="bg-primary text-white border rounded" scope="row"><?php echo $task['name']; ?></th>
+                            <td><?php echo $task['description']; ?></td>
 
-                    </tr>
-                    <tr>
-                        <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                        <td>Configure apache</td>
-                        <td>Juan, messi, kids</td>
-                        <td class="bg-warning text-white border rounded">En Progreso</td>
-                        <td>15-02-2021</td>
 
-                    </tr>
-                    <tr>
-                        <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                        <td>Validation HTML</td>
-                        <td>juan, andres, pedro</td>
-                        <td class="bg-warning text-white border rounded">En Progreso</td>
-                        <td>15-02-2021</td>
+                            <td class="bg-success text-white border rounded"><?php echo $task['state']; ?></td>
+                            <td><?php echo $task['date_end']; ?></td>
 
-                    </tr>
-                    <tr>
-                        <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                        <td>Fixed DB Error</td>
-                        <td>Thornton</td>
-                        <td class="bg-success text-white border rounded">Acabada</td>
-                        <td>15-02-2021</td>
+                        </tr>
+                    <?php endforeach; ?>
 
-                    </tr>
-                    <tr>
-                        <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                        <td>Configure apache</td>
-                        <td>Juan, messi, kids</td>
-                        <td class="bg-warning text-white border rounded">En Progreso</td>
-                        <td>15-02-2021</td>
-
-                    </tr>
-                    <tr>
-                        <th class="bg-danger text-white border rounded" scope="row">Alta</th>
-                        <td>Validation HTML</td>
-                        <td>juan, andres, pedro</td>
-                        <td class="bg-warning text-white border rounded">En Progreso</td>
-                        <td>15-02-2021</td>
-
-                    </tr>
-                    <tr>
-                        <th class="bg-success text-white border rounded" scope="row">Baja</th>
-                        <td class="">Fixed DB Error</td>
-                        <td>Thornton</td>
-                        <td class="bg-success text-white border rounded">Acabada</td>
-                        <td>15-02-2021</td>
-
-                    </tr>
-                    <tr>
-                        <th class="text-white bg-secondary border rounded" scope="row">Media</th>
-                        <td>Configure apache</td>
-                        <td>Juan, messi, kids</td>
-                        <td class="bg-warning text-white border rounded">En Progreso</td>
-                        <td>15-02-2021</td>
-
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -235,7 +152,5 @@
     <div class="row">
 
     </div>
-
-
 
 <?php endif; ?>

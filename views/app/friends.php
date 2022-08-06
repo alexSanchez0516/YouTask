@@ -4,7 +4,7 @@
   <h4 class="text-center" id="countFriends"></h4>
 </div>
 
-<div class="row w-100 justify-content-center mb-5"> ">
+<div class="row w-100 justify-content-center mb-5">
   <form class="d-flex flex-column col-10 col-sm-5 col-lg-4 my-2 my-lg-0">
     <input class="form-control mb-2 mr-sm-2" minlength="3" name="profile" type="text" id="search_profile" placeholder="Search">
     <button id="btn__search__friends" class="btn btn-outline-dark mb-2 my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modal__profiles" type="button">Search</button>

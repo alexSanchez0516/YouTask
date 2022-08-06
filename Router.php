@@ -28,7 +28,7 @@ class Router
 
         self::$urlsProtected = ['/crear-post', '/miembros-proyecto', '/actualizar-proyecto', '/actualizar-tarea', '/modificar-post', '/panel', '/mensajes', '/post', '/posts', '/actividad', '/perfil', '/seguidores', '/seguidor', '/editar-perfil', '/crear-proyecto', '/crear-tarea', '/calendario', '/proyectos', '/proyecto', '/tareas', '/tarea'];
 
-        self::$currentUrl = $_SERVER['PATH_INFO'] ?? '/';
+        self::$currentUrl = $_SERVER['REQUEST_URI'] === '' ? '/' : $_SERVER['REQUEST_URI'];
 
 
         /*problema con los parametros en la url,

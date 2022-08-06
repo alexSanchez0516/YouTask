@@ -66,8 +66,9 @@
         </div>
 
         <div class="col-12 d-flex justify-content-between">
+            <button onclick="window.location.href='/tarea?id=<?php echo $_GET['id']; ?>'" type="button" class="btn btn-primary m-2">Ir atrás</button>
             <button type="submit" class="btn btn-primary py-2 my-2">Guardar</button>
-            <button onclick="window.location.href='/tarea?id=<?php echo $_GET['id']; ?>'" type="button" class="btn btn-primary">Ir atrás</button>
+
         </div>
     </form>
 </div>

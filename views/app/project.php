@@ -18,7 +18,11 @@
 
                 <?php if ($admin) : ?>
                     <button type="button" onclick="window.location='/actualizar-proyecto?id=<?php echo $project->id; ?>'" class="btn btn-sm btn-default pull-right"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                    <button type="button" onclick="createEventC()" class="btn btn-sm btn-default pull-right"><i class="fa-solid fa-plus"></i> Crear evento</button>
+
                 <?php endif; ?>
+                <button onclick="window.location.href='/proyectos?limit=10&page=1'" type=" button" class="btn "><i class="fa-solid fa-arrow-rotate-left"></i></button>
+
 
                 <p><?php echo $project->description; ?></p>
                 <div class="row">
@@ -43,6 +47,23 @@
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="<?php echo $progress ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress ?>%"></div>
                                 </div>
                             </div>
+
+                            <div class="col-md-10 col-12 my-2 grid-template-col-2 p-3 mt-2">
+                                <?php foreach ($events as $event) : ?>
+                                    <div class="card m-2 shadow " style="width: 18rem;">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title text-success"><a class="text-success" href="/tarea?id=<?php echo $event['taskID'] ?>"><?php echo $event['title'] ?></a></h5>
+                                            <span><span class="text-primary">Inicio:</span> <?php echo substr($event['start'], 0, 11) ?></span>
+                                            <span><span class="text-danger">Fin:</span> <?php echo substr($event['end'], 0, 11) ?></span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <div id="calendar">
+
+                            </div>
+
 
                             <div class="col-md-12 my-4">
                                 <div class="d-flex flex-column align-items-center">
@@ -303,12 +324,6 @@
 
 
 
-
-
-
-
-
-
 <div class="modal fade" id="modal_send_message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -333,6 +348,8 @@
     </div>
 </div>
 
+<!-- Modal CREATE EVENT TASK -->
+<?php include_once __DIR__ . "/../templates/createEvents.php"; ?>
 
 <!-- Modal -->
 <div class="modal fade" id="modal__profiles" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

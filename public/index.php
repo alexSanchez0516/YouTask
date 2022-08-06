@@ -18,6 +18,7 @@ $router->post('/', [PageController::class, 'index']);
 $router->get('/', [PageController::class, 'index']);
 $router->get('/inicio', [PageController::class, 'index']);
 $router->post('/inicio', [PageController::class, 'index']);
+$router->get('/contacto', [PageController::class, 'contact']);
 
 
 //AUTH
@@ -210,7 +211,11 @@ $router->post('/api/sendCommentChat', [APIController::class, 'sendCommentChat'])
 $router->post('/api/showMessagesTask', [APIController::class, 'showMessagesTask']);
 
 
+$router->post('/api/getEventsTask', [APIController::class, 'getEventsTask']);
+$router->get('/api/getEvents', [APIController::class, 'getEvents']);
 
+
+$router->post('/api/createEventC', [APIController::class, 'createEventC']);
 
 
 $router->checkRutes();

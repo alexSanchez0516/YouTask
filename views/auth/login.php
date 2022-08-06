@@ -25,7 +25,7 @@
                                     <h3 class="mb-4">Iniciar</h3>
                                 </div>
                             </div>
-                            <form action="/login" class="signin-form" method="post">
+                            <form action="/login" class="signin-form" id="form_login" method="post">
                                 <div class="form-group mb-3">
                                     <label class="label" for="name">Email</label>
                                     <input type="email" class="form-control" value="<?php echo s($user->email) ?> " name="email" placeholder="email" required>
@@ -34,8 +34,12 @@
                                     <label class="label" for="password">Contraseña</label>
                                     <input type="password" class="form-control" name="password" placeholder="Password" required>
                                 </div>
+
+
                                 <div class="form-group">
-                                    <button type="submit" class="form-control btn btn-dark submit px-3">Ingresar</button>
+                                    <button type="submit" class="form-control btn btn-dark submit px-3">
+                                        Ingresar
+                                    </button>
                                 </div>
                                 <div class="form-group d-md-flex mt-2">
                                     <div class="w-50 text-left">

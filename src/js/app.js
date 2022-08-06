@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   let currentURL = window.location.pathname
+  destroyCookies()
 
   checkPassword()
   checkAlerts()
@@ -37,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
     loadBtnUploadFileProject()
     searchMembers()
     getTasksPaginate()
-
     getEntityByName('Tasks')
 
     setInterval(() => {
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 async function showMessagesTask() {
-  let url = 'http://127.0.0.1:8080/api/showMessagesTask'
+  let url = 'https://youtask.es/api/showMessagesTask'
   const data = new FormData()
   let id_task = getParameterByName('id')
   data.append('id_task', id_task)
@@ -111,7 +111,7 @@ function buildMessagesTask(messages) {
 
 async function sendMessageTask() {
   const data = new FormData()
-  let url = 'http://127.0.0.1:8080/api/sendCommentChat'
+  let url = 'https://youtask.es/api/sendCommentChat'
   let id_task = getParameterByName('id')
   data.append('id_task', id_task)
   const msgTask = document.querySelector('#msgTask').value
@@ -156,7 +156,7 @@ function validateMessage(message) {
  * @return [type]
  */
 async function dissmisAdmin(id_user) {
-  let url = 'http://127.0.0.1:8080/api/dismisAdminByProject'
+  let url = 'https://youtask.es/api/dismisAdminByProject'
   const data = new FormData()
   let id_project = getParameterByName('id')
   data.append('id_project', id_project)
@@ -206,7 +206,7 @@ async function dissmisAdmin(id_user) {
  * @return [type]
  */
 async function dataMessageGeneral(receiver) {
-  let url = 'http://127.0.0.1:8080/api/chat/app/send-message'
+  let url = 'https://youtask.es/api/chat/app/send-message'
 
   const send_msg_members_page = document.querySelector('#send_msg_members_page')
   $('#send_msg_members_page').click((event) => {
@@ -263,7 +263,7 @@ async function converAdmin(id_user) {
       return
     }
 
-    let url = 'http://127.0.0.1:8080/api/insertAdminByProject'
+    let url = 'https://youtask.es/api/insertAdminByProject'
     const data = new FormData()
     let id_project = getParameterByName('id')
     data.append('id_user', id_user)
@@ -421,7 +421,7 @@ async function deleteCommentTask(id) {
  */
 async function sendInvitationProject(id_user) {
   const data = new FormData()
-  let url = 'http://127.0.0.1:8080/api/sendInvitationProject'
+  let url = 'https://youtask.es/api/sendInvitationProject'
   let id_project = getParameterByName('id')
 
   data.append('id_project', id_project)
@@ -452,7 +452,7 @@ async function sendInvitationProject(id_user) {
 function searchMembers() {
   const member_project = document.querySelector('#member_project')
   const data = new FormData()
-  let url = 'http://127.0.0.1:8080/api/getFriendsNotMembersByGroup'
+  let url = 'https://youtask.es/api/getFriendsNotMembersByGroup'
   let id_project = getParameterByName('id')
   let template = ''
   //content__profiles
@@ -537,7 +537,7 @@ function loadBtnUploadFileProject() {
  * @return [type]
  */
 async function deleteFileByProject(nameFile) {
-  let url = 'http://127.0.0.1:8080/api/deleteFileByProject'
+  let url = 'https://youtask.es/api/deleteFileByProject'
   const data = new FormData()
   let idProject = getParameterByName('id')
   data.append('name', nameFile)
@@ -645,7 +645,7 @@ function validateDataTask() {
 }
 
 async function sendTaskByProject(formdata) {
-  let url = 'http://127.0.0.1:8080/api/addTaskByProject'
+  let url = 'https://youtask.es/api/addTaskByProject'
   const request = await fetch(url, {
     method: 'POST',
     body: formdata,
@@ -674,7 +674,7 @@ async function sendTaskByProject(formdata) {
  */
 async function sendMessagesProject() {
   let msg = document.querySelector('#msg_project').value
-  let url = 'http://127.0.0.1:8080/api/sendMessageProject'
+  let url = 'https://youtask.es/api/sendMessageProject'
   let project_id = getParameterByName('id')
   const data = new FormData()
 
@@ -704,7 +704,7 @@ async function sendMessagesProject() {
  * @return [type]
  */
 async function getMessagesProjects() {
-  let url = 'http://127.0.0.1:8080/api/getMessagesProjects'
+  let url = 'https://youtask.es/api/getMessagesProjects'
   const data = new FormData()
   let id = Number(getParameterByName('id'))
   data.append('id', id)
@@ -761,7 +761,7 @@ async function deleteListProject(id) {
 
 async function getListByProject() {
   let id = getParameterByName('id')
-  let url = 'http://127.0.0.1:8080/api/to-do-list'
+  let url = 'https://youtask.es/api/to-do-list'
   const data = new FormData()
   data.append('id', id)
 
@@ -794,7 +794,7 @@ async function showContacts() {
   const container__users = document.querySelector('#container__users')
 
   try {
-    const url = 'http://127.0.0.1:8080/api/friends'
+    const url = 'https://youtask.es/api/friends'
     const result = await fetch(url)
     let template = ''
     const friends = await result.json()
@@ -847,7 +847,7 @@ function setMessages(contact, execution) {
   if (execution != contact.dataset.chat) {
     let idSelected = Number(contact.getAttribute('data-chat'))
 
-    let url_api = 'http://127.0.0.1:8080/api/chat/app'
+    let url_api = 'https://youtask.es/api/chat/app'
     $.post(url_api, { idSelected }, (response) => {
       const mensages = JSON.parse(response)
 
@@ -900,7 +900,7 @@ function setMessages(contact, execution) {
 function sendMessage(message) {
   const receiver = $('#chat__box__container').attr('data-id')
   $.post(
-    'http://127.0.0.1:8080/api/chat/app/send-message',
+    'https://youtask.es/api/chat/app/send-message',
     { receiver, message },
     (response) => {
       const dataID = document
@@ -923,7 +923,7 @@ function createSkill() {
   const btn_close_skill_user = document.querySelector('#btn_close_skill_user')
   const skills_data = document.querySelector('#skills_data')
 
-  $.post('http://127.0.0.1:8080/api/create-skill', { skill }, (response) => {
+  $.post('https://youtask.es/api/create-skill', { skill }, (response) => {
     let result = JSON.parse(response)
 
     if (result) {
@@ -948,12 +948,12 @@ function getSkills() {
 
   const container_skills = document.querySelector('#container_skills')
   let template = ''
-  $.get('http://127.0.0.1:8080/api/get-skills', (response) => {
+  $.get('https://youtask.es/api/get-skills', (response) => {
     const skills = JSON.parse(response)
 
     skills.forEach((skill) => {
       $.post(
-        'http://127.0.0.1:8080/api/check-skill',
+        'https://youtask.es/api/check-skill',
         { skill: skill.id },
         (response) => {
           if (response != null) {
@@ -1018,7 +1018,7 @@ function getRequestsFollow() {
 
   const found = rutesNoProtected.find((r) => r == currentURL)
   if (found == undefined) {
-    let url = 'http://127.0.0.1:8080/api/show-requests-followers'
+    let url = 'https://youtask.es/api/show-requests-followers'
     const wrap__notifications = document.querySelector('#wrap__notifications')
 
     $.get(url, (response) => {
@@ -1077,7 +1077,7 @@ async function getEntityByName(entity) {
  */
 async function getProjectsPaginate(filter = null, value = null) {
   const data = new FormData()
-  let url = 'http://127.0.0.1:8080/api/get-projects-paginate'
+  let url = 'https://youtask.es/api/get-projects-paginate'
   let page = getParameterByName('page')
   let limit = getParameterByName('limit')
 
@@ -1109,7 +1109,7 @@ async function getTasksPaginate(filter = null, value = null) {
   let currentURL = window.location.pathname
 
   const data = new FormData()
-  let url = 'http://127.0.0.1:8080/api/get-tasks-paginate'
+  let url = 'https://youtask.es/api/get-tasks-paginate'
   let page = getParameterByName('page')
   let limit = getParameterByName('limit')
 
@@ -1144,7 +1144,7 @@ async function deleteAny(id, table) {
   //comprobar si es admin o creator
 
   /*
-  let url_check = 'http://127.0.0.1:8080/api/checkAdminOrCreator'
+  let url_check = 'https://youtask.es/api/checkAdminOrCreator'
   let currentURL = window.location.pathname
   const data_check = new FormData()
 
@@ -1168,7 +1168,7 @@ async function deleteAny(id, table) {
 
   if (true) {
     const data = new FormData()
-    let url = 'http://127.0.0.1:8080/api/delete'
+    let url = 'https://youtask.es/api/delete'
 
     let currentURL = window.location.pathname
     data.append('table', table)
@@ -1281,7 +1281,7 @@ function buildProjects(projects) {
   let template = ''
   let templateIMG = ''
   const content_projects = document.querySelector('#content_projects')
-  let url = 'http://127.0.0.1:8080/api/getMembersByProject'
+  let url = 'https://youtask.es/api/getMembersByProject'
 
   projects.forEach((project) => {
     if (project != null) {
@@ -1372,7 +1372,7 @@ function buildMembers() {
 }
 
 async function getMembers(project_id) {
-  let url = 'http://127.0.0.1:8080/api/getMembersByProject'
+  let url = 'https://youtask.es/api/getMembersByProject'
   const data = new FormData()
   let currentURL = window.location.pathname
   data.append('id', project_id)
@@ -1393,7 +1393,7 @@ async function getMembers(project_id) {
 
 function accept_request_follower(id_request) {
   $.post(
-    'http://127.0.0.1:8080/api/accept-follower',
+    'https://youtask.es/api/accept-follower',
     { id_request },
     (response) => {
       if (response) {
@@ -1406,7 +1406,7 @@ function accept_request_follower(id_request) {
 }
 
 function reject_request_follower(id_request) {
-  let url = 'http://127.0.0.1:8080/api/accept-reject'
+  let url = 'https://youtask.es/api/accept-reject'
   if (id_request != null) {
     $.post(url, { id_request }, (response) => {
       if (response) {
@@ -1419,7 +1419,7 @@ function reject_request_follower(id_request) {
 function send_request_friend(receiver) {
   if (receiver != null) {
     $.post(
-      'http://127.0.0.1:8080/api/send-resquest-friend',
+      'https://youtask.es/api/send-resquest-friend',
       { receiver },
       (response) => {
         Swal.fire(response)
@@ -1446,7 +1446,7 @@ function search_profile() {
 
       $.ajax({
         //get obtener algo y post para enviar
-        url: 'http://127.0.0.1:8080/api/search-friends-for-name',
+        url: 'https://youtask.es/api/search-friends-for-name',
         type: 'POST',
         data: { search },
         success: (response) => {
@@ -1459,7 +1459,7 @@ function search_profile() {
                 console.log(profile)
                 let id = profile.id
                 $.post(
-                  'http://127.0.0.1:8080/api/check-request-follower',
+                  'https://youtask.es/api/check-request-follower',
                   { id },
                   (response) => {
                     template += `<div class="d-flex flex-column align-items-center ">
@@ -1524,7 +1524,7 @@ function search_profile() {
  * @return [type]
  */
 function send_response_comment() {
-  let url = 'http://127.0.0.1:8080/api/send_response_comment'
+  let url = 'https://youtask.es/api/send_response_comment'
 
   let currentURL = window.location.href
 
@@ -1557,7 +1557,7 @@ function deletePost() {
     if (confirm('¿Seguro que quieres eliminar este post?')) {
       let id_element = element.target.dataset.id
       $.post(
-        'http://127.0.0.1:8080/api/post/delete',
+        'https://youtask.es/api/post/delete',
         { id_element },
         (response) => {
           listPosts()
@@ -1570,7 +1570,7 @@ function deletePost() {
 function update_post() {
   $(document).on('click', '#update_post', (element) => {
     let id_element = element.target.dataset.id
-    window.location.href = `http://127.0.0.1:8080/modificar-post?id=${id_element}`
+    window.location.href = `https://youtask.es/modificar-post?id=${id_element}`
   })
 }
 
@@ -1581,7 +1581,7 @@ function deleteFriend() {
         element.target.parentElement.parentElement.children[2].textContent
 
       $.post(
-        'http://127.0.0.1:8080/api/friends/delete',
+        'https://youtask.es/api/friends/delete',
         { id_element },
         (response) => {
           showFriends()
@@ -1613,7 +1613,7 @@ async function showFriends() {
   let currentURL = window.location.pathname
 
   try {
-    const url = 'http://127.0.0.1:8080/api/friends'
+    const url = 'https://youtask.es/api/friends'
     const result = await fetch(url)
     const friends = await result.json()
     if (currentURL == '/seguidores') {
@@ -1643,7 +1643,7 @@ async function listPosts() {
 
   if (currentURL == '/posts' || currentURL == '/perfil') {
     try {
-      const url = 'http://127.0.0.1:8080/api/posts'
+      const url = 'https://youtask.es/api/posts'
       const result = await fetch(url)
 
       const posts = await result.json()
@@ -1722,6 +1722,178 @@ async function listPosts() {
     }
   }
 }
+
+/**
+ * @return [type]
+ */
+async function getEvents() {
+  let url = 'https://youtask.es/api/getEvents'
+
+  const request = await fetch(url, {
+    method: 'GET',
+  })
+
+  const response = await request.json()
+
+  return response
+}
+
+/**
+ * @return [type]
+ */
+async function buildEvents() {
+  console.log('cargando eventos')
+
+  const events = await getEvents()
+  const start_event = document.querySelector('#start_event')
+  const modalEvent = document.querySelector('#staticBackdrop')
+  const body__calendar_event = modalEvent.querySelector(
+    '#modal__calendar_event',
+  )
+  const modal__footer = modalEvent.querySelector('#modal__footer')
+
+  var calendarEl = document.getElementById('calendar')
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'es',
+    events: events,
+    dateClick: function (info) {
+      start_event.value = info.dateStr
+      const modalCreateEvent = document.querySelector('#modalCreateEvent')
+      modalCreateEvent.classList.add('show')
+      //alert('Clicked on: ' + info.dateStr)
+      //alert('Current view: ' + info.view.type)
+    },
+    eventClick: function (info) {
+      let init = info.event._instance.range.start.toLocaleDateString()
+      let end = info.event._instance.range.end.toLocaleDateString()
+
+      let templateModalEvent = ''
+      modalEvent.classList.add('show')
+      templateModalEvent = `
+        <div class="row">
+          <div class="col-12- col-md-10 d-flex flex-column flex-wrap">
+            <h3><a class="text-decoration-none text-dark text-capitalize" href="/tarea?id=${info.event.extendedProps.taskID}">
+            ${info.event.title}</a></h3>
+            <p>${info.event.extendedProps.description}</p>
+            <span>Inicio: ${init}</span>
+            <span>Fin: ${end}</span>
+          </div>
+        </div>
+      `
+      body__calendar_event.innerHTML = templateModalEvent
+      modal__footer.innerHTML = ` 
+      <button type="button" id="btn_close_modal_event" data-dismiss="#staticBackdrop" class="btn btn-secondary" onclick="closeModal('#staticBackdrop')">Cerrar</button>
+      <button type="button" onclick="deleteEvent(${info.event.extendedProps.eventID})" class="btn btn-danger">Eliminar</button>
+      `
+    },
+  })
+  calendar.render()
+}
+
+/**
+ * @return [type]
+ */
+function closeModal(modal) {
+  $(modal).removeClass('show')
+}
+
+/**
+ * @return [type]
+ */
+async function createEventC() {
+  const modalCreateEvent = document.querySelector('#modalCreateEvent')
+  modalCreateEvent.classList.add('show')
+
+  const data = new FormData()
+  let url = 'https://youtask.es/api/createEventC'
+
+  let id_task = document.querySelector('#id_task').value
+
+  let init = document.querySelector('#start_event')
+  let end = document.querySelector('#end_event')
+
+  try {
+    //validamos fechas
+    if (!ValidateDateEvent(init.valueAsDate, end.valueAsDate)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Fechas incorrectas',
+      })
+      return
+    }
+
+    data.append('id_task', id_task)
+    data.append('start', init.value)
+    data.append('end', end.value)
+
+    const request = await fetch(url, {
+      method: 'POST',
+      body: data,
+    })
+
+    const response = await request.json()
+
+    if (!response) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '¡Ha ocurrido un error!',
+      })
+      return
+    }
+
+    Swal.fire('Evento creado correctamente', '', 'success')
+    closeModal('#modalCreateEvent')
+    init.value = ''
+    end.value = ''
+
+    buildEvents()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+/**
+ * @param mixed eventID
+ *
+ * @return [type]
+ */
+async function deleteEvent(eventID) {
+  await deleteAny(eventID, 'events')
+  buildEvents()
+  closeModal('#staticBackdrop')
+
+  console.log('delete')
+}
+
+/**
+ * @param date init
+ * @param date end
+ *
+ * @return bool
+ */
+function ValidateDateEvent(init, end) {
+  let result = true
+  const xhoy = new Date()
+
+  xhoy.setMilliseconds(0)
+  xhoy.setSeconds(0)
+  xhoy.setMinutes(0)
+  xhoy.setHours(0)
+
+  init.setMilliseconds(0)
+  init.setSeconds(0)
+  init.setMinutes(0)
+  init.setHours(0)
+
+  result = init <= end && init >= xhoy
+
+  return result
+}
+
+function getEventsByTask() {}
 
 /**
  * @param mixed friends
@@ -1851,4 +2023,35 @@ function showMenuResponse() {
       nav__list.classList.toggle('flex-column')
     })
   }
+}
+
+function onSubmit(token) {
+  document.getElementById('form_login').submit()
+}
+
+function destroyCookies() {
+  const accept_cookies = document.querySelector('#btn-aceptar-cookies')
+  const cookies = document.querySelector('.cookies')
+
+  if (cookies == null) {
+    return
+  }
+
+  dataLayer = []
+
+  if (!localStorage.getItem('cookies-aceptadas')) {
+    cookies.classList.add('activo')
+  } else {
+    dataLayer.push({ event: 'cookies-aceptadas' })
+    cookies.remove()
+  }
+
+  accept_cookies.addEventListener('click', () => {
+    console.log('click')
+    cookies.remove()
+
+    localStorage.setItem('cookies-aceptadas', true)
+
+    dataLayer.push({ event: 'cookies-aceptadas' })
+  })
 }

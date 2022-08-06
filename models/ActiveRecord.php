@@ -265,10 +265,8 @@ class ActiveRecord
     {
         $query = "SELECT * FROM " . static::$tabla  . " WHERE ${col} = '${item}' ";
 
-
-
-
         $data = static::consulSQL($query);
+
         if ($isAll) {
             return $data;
         }

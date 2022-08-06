@@ -10,6 +10,9 @@
                         <button type="button" style="float:right;" onclick="window.location='/actualizar-tarea?id=<?php echo $Task->id; ?>'" class="btn btn-sm btn-default pull-right"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
                     <?php endif;
                     ?>
+
+                    <button onclick="window.location.href='/tareas?limit=10&page=1'" type=" button" class="btn btn-secondary"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+
                     <h2 class="m-b-20 fg-posts_title my-4 text-center text-uppercase"><?php echo $Task->name; ?></h4>
 
                         <div class="row my-4">
@@ -70,6 +73,7 @@
                 </div>
 
             </div>
+
             <!-- end col -->
             <div class="col-lg-12">
                 <div class="card-box d-flex flex-column align-items-center">

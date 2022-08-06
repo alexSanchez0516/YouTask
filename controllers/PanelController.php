@@ -21,10 +21,32 @@ class PanelController
         $project = new Project();
         $user = $_SESSION['user'];
         $typeAlert = false;
-
+        $tasks = Task::getTaskByState('EN PROCESO', 10); //falta filtrar por dia
+        $tasksMonth = Task::getTaskByMonth();
         $lastProgress = Project::getLastProgress(4);
+        $TaskFinishQuantity = intval(Project::getTaskFinishQuantity()[0]['quantity']);
+        $ProjectsQuantity = intval(Project::getProjectsQuantity()[0]['quantity']);
+        $TaskQuantity = intval(Project::getTaskQuantity()[0]['quantity']);
+        $porcentTasks = null;
+        $porcentTasksMonth = 0;
+        $currentDate = getdate();
+        $month = $currentDate['mon'];
+        $taskMonth =  intval(Project::getTasksCurrentMonth($month)[0]['quantity']);
+        $taskMonthFinish = intval(Project::getTasksFinishedCurrentMonth($month)[0]['quantity']);
 
-        //debug($lastProgress);
+
+        //debug($tasksMonth);
+
+        try {
+            $porcentTasks = ceil(((($TaskFinishQuantity / $TaskQuantity) * 100) * 100) / 100);
+            if ($taskMonth > 0) {
+                $porcentTasksMonth = ceil(((($taskMonthFinish / $taskMonth) * 100) * 100) / 100);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+
 
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,7 +64,15 @@ class PanelController
             'user' => $user,
             'alerts' => Project::getAlerts(),
             'typeAlert' => $typeAlert,
-            'projects' => $project->getAllC($user)
+            'projects' => $ProjectsQuantity,
+            'lastProgress' => $lastProgress,
+            'porcentTasks' => $porcentTasks,
+            'porcentTasksMonth' => $porcentTasksMonth,
+            'TaskQuantity' => $TaskQuantity,
+            'ProjectsQuantity' => $ProjectsQuantity,
+            'taskMonth' => $taskMonth,
+            'tasks' => $tasks,
+            'tasksMonth' => $tasksMonth,
 
         ]);
     }
@@ -192,7 +222,14 @@ class PanelController
 
     public static function Calendar(Router $router)
     {
-        $router->render('app/calendar');
+        $user = $_SESSION['user'];
+
+
+        $tasks = Task::getTaskByState('EN PROCESO', 0);
+
+        $router->render('app/calendar', [
+            'tasks' => $tasks,
+        ]);
     }
 
     public static function getMembersProjectC(Router $router)
@@ -261,30 +298,24 @@ class PanelController
     public static function showProject(Router $router)
     {
 
-        $id_user = $_SESSION['user'];
-        $progress = 0;
-        $total = 0;
-        $finished = 0;
-
-        $typeAlert = true;
-
-        $id = validateOrRedirect("/panel");
+        $id_user    = $_SESSION['user'];
+        $progress   = 0;
+        $total      = 0;
+        $finished   = 0;
+        $tasks      = Task::getTaskByState('EN PROCESO', 0);
+        $typeAlert  = true;
+        $id         = validateOrRedirect("/panel");
         $project = Project::find('id', $id, false);
-
-
-
         $limit      = (isset($_GET['limit'])) ? $_GET['limit'] : 25;
         $page       = (isset($_GET['page'])) ? $_GET['page'] : 1;
         $links      = (isset($_GET['links'])) ? $_GET['links'] : 7;
-
+        $events     = $project->getEvents();
 
         $query      = "SELECT task.name, task.state, task.priority, task.date_end,  project.name as Project FROM Tasks as task";
         $query     .= " left join Projects as project on projectID = project.id";
         $query     .= " where task.adminID = $id_user and project.id = $id ";
 
-
         $Paginator  = new Paginator($query);
-
         $Paginator->getData($limit, $page);
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -293,17 +324,16 @@ class PanelController
 
                 $project->uploadFiles();
             }
-            //filesUpload
         }
 
 
         $project->getMembers();
 
         $countMessages = $project->getQuantityMessages();
-        $tasks = $project->getTasks();
+        $tasksC = $project->getTasks();
 
 
-        foreach ($tasks as $task) {
+        foreach ($tasksC as $task) {
             $total += 1;
             if ($task['state'] == 'REALIZADO') {
                 $finished += 1;
@@ -316,8 +346,7 @@ class PanelController
             //throw $th;
         }
 
-
-
+        //Falla
         $isAdministrator = Project::checkAdminOrCreator($project->id);
 
 
@@ -335,6 +364,8 @@ class PanelController
             'typeAlert' => $typeAlert,
             'alerts' => Project::getAlerts(),
             'admin' => $isAdministrator,
+            'tasks' => $tasks,
+            'events' => $events,
         ]);
     }
 

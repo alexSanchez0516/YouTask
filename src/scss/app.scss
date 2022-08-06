@@ -18,3 +18,57 @@
 @import 'project/members';
 @import 'task/taskPage';
 @import 'panel/contact_fot';
+
+.cookies {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  border: 1px solid #ccc;
+  background-color: rgb(252, 250, 250);
+  border-radius: 1em;
+  padding: 0.5rem;
+  position: fixed;
+  bottom: 0;
+  width: 70%;
+}
+
+/*cookies*/
+
+@media screen and (min-width: 768px) {
+  .cookies {
+    width: 25%;
+  }
+}
+
+.cookies-img {
+  position: relative;
+  bottom: 40px;
+}
+#cookies__title {
+  font-weight: bolder;
+  font-size: 1.55rem;
+  position: relative;
+  bottom: 30px;
+}
+#cookies__text {
+  width: 80%;
+
+  position: relative;
+  bottom: 30px;
+}
+
+@media screen and (min-width: 768px) {
+  #cookies__text {
+    width: 100%;
+  }
+}
+
+#btn-aceptar-cookies {
+  position: relative;
+  bottom: 30px;
+  color: white !important;
+}
+.enlace {
+  position: relative;
+  bottom: 20px;
+}

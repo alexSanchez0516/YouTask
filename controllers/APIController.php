@@ -328,10 +328,13 @@ class APIController
         $value_filter = (isset($_POST['value'])) ? $_POST['value'] : null;
         $date_filter = "desc";
 
-        $query      = "SELECT project.id, adminID, user.id as userID, user.avatar as avatar, project.name, project.description, state, priority, date_end  FROM  Projects as project inner join users as user on project.adminID = user.id where adminID = $id ";
+        $query      = "SELECT project.id, adminID, user.id as userID, user.avatar as avatar, project.name, project.description, state, priority, date_end  FROM  Projects as project";
+        $query     .= " inner join users as user on project.adminID = user.id  ";
+        $query     .= " inner join Members_Projects as member on member.id_project = project.id";
+        $query     .= " group by project.id";
 
         if ($filter != null) {
-            if ($filter == 'create_at') {
+            if ($filter == 'project.create_at') {
                 $date_filter = $value_filter;
             } else {
                 $query     .= "and $filter = '$value_filter'";
@@ -341,7 +344,7 @@ class APIController
                 $query     .= "AND name LIKE '%$value_filter%'";
             }
         }
-        $query     .= " order by create_at " . $date_filter;
+        $query     .= " order by project.create_at " . $date_filter;
 
         $Paginator  = new Paginator($query);
 
@@ -630,5 +633,42 @@ class APIController
 
 
         echo json_encode(Users::getAnyQueryResult($query));
+    }
+
+    public static function getEventsTask()
+    {
+        $id = $_POST['id_task'];
+
+        $query      = "SELECT Task.name as title, start, end FROM events INNER JOIN Tasks as Task on events.id_task = Task.id ";
+        $query     .= "WHERE events.id_task = $id order by create_at desc";
+
+        echo json_encode($query);
+        //echo json_encode(Users::getAnyQueryResult($query));
+    }
+
+    public static function getEvents()
+    {
+        $id = $_SESSION['user'];
+
+        $query      = "SELECT events.id as eventID, Task.id as taskID, Task.name as title, Task.description as description ,start, end FROM events INNER JOIN Tasks as Task on events.id_task = Task.id ";
+        $query     .= "WHERE Task.adminID = $id and state = 'EN PROCESO' order by events.create_at desc";
+
+        echo json_encode(Users::getAnyQueryResult($query));
+    }
+
+    public static function createEventC()
+    {
+        $id_task = $_POST['id_task'];
+        $start = $_POST['start'];
+        $end = $_POST['end'];
+
+        $query = "INSERT INTO events (id_task, start, end) VALUES ($id_task, '$start', '$end')";
+
+        try {
+            Task::insertAny($query);
+            echo json_encode(true);
+        } catch (\Throwable $th) {
+            echo json_encode(false);
+        }
     }
 }
