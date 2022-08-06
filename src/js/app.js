@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', function () {
   getRequestsFollow()
   storage()
   previewImg()
+
+  if (currentURL == '/calendario') {
+    buildEvents();
+  }
+
   if (currentURL == '/seguidores') {
     showFriends()
     search_profile()

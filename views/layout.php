@@ -18,8 +18,8 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/build/img/logo_oficial.png" type="image/x-icon">
-    <link rel="stylesheet" href="../build/css/app.css">
-
+    <link rel="stylesheet" type="text/css" href="../build/css/app.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Primary Meta Tags -->
     <title>YouTask</title>
 </head>

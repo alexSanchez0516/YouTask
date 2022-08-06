@@ -98,7 +98,7 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
                                     <ul class="row   d-flex  justify-content-between w-100">
                                         <li class=" col-2 col-sm-1 my-2 "><i class="fas fa-bell text-dark fs-2 mx-2"></i></li>
                                         <li class=" col-2 col-sm-1 my-2"><a href="#" class="text-decoration-none text-dark"><i class="fas fa-users fs-2 mx-2"></i></a>
-                                        <li class=" col-2 col-sm-1 my-2"><a href="#" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-2"></i></a>
+                                        <li class=" col-2 col-sm-1 my-2"><a href="/seguidores" class="text-decoration-none text-dark"><i class="fas fa-user-friends fs-2 mx-2"></i></a>
                                         <li class=" col-2 col-sm-1 my-2"><a href="/perfil" class="text-decoration-none text-dark"><i class="far fa-user text-dark fs-2 mx-2"></i></a></li>
                                         <li class=" col-2 col-sm-1 my-2"><a href="/panel"><i class="fas fa-chart-line text-dark fs-1 mx-2"></i></a></li>
                                         <li class=" col-2 col-sm-1 my-2"> <a href="/calendario"><i class="far fa-calendar-check text-dark fs-1 mx-2"></i></a> </li>
