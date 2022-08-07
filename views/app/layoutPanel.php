@@ -18,9 +18,11 @@ $auth = $_SESSION['auth'] ?? false; //si no existe es igual a null
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/build/img/logo_oficial.png" type="image/x-icon">
-    <link rel="stylesheet" href="../build/css/app.css">
-
-    <!-- Primary Meta Tags -->
+    <link rel="stylesheet" type="text/css" href="../build/css/app.css">
+    <meta http-equiv="encoding" content="utf-8" />    
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+<!-- Primary Meta Tags -->
+    
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>YouTask Panel</title>
 </head>

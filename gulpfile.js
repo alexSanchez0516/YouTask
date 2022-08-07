@@ -69,7 +69,8 @@ function watchStatic() {
     watch( paths.scss, css );
     watch( paths.js, javascript );
 }
-  
+ 
+exports.js = javascript
 exports.css = css;
 exports.watchArchivos = watchArchivos;
 //exports.default = parallel(css, javascript,  imagenes, versionebp,  watchArchivos ); 

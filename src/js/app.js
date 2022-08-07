@@ -882,7 +882,7 @@ function setMessages(contact, execution) {
             <li class="chat-left d-flex flex-column flex-md-row flex align-items-center bg-messages_sender border rounded p-2 my-2">
                 <div class="chat-avatar w-50">
                     <img src="${image_avatar}"  class="raidius_max w-50" alt="Retail Admin">
-                    <p class="chat-name">Tú</p>
+                    <p class="chat-name">${name_users_on_chat}</p>
                 </div>
                 <div class="chat-text d-flex flex-column mb-2 mx-2 w-100">
                   <span>${msg.create_at}</span>

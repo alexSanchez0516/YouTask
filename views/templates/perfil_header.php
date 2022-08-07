@@ -5,7 +5,7 @@
     <div class="col-7 d-flex flex-column justify-content-center">
         <span class="text-white"><?php echo $_SESSION['username'] ?></span><br>
         <span class="text-white"><?php echo $_SESSION['rol'] ?></span>
-        <a href="/editar-perfil" class="text-decoration-none mt-2 text-white">Editar Perfil</a>
+        <a href="/editar-perfil" class="text-decoration-underline mt-2 text-white">Editar Perfil</a>
     </div>
 </div>
 

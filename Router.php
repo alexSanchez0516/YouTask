@@ -28,25 +28,21 @@ class Router
 
         self::$urlsProtected = ['/crear-post', '/miembros-proyecto', '/actualizar-proyecto', '/actualizar-tarea', '/modificar-post', '/panel', '/mensajes', '/post', '/posts', '/actividad', '/perfil', '/seguidores', '/seguidor', '/editar-perfil', '/crear-proyecto', '/crear-tarea', '/calendario', '/proyectos', '/proyecto', '/tareas', '/tarea'];
 
-        self::$currentUrl = $_SERVER['REQUEST_URI'] === '' ? '/' : $_SERVER['REQUEST_URI'];
+        //self::$currentUrl = $_SERVER['REQUEST_URI'] === '' ? '/' : $_SERVER['REQUEST_URI'];
 
 
-        /*problema con los parametros en la url,
-         debemos quitar todo el fragmento del parametros
-         para dejar la url limpia para que se valide en el index
 
+	 
+	 self::$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
          for ($i = 0; $i < strlen(self::$currentUrl); $i++) {
-            if (self::$currentUrl === '?') {
+            if (self::$currentUrl[$i] == '?') {
                
                 self::$currentUrl = substr(self::$currentUrl, 0, $i);
                 break;
             }
-        }
-
-        */
-
-
-
+	 }
+	//debug(self::$currentUrl);
+	
 
         $method = $_SERVER['REQUEST_METHOD'];
 
