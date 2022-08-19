@@ -1,8 +1,8 @@
 <?php
 
 function connectDB() {
-    $db = new MySQLi('localhost', 'root', '1690001299Gr.', 'youtask');
-
+    $db = new MySQLi($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_DB']);
+//	debug($_ENV);
     if (!$db) {
         echo "No hay conexion";
         exit;

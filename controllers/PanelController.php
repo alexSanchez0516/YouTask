@@ -166,11 +166,11 @@ class PanelController
             $Task->synchronize($_POST);
 
             //COMPROBAR FECHA
-            if (!Project::validateDate($Task->date_end)) {
+/*            if (!Project::validateDate($Task->date_end)) {
                 $seguir = false;
                 $typeAlert = false;
                 $Task->setAlert("Fecha invalidad");
-            }
+            }*/
 
             //COMPROBAR LONGITUD NAME
             if (strlen($Task->name) > 40) {

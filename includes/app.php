@@ -1,9 +1,12 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 require 'functions.php';
 require 'config/db.php';
-require __DIR__ . '/../vendor/autoload.php';
 
 $db = connectDB();
 

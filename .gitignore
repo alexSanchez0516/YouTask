@@ -6,3 +6,6 @@ node_modules
 public/build/js/bootstrap.bundle.js
 public/build/js/jquery.min.js
 /nbproject/private/
+includes/.env
+/vendor
+public/Projects

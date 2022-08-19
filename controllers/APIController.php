@@ -502,15 +502,12 @@ class APIController
         $Task->synchronize($_POST);
         $isCreated = false;
 
-        //COMPROBAR FECHA
-        if (Project::validateDate($Task->date_end)) {
 
             if (strlen($Task->name) < 40) {
                 if ($Task->createC($Task->projectID)) {
                     $isCreated = true;
                 }
             }
-        }
         echo json_encode($isCreated);
     }
 
